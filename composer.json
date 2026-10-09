@@ -10,8 +10,7 @@
         "migration"
     ],
     "require": {
-        "php": "^8.5",
-        "phpstan/phpstan": "^2.3.0"
+        "php": "^8.5"
     },
     "bin": [
         "resources/upgrade/bin/code-upgrade"

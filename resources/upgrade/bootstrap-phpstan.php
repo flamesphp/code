@@ -6,23 +6,13 @@ if (class_exists(\PHPStan\Type\Type::class, false)) {
     return;
 }
 
-$roots = [];
+$bundledBootstrap = __DIR__ . '/thirdparty/phpstan/bootstrap.php';
 
-if (defined('ROOT_PATH')) {
-    $roots[] = rtrim(ROOT_PATH, '/') . '/';
+if (! is_file($bundledBootstrap)) {
+    throw new \RuntimeException(
+        'Bundled PHPStan was not found at resources/upgrade/thirdparty/phpstan/. '
+        . 'Run: php scripts/bundle-phpstan-thirdparty.php',
+    );
 }
 
-$roots[] = dirname(__DIR__, 5) . '/';
-
-foreach ($roots as $root) {
-    foreach ([
-        'vendor/phpstan/phpstan/bootstrap.php',
-        'vendor/phpstan2/phpstan/bootstrap.php',
-    ] as $relative) {
-        $bootstrap = $root . $relative;
-        if (is_file($bootstrap)) {
-            require_once $bootstrap;
-            return;
-        }
-    }
-}
+require_once $bundledBootstrap;

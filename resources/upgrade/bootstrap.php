@@ -6,11 +6,11 @@ use PHPParser\Node;
 use PHPUnit\Runner\Version;
 
 /**
- * The preload.php contains 2 dependencies
- *      - phpstan/phpdoc-parser
- *      - nikic/php-parser
+ * The preload.php preloads scoped third-party parsers early:
+ *      - phpstan/phpdoc-parser (Flames/Code/Upgrade/ThirdParty/PHPStan/)
+ *      - nikic/php-parser (Flames/Code/Upgrade/ThirdParty/PhpParser/)
  *
- * They need to be loaded early to avoid conflict version between prefixed thirdparty and project vendor.
+ * Full PHPStan (analyser) loads from resources/upgrade/thirdparty/phpstan/ via bootstrap-phpstan.php.
  */
 if (
     defined('PHPUNIT_COMPOSER_INSTALL')
