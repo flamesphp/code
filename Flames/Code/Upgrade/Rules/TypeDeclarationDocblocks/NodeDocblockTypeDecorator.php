@@ -1,0 +1,126 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks;
+
+use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
+use PHPStan\Type\Type;
+use PHPStan\Type\TypeTraverser;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Flames\Code\Upgrade\Rules\Privatization\TypeManipulator\TypeNormalizer;
+use Flames\Code\Upgrade\StaticTypeMapper\StaticTypeMapper;
+final readonly class NodeDocblockTypeDecorator
+{
+    public function __construct(private TypeNormalizer $typeNormalizer, private StaticTypeMapper $staticTypeMapper, private PhpDocTypeChanger $phpDocTypeChanger)
+    {
+    }
+    public function decorateGenericIterableParamType(Type $type, PhpDocInfo $phpDocInfo, FunctionLike $functionLike, Param $param, string $parameterName): bool
+    {
+        if ($this->isBareMixedType($type)) {
+            // no value
+            return \false;
+        }
+        $typeNode = $this->createTypeNode($type);
+        // no value iterable type
+        if ($typeNode instanceof IdentifierTypeNode) {
+            return \false;
+        }
+        $paramTagValueNode = $phpDocInfo->getParamTagValueByName($parameterName);
+        if ($paramTagValueNode instanceof ParamTagValueNode && (string) $paramTagValueNode->type === (string) $typeNode) {
+            return \false;
+        }
+        $this->phpDocTypeChanger->changeParamTypeNode($functionLike, $phpDocInfo, $param, $parameterName, $typeNode);
+        return \true;
+    }
+    /**
+     * @param \PHPStan\Type\Type|\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeOrTypeNode
+     */
+    public function decorateGenericIterableReturnType($typeOrTypeNode, PhpDocInfo $classMethodPhpDocInfo, FunctionLike $functionLike): bool
+    {
+        if ($typeOrTypeNode instanceof TypeNode) {
+            $type = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeOrTypeNode, $functionLike);
+        } else {
+            $type = $typeOrTypeNode;
+        }
+        if ($this->isBareMixedType($type)) {
+            // no value
+            return \false;
+        }
+        if ($typeOrTypeNode instanceof TypeNode) {
+            $typeNode = $typeOrTypeNode;
+        } else {
+            $typeNode = $this->createTypeNode($typeOrTypeNode);
+        }
+        // no value iterable type
+        if ($typeNode instanceof IdentifierTypeNode) {
+            return \false;
+        }
+        $this->phpDocTypeChanger->changeReturnTypeNode($functionLike, $classMethodPhpDocInfo, $typeNode);
+        return \true;
+    }
+    public function decorateGenericIterableVarType(Type $type, PhpDocInfo $phpDocInfo, Property $property): bool
+    {
+        $typeNode = $this->createTypeNode($type);
+        if ($this->isBareMixedType($type)) {
+            // no value
+            return \false;
+        }
+        // no value iterable type
+        if ($typeNode instanceof IdentifierTypeNode) {
+            return \false;
+        }
+        $this->phpDocTypeChanger->changeVarTypeNode($property, $phpDocInfo, $typeNode);
+        return \true;
+    }
+    private function createTypeNode(Type $type): TypeNode
+    {
+        $generalizedType = $this->typeNormalizer->generalizeConstantTypes($type);
+        // empty array default "[]" resolves to "never[]"; widen to "mixed[]" to keep the docblock useful
+        $generalizedType = TypeTraverser::map($generalizedType, static function (Type $type, callable $traverse): Type {
+            if ($type instanceof NeverType) {
+                return new MixedType();
+            }
+            return $traverse($type);
+        });
+        // turn into rather generic short return typeOrTypeNode, to keep it open to extension later and readable to human
+        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($generalizedType);
+        if ($typeNode instanceof IdentifierTypeNode && $typeNode->name === 'mixed') {
+            return new ArrayTypeNode($typeNode);
+        }
+        return $typeNode;
+    }
+    private function isBareMixedType(Type $type): bool
+    {
+        if ($type instanceof MixedType) {
+            return \true;
+        }
+        $normalizedResolvedParameterType = $this->typeNormalizer->generalizeConstantTypes($type);
+        // most likely mixed, skip
+        return $this->isArrayMixed($normalizedResolvedParameterType);
+    }
+    private function isArrayMixed(Type $type): bool
+    {
+        if (!$type instanceof ArrayType) {
+            return \false;
+        }
+        if ($type->getItemType() instanceof NeverType) {
+            return \true;
+        }
+        if (!$type->getItemType() instanceof MixedType) {
+            return \false;
+        }
+        // both plain "mixed[]" (integer key) and a fully mixed-keyed array carry no useful value
+        return $type->getKeyType() instanceof IntegerType || $type->getKeyType() instanceof MixedType;
+    }
+}

@@ -1,0 +1,95 @@
+<?php
+
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace FlamesPrefix202610\Symfony\Component\Finder\Iterator;
+
+use FlamesPrefix202610\Symfony\Component\Finder\SplFileInfo;
+/**
+ * ExcludeDirectoryFilterIterator filters out directories.
+ *
+ * @author Fabien Potencier <fabien@symfony.com>
+ *
+ * @extends \FilterIterator<string, SplFileInfo>
+ *
+ * @implements \RecursiveIterator<string, SplFileInfo>
+ */
+class ExcludeDirectoryFilterIterator extends \FilterIterator implements \RecursiveIterator
+{
+    private readonly bool $isRecursive;
+    /** @var array<string, true> */
+    private array $excludedDirs = [];
+    private ?string $excludedPattern = null;
+    /** @var list<callable(SplFileInfo):bool> */
+    private array $pruneFilters = [];
+    /**
+     * @param \Iterator<string, SplFileInfo>          $iterator    The Iterator to filter
+     * @param list<string|callable(SplFileInfo):bool> $directories An array of directories to exclude
+     */
+    public function __construct(private readonly \Iterator $iterator, array $directories)
+    {
+        $this->isRecursive = $this->iterator instanceof \RecursiveIterator;
+        $patterns = [];
+        foreach ($directories as $directory) {
+            if (!\is_string($directory)) {
+                if (!\is_callable($directory)) {
+                    throw new \InvalidArgumentException('Invalid PHP callback.');
+                }
+                $this->pruneFilters[] = $directory;
+                continue;
+            }
+            $directory = rtrim($directory, '/');
+            if (!$this->isRecursive || str_contains($directory, '/')) {
+                $patterns[] = preg_quote($directory, '#');
+            } else {
+                $this->excludedDirs[$directory] = \true;
+            }
+        }
+        if ($patterns) {
+            $this->excludedPattern = '#(?:^|/)(?:' . implode('|', $patterns) . ')(?:/|$)#';
+        }
+        parent::__construct($this->iterator);
+    }
+    /**
+     * Filters the iterator values.
+     */
+    public function accept(): bool
+    {
+        if ($this->isRecursive && isset($this->excludedDirs[$this->current()->getFilename()]) && $this->current()->isDir()) {
+            return \false;
+        }
+        if ($this->excludedPattern) {
+            $path = $this->current()->isDir() ? $this->current()->getRelativePathname() : $this->current()->getRelativePath();
+            $path = str_replace('\\', '/', $path);
+            if (preg_match($this->excludedPattern, $path)) {
+                return \false;
+            }
+        }
+        if ($this->pruneFilters && $this->hasChildren()) {
+            foreach ($this->pruneFilters as $pruneFilter) {
+                if (!$pruneFilter($this->current())) {
+                    return \false;
+                }
+            }
+        }
+        return \true;
+    }
+    public function hasChildren(): bool
+    {
+        return $this->isRecursive && $this->iterator->hasChildren();
+    }
+    public function getChildren(): self
+    {
+        $children = new self($this->iterator->getChildren(), []);
+        $children->excludedDirs = $this->excludedDirs;
+        $children->excludedPattern = $this->excludedPattern;
+        $children->pruneFilters = $this->pruneFilters;
+        return $children;
+    }
+}

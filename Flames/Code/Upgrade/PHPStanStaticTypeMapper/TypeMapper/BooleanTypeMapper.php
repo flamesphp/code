@@ -1,0 +1,62 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\PHPStanStaticTypeMapper\TypeMapper;
+
+use PhpParser\Node;
+use PhpParser\Node\Identifier;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\BooleanType;
+use PHPStan\Type\Type;
+use Flames\Code\Upgrade\Php\PhpVersionProvider;
+use Flames\Code\Upgrade\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Flames\Code\Upgrade\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
+/**
+ * @implements TypeMapperInterface<BooleanType>
+ */
+final readonly class BooleanTypeMapper implements TypeMapperInterface
+{
+    public function __construct(private PhpVersionProvider $phpVersionProvider)
+    {
+    }
+    /**
+     * @return array<class-string<Type>>
+     */
+    public function getNodeClasses(): array
+    {
+        return [BooleanType::class];
+    }
+    /**
+     * @param BooleanType $type
+     */
+    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    {
+        return $type->toPhpDocNode();
+    }
+    /**
+     * @param BooleanType $type
+     */
+    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
+    {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
+            return null;
+        }
+        if ($typeKind === TypeKind::PROPERTY) {
+            return new Identifier('bool');
+        }
+        if ($typeKind === TypeKind::UNION && $type->isFalse()->yes()) {
+            return new Identifier('false');
+        }
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::NULL_FALSE_TRUE_STANDALONE_TYPE)) {
+            return new Identifier('bool');
+        }
+        if ($type->isTrue()->yes()) {
+            return new Identifier('true');
+        }
+        if ($type->isFalse()->yes()) {
+            return new Identifier('false');
+        }
+        return new Identifier('bool');
+    }
+}

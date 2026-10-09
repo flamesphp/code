@@ -1,0 +1,51 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\PHPStanStaticTypeMapper\TypeMapper;
+
+use PhpParser\Node;
+use PhpParser\Node\Identifier;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\StrictMixedType;
+use PHPStan\Type\Type;
+use Flames\Code\Upgrade\Php\PhpVersionProvider;
+use Flames\Code\Upgrade\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Flames\Code\Upgrade\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
+/**
+ * @implements TypeMapperInterface<StrictMixedType>
+ */
+final readonly class StrictMixedTypeMapper implements TypeMapperInterface
+{
+    private const string MIXED = 'mixed';
+    public function __construct(private PhpVersionProvider $phpVersionProvider)
+    {
+    }
+    /**
+     * @return array<class-string<Type>>
+     */
+    public function getNodeClasses(): array
+    {
+        return [StrictMixedType::class];
+    }
+    /**
+     * @param StrictMixedType $type
+     */
+    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    {
+        return $type->toPhpDocNode();
+    }
+    /**
+     * @param StrictMixedType $type
+     */
+    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
+    {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::MIXED_TYPE)) {
+            return null;
+        }
+        if ($typeKind === TypeKind::UNION) {
+            return null;
+        }
+        return new Identifier(self::MIXED);
+    }
+}

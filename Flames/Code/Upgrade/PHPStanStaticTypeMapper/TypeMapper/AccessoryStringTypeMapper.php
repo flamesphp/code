@@ -1,0 +1,45 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\PHPStanStaticTypeMapper\TypeMapper;
+
+use PhpParser\Node;
+use PhpParser\Node\Identifier;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Accessory\AccessoryLiteralStringType;
+use PHPStan\Type\Accessory\AccessoryNonEmptyStringType;
+use PHPStan\Type\Accessory\AccessoryNonFalsyStringType;
+use PHPStan\Type\Accessory\AccessoryNumericStringType;
+use PHPStan\Type\Type;
+use Flames\Code\Upgrade\Php\PhpVersionProvider;
+use Flames\Code\Upgrade\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
+/**
+ * Every accessory string type narrows "string" with an extra guarantee, so they all map back to "string"
+ *
+ * @implements TypeMapperInterface<AccessoryLiteralStringType|AccessoryNonEmptyStringType|AccessoryNonFalsyStringType|AccessoryNumericStringType>
+ */
+final readonly class AccessoryStringTypeMapper implements TypeMapperInterface
+{
+    public function __construct(private PhpVersionProvider $phpVersionProvider)
+    {
+    }
+    /**
+     * @return array<class-string<Type>>
+     */
+    public function getNodeClasses(): array
+    {
+        return [AccessoryLiteralStringType::class, AccessoryNonEmptyStringType::class, AccessoryNonFalsyStringType::class, AccessoryNumericStringType::class];
+    }
+    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    {
+        return $type->toPhpDocNode();
+    }
+    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
+    {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
+            return null;
+        }
+        return new Identifier('string');
+    }
+}

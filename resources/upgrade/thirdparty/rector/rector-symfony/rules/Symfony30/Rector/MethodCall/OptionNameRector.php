@@ -1,0 +1,95 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Symfony30\Rector\MethodCall;
+
+use PhpParser\Node;
+use PhpParser\Node\ArrayItem;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Scalar\String_;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer;
+use Flames\Code\Upgrade\Symfony\NodeAnalyzer\FormOptionsArrayMatcher;
+use Flames\Code\Upgrade\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Flames\Code\Upgrade\VersionBonding\ValueObject\ComposerPackageConstraint;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\Symfony30\Rector\MethodCall\OptionNameRectorTest
+ */
+final class OptionNameRector extends AbstractRector implements ComposerPackageConstraintInterface
+{
+    /**
+     * @var array<string, string>
+     */
+    private const array OLD_TO_NEW_OPTION = ['precision' => 'scale', 'virtual' => 'inherit_data'];
+    public function __construct(private readonly FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer, private readonly FormOptionsArrayMatcher $formOptionsArrayMatcher)
+    {
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/form', '>=3.0');
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Turns old option names to new ones in FormTypes in Form in Symfony', [new CodeSample(<<<'CODE_SAMPLE'
+use Symfony\Component\Form\FormBuilder;
+
+$formBuilder = new FormBuilder;
+$formBuilder->add("...", ["precision" => "...", "virtual" => "..."];
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+use Symfony\Component\Form\FormBuilder;
+
+$formBuilder = new FormBuilder;
+$formBuilder->add("...", ["scale" => "...", "inherit_data" => "..."];
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [MethodCall::class];
+    }
+    /**
+     * @param MethodCall $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if (!$this->formAddMethodCallAnalyzer->isMatching($node)) {
+            return null;
+        }
+        $optionsArray = $this->formOptionsArrayMatcher->match($node);
+        if (!$optionsArray instanceof Array_) {
+            return null;
+        }
+        $hasChanged = \false;
+        foreach ($optionsArray->items as $arrayItemNode) {
+            if (!$arrayItemNode instanceof ArrayItem) {
+                continue;
+            }
+            if (!$arrayItemNode->key instanceof String_) {
+                continue;
+            }
+            if ($this->processStringKey($arrayItemNode->key)) {
+                $hasChanged = \true;
+            }
+        }
+        if (!$hasChanged) {
+            return null;
+        }
+        return $node;
+    }
+    private function processStringKey(String_ $string): bool
+    {
+        $currentOptionName = $string->value;
+        if (!isset(self::OLD_TO_NEW_OPTION[$currentOptionName])) {
+            return \false;
+        }
+        $string->value = self::OLD_TO_NEW_OPTION[$currentOptionName];
+        return \true;
+    }
+}

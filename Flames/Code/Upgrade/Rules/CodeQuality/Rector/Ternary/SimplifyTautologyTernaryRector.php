@@ -1,0 +1,48 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\CodeQuality\Rector\Ternary;
+
+use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\Ternary;
+use Flames\Code\Upgrade\NodeManipulator\BinaryOpManipulator;
+use Flames\Code\Upgrade\Rules\Php71\ValueObject\TwoNodeMatch;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\Rules\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRectorTest
+ */
+final class SimplifyTautologyTernaryRector extends AbstractRector
+{
+    public function __construct(private readonly BinaryOpManipulator $binaryOpManipulator)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Simplify tautology ternary to value', [new CodeSample('$value = ($fullyQualifiedTypeHint !== $typeHint) ? $fullyQualifiedTypeHint : $typeHint;', '$value = $fullyQualifiedTypeHint;')]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [Ternary::class];
+    }
+    /**
+     * @param Ternary $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if (!$node->cond instanceof NotIdentical && !$node->cond instanceof Identical) {
+            return null;
+        }
+        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($node->cond, fn(Node $leftNode): bool => $this->nodeComparator->areNodesEqual($leftNode, $node->if), fn(Node $leftNode): bool => $this->nodeComparator->areNodesEqual($leftNode, $node->else));
+        if (!$twoNodeMatch instanceof TwoNodeMatch) {
+            return null;
+        }
+        return $node->cond instanceof NotIdentical ? $node->if : $node->else;
+    }
+}

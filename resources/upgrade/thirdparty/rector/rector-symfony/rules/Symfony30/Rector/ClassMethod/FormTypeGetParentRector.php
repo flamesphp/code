@@ -1,0 +1,131 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Symfony30\Rector\ClassMethod;
+
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ObjectType;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\Symfony\Enum\SymfonyClass;
+use Flames\Code\Upgrade\Symfony\FormHelper\FormTypeStringToTypeProvider;
+use Flames\Code\Upgrade\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Flames\Code\Upgrade\VersionBonding\ValueObject\ComposerPackageConstraint;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\Symfony30\Rector\ClassMethod\FormTypeGetParentRectorTest
+ */
+final class FormTypeGetParentRector extends AbstractRector implements ComposerPackageConstraintInterface
+{
+    public function __construct(private readonly FormTypeStringToTypeProvider $formTypeStringToTypeProvider)
+    {
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('symfony/form', '>=3.0');
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Turns string Form Type references to their CONSTANT alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony', [new CodeSample(<<<'CODE_SAMPLE'
+use Symfony\Component\Form\AbstractType;
+
+class SomeType extends AbstractType
+{
+    public function getParent()
+    {
+        return 'collection';
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+use Symfony\Component\Form\AbstractType;
+
+class SomeType extends AbstractType
+{
+    public function getParent()
+    {
+        return \Symfony\Component\Form\Extension\Core\Type\CollectionType::class;
+    }
+}
+CODE_SAMPLE
+), new CodeSample(<<<'CODE_SAMPLE'
+use Symfony\Component\Form\AbstractTypeExtension;
+
+class SomeExtension extends AbstractTypeExtension
+{
+    public function getExtendedType()
+    {
+        return 'collection';
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+use Symfony\Component\Form\AbstractTypeExtension;
+
+class SomeExtension extends AbstractTypeExtension
+{
+    public function getExtendedType()
+    {
+        return \Symfony\Component\Form\Extension\Core\Type\CollectionType::class;
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [Class_::class];
+    }
+    /**
+     * @param Class_ $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $classMethod) {
+            if (!$this->isClassAndMethodMatch($node, $classMethod)) {
+                continue;
+            }
+            $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (&$hasChanged): ?Node {
+                if (!$node instanceof Return_) {
+                    return null;
+                }
+                if (!$node->expr instanceof Expr) {
+                    return null;
+                }
+                if (!$node->expr instanceof String_) {
+                    return null;
+                }
+                $formClass = $this->formTypeStringToTypeProvider->matchClassForNameWithPrefix($node->expr->value);
+                if ($formClass === null) {
+                    return null;
+                }
+                $node->expr = $this->nodeFactory->createClassConstReference($formClass);
+                $hasChanged = \true;
+                return $node;
+            });
+        }
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
+    }
+    private function isClassAndMethodMatch(Class_ $class, ClassMethod $classMethod): bool
+    {
+        if ($this->isName($classMethod->name, 'getParent')) {
+            return $this->isObjectType($class, new ObjectType(SymfonyClass::ABSTRACT_TYPE));
+        }
+        if ($this->isName($classMethod->name, 'getExtendedType')) {
+            return $this->isObjectType($class, new ObjectType(SymfonyClass::ABSTRACT_TYPE_EXTENSION));
+        }
+        return \false;
+    }
+}

@@ -1,0 +1,105 @@
+<?php
+
+declare (strict_types=1);
+namespace FlamesPrefix202610\Entropy\Console\Input;
+
+use FlamesPrefix202610\Entropy\Attribute\RelatedTest;
+use FlamesPrefix202610\Entropy\Console\CommandRegistry;
+use FlamesPrefix202610\Entropy\Console\Contract\CommandInterface;
+use FlamesPrefix202610\Entropy\Console\ValueObject\CLIRequest;
+use FlamesPrefix202610\Entropy\Reflection\ValueOptionNameResolver;
+use FlamesPrefix202610\Entropy\Tests\Console\Input\InputParserTest;
+use ReflectionMethod;
+/**
+ * @see \Entropy\Tests\Console\Input\InputParserTest
+ */
+final readonly class InputParser
+{
+    public function __construct(private CommandRegistry $commandRegistry)
+    {
+    }
+    /**
+     * @param array<int, mixed> $argv
+     */
+    public function parse(array $argv): CLIRequest
+    {
+        // remove script name
+        array_shift($argv);
+        if ($argv === []) {
+            // fallback to show all commands
+            return new CLIRequest(null);
+        }
+        // the first non-option token is the command name
+        $command = null;
+        if (!str_starts_with((string) $argv[0], '-')) {
+            $command = array_shift($argv);
+        }
+        // which "--name" options take a value, so a flag never swallows the next token
+        $valueOptionNames = $this->resolveValueOptionNames($command);
+        $args = [];
+        $options = [];
+        $optionsEnded = \false;
+        while ($argv !== []) {
+            $item = array_shift($argv);
+            // "--" ends option parsing; everything after it is a positional argument
+            if (!$optionsEnded && $item === '--') {
+                $optionsEnded = \true;
+                continue;
+            }
+            // --option or --option=value
+            if (!$optionsEnded && str_starts_with((string) $item, '--')) {
+                $name = ltrim((string) $item, '-');
+                if (str_contains($name, '=')) {
+                    [$name, $value] = explode('=', $name, 2);
+                } elseif (isset($valueOptionNames[$name]) && $argv !== [] && $argv[0] !== '--' && !str_starts_with((string) $argv[0], '-')) {
+                    // only value options consume the next token; a flag never does
+                    $value = array_shift($argv);
+                } else {
+                    $value = \true;
+                }
+                // flag, no value
+                if ($value === \true) {
+                    $options[$name] = \true;
+                    continue;
+                }
+                if (is_numeric($value)) {
+                    $options[$name] = $value;
+                    continue;
+                }
+                // allow a repeatable value option
+                if (!isset($options[$name]) || !is_array($options[$name])) {
+                    $options[$name] = [];
+                }
+                $options[$name][] = $value;
+                continue;
+            }
+            // -v
+            if (!$optionsEnded && str_starts_with((string) $item, '-')) {
+                $options[ltrim((string) $item, '-')] = \true;
+                continue;
+            }
+            // positional argument
+            $args[] = $item;
+        }
+        return new CLIRequest($command, $args, $options);
+    }
+    /**
+     * @return array<string, true>
+     */
+    private function resolveValueOptionNames(?string $commandName): array
+    {
+        $command = $this->resolveCommand($commandName);
+        if (!$command instanceof CommandInterface) {
+            return [];
+        }
+        return ValueOptionNameResolver::resolve(new ReflectionMethod($command, 'run'));
+    }
+    private function resolveCommand(?string $commandName): ?CommandInterface
+    {
+        if ($commandName !== null && $this->commandRegistry->has($commandName)) {
+            return $this->commandRegistry->get($commandName);
+        }
+        // no command name (options first) or an unknown token: fall back to the default command's schema
+        return $this->commandRegistry->getDefault();
+    }
+}

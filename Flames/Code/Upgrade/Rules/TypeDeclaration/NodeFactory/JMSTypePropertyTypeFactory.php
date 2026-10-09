@@ -1,0 +1,67 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\TypeDeclaration\NodeFactory;
+
+use PhpParser\Node;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\FloatType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\StringType;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Flames\Code\Upgrade\Rules\DeadCode\PhpDoc\TagRemover\VarTagRemover;
+use Flames\Code\Upgrade\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Flames\Code\Upgrade\StaticTypeMapper\Mapper\ScalarStringToTypeMapper;
+use Flames\Code\Upgrade\StaticTypeMapper\StaticTypeMapper;
+final readonly class JMSTypePropertyTypeFactory
+{
+    public function __construct(private ScalarStringToTypeMapper $scalarStringToTypeMapper, private StaticTypeMapper $staticTypeMapper, private PhpDocInfoFactory $phpDocInfoFactory, private VarTagRemover $varTagRemover, private ReflectionProvider $reflectionProvider)
+    {
+    }
+    public function createObjectTypeNode(string $typeValue): ?Node
+    {
+        // skip generic iterable types
+        if (str_contains($typeValue, '<')) {
+            return null;
+        }
+        $type = $this->scalarStringToTypeMapper->mapScalarStringToType($typeValue);
+        if ($type instanceof MixedType) {
+            // fallback to object type
+            $type = new ObjectType($typeValue);
+        }
+        $node = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PROPERTY);
+        if ($node instanceof FullyQualified && !$this->reflectionProvider->hasClass($node->toString())) {
+            return null;
+        }
+        return $node;
+    }
+    public function createScalarTypeNode(string $typeValue, Property $property): ?Node
+    {
+        if ($typeValue === 'float') {
+            $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
+            // fallback to string, as most likely string representation of float
+            if ($propertyPhpDocInfo instanceof PhpDocInfo && $propertyPhpDocInfo->getVarType() instanceof StringType) {
+                $this->varTagRemover->removeVarTag($property);
+                return new Identifier('string');
+            }
+        }
+        if ($typeValue === 'string') {
+            $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
+            // fallback to string, as most likely string representation of float
+            if ($propertyPhpDocInfo instanceof PhpDocInfo && $propertyPhpDocInfo->getVarType() instanceof FloatType) {
+                $this->varTagRemover->removeVarTag($property);
+                return new Identifier('float');
+            }
+        }
+        $type = $this->scalarStringToTypeMapper->mapScalarStringToType($typeValue);
+        if ($type instanceof MixedType) {
+            return null;
+        }
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PROPERTY);
+    }
+}

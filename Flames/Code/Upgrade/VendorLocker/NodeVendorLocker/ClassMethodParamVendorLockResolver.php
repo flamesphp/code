@@ -1,0 +1,47 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\VendorLocker\NodeVendorLocker;
+
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ClassReflection;
+use Flames\Code\Upgrade\NodeNameResolver\NodeNameResolver;
+use Flames\Code\Upgrade\Reflection\ReflectionResolver;
+use Flames\Code\Upgrade\VendorLocker\ParentClassMethodTypeOverrideGuard;
+final readonly class ClassMethodParamVendorLockResolver
+{
+    public function __construct(private NodeNameResolver $nodeNameResolver, private ReflectionResolver $reflectionResolver, private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
+    {
+    }
+    public function isVendorLocked(ClassMethod $classMethod): bool
+    {
+        if ($classMethod->isMagic()) {
+            return \true;
+        }
+        // user-guarded class: adding a param type here would break its child classes
+        if ($this->parentClassMethodTypeOverrideGuard->isTypeGuardedClass($classMethod)) {
+            return \true;
+        }
+        if ($classMethod->isPrivate()) {
+            return \false;
+        }
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
+        if (!$classReflection instanceof ClassReflection) {
+            return \false;
+        }
+        /** @var string $methodName */
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+        // has interface vendor lock? → better skip it, as PHPStan has access only to just analyzed classes
+        return $this->hasParentInterfaceMethod($classReflection, $methodName);
+    }
+    /**
+     * Has interface even in our project?
+     * Better skip it, as PHPStan has access only to just analyzed classes.
+     * This might change type, that works for current class, but breaks another implementer.
+     */
+    private function hasParentInterfaceMethod(ClassReflection $classReflection, string $methodName): bool
+    {
+        $found = array_any($classReflection->getInterfaces(), fn($interfaceClassReflection) => $interfaceClassReflection->hasMethod($methodName));
+        return $found;
+    }
+}

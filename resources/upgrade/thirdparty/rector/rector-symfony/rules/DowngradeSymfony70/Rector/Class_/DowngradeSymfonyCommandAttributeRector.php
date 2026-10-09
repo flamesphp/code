@@ -1,0 +1,131 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\DowngradeSymfony70\Rector\Class_;
+
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use PHPStan\Reflection\ClassReflection;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\Reflection\ReflectionResolver;
+use Flames\Code\Upgrade\Symfony\Enum\SymfonyAttribute;
+use Flames\Code\Upgrade\ValueObject\Visibility;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\DowngradeSymfony70\Rector\Class_\DowngradeSymfonyCommandAttributeRectorTest
+ */
+final class DowngradeSymfonyCommandAttributeRector extends AbstractRector
+{
+    public function __construct(private readonly ReflectionResolver $reflectionResolver)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Downgrade Symfony Command Attribute', [new CodeSample(<<<'CODE_SAMPLE'
+#[AsCommand(name: 'app:create-user', description: 'some description')]
+class CreateUserCommand extends Command
+{
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+#[AsCommand(name: 'app:create-user', description: 'some description')]
+class CreateUserCommand extends Command
+{
+    protected function configure(): void
+    {
+        $this->setName('app:create-user');
+        $this->setDescription('some description');
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [Class_::class];
+    }
+    /**
+     * @param Class_ $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+        if (!$classReflection instanceof ClassReflection) {
+            return null;
+        }
+        if (!$classReflection->is('Symfony\Component\Console\Command\Command')) {
+            return null;
+        }
+        $resolveNameAndDescription = $this->resolveNameAndDescription($node);
+        $name = $resolveNameAndDescription['name'];
+        $description = $resolveNameAndDescription['description'];
+        if ($name === null && $description === null) {
+            return null;
+        }
+        $configureClassMethod = $node->getMethod('configure');
+        $stmts = [];
+        if ($name !== null) {
+            $stmts[] = new Expression(new MethodCall(new Variable('this'), 'setName', [new Arg($name)]));
+        }
+        if ($description !== null) {
+            $stmts[] = new Expression(new MethodCall(new Variable('this'), 'setDescription', [new Arg($description)]));
+        }
+        if ($configureClassMethod instanceof ClassMethod) {
+            $configureClassMethod->stmts = array_merge((array) $configureClassMethod->stmts, $stmts);
+        } else {
+            $classMethod = new ClassMethod('configure');
+            $classMethod->flags = Visibility::PROTECTED;
+            $classMethod->stmts = $stmts;
+            $node->stmts[] = $classMethod;
+        }
+        foreach ($node->attrGroups as $keyAttribute => $attrGroup) {
+            foreach ($attrGroup->attrs as $key => $attr) {
+                if ($this->isName($attr->name, SymfonyAttribute::AS_COMMAND)) {
+                    unset($attrGroup->attrs[$key]);
+                }
+            }
+            if ($attrGroup->attrs === []) {
+                unset($node->attrGroups[$keyAttribute]);
+            }
+        }
+        return $node;
+    }
+    /**
+     * @return array{name: ?Expr, description: ?Expr}
+     */
+    private function resolveNameAndDescription(Class_ $class): array
+    {
+        $name = null;
+        $description = null;
+        foreach ($class->attrGroups as $attrGroup) {
+            foreach ($attrGroup->attrs as $attr) {
+                if (!$this->isName($attr->name, SymfonyAttribute::AS_COMMAND)) {
+                    continue;
+                }
+                foreach ($attr->args as $arg) {
+                    if (!$arg->name instanceof Identifier) {
+                        continue;
+                    }
+                    if ($arg->name->toString() === 'name') {
+                        $name = $arg->value;
+                    }
+                    if ($arg->name->toString() === 'description') {
+                        $description = $arg->value;
+                    }
+                }
+            }
+        }
+        return ['name' => $name, 'description' => $description];
+    }
+}

@@ -1,0 +1,29 @@
+<?php
+
+declare (strict_types=1);
+namespace PhpParser\Node;
+
+use PhpParser\NodeAbstract;
+class InterpolatedStringPart extends NodeAbstract
+{
+    /**
+     * Constructs a node representing a string part of an interpolated string.
+     *
+     * @param string $value String value
+     * @param array<string, mixed> $attributes Additional attributes
+     */
+    public function __construct(public string $value, array $attributes = [])
+    {
+        $this->attributes = $attributes;
+    }
+    public function getSubNodeNames(): array
+    {
+        return ['value'];
+    }
+    public function getType(): string
+    {
+        return 'InterpolatedStringPart';
+    }
+}
+// @deprecated compatibility alias
+class_alias(\PhpParser\Node\InterpolatedStringPart::class, \PhpParser\Node\Scalar\EncapsedStringPart::class);

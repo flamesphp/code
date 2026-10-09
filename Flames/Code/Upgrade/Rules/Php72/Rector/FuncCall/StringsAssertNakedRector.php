@@ -1,0 +1,81 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\Php72\Rector\FuncCall;
+
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\PhpParser\Parser\SimplePhpParser;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
+use Flames\Code\Upgrade\VersionBonding\Contract\MinPhpVersionInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\Rules\Php72\Rector\FuncCall\StringsAssertNakedRectorTest
+ */
+final class StringsAssertNakedRector extends AbstractRector implements MinPhpVersionInterface
+{
+    public function __construct(private readonly SimplePhpParser $simplePhpParser)
+    {
+    }
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::STRING_IN_ASSERT_ARG;
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('String asserts must be passed directly to assert()', [new CodeSample(<<<'CODE_SAMPLE'
+function nakedAssert()
+{
+    assert('true === true');
+    assert("true === true");
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+function nakedAssert()
+{
+    assert(true === true);
+    assert(true === true);
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [FuncCall::class];
+    }
+    /**
+     * @param FuncCall $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if (!$this->isName($node, 'assert')) {
+            return null;
+        }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
+        $firstArg = $node->getArgs()[0];
+        $firstArgValue = $firstArg->value;
+        if (!$firstArgValue instanceof String_) {
+            return null;
+        }
+        $phpCode = '<?php ' . $firstArgValue->value . ';';
+        $contentStmts = $this->simplePhpParser->parseString($phpCode);
+        if (!isset($contentStmts[0])) {
+            return null;
+        }
+        if (!$contentStmts[0] instanceof Expression) {
+            return null;
+        }
+        $node->args[0] = new Arg($contentStmts[0]->expr);
+        return $node;
+    }
+}

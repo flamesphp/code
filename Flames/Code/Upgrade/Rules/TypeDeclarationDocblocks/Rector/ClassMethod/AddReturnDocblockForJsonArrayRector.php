@@ -1,0 +1,129 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks\Rector\ClassMethod;
+
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\StringType;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Flames\Code\Upgrade\PhpParser\Node\Value\ValueResolver;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks\Enum\NetteClassName;
+use Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks\NodeFinder\ReturnNodeFinder;
+use Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForJsonArrayRectorTest
+ */
+final class AddReturnDocblockForJsonArrayRector extends AbstractRector
+{
+    public function __construct(private readonly PhpDocInfoFactory $phpDocInfoFactory, private readonly ReturnNodeFinder $returnNodeFinder, private readonly PhpDocTypeChanger $phpDocTypeChanger, private readonly ValueResolver $valueResolver, private readonly UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Add @return docblock for array based on return of json_decode() return array', [new CodeSample(<<<'CODE_SAMPLE'
+final class SomeClass
+{
+    public function provide(string $contents): array
+    {
+        return json_decode($contents, true);
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+final class SomeClass
+{
+    /**
+     * @return array<string, mixed>
+     */
+    public function provide(string $contents): array
+    {
+        return json_decode($contents, true);
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [ClassMethod::class, Function_::class];
+    }
+    /**
+     * @param ClassMethod|Function_ $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        // definitely not an array return
+        if ($node->returnType instanceof Node && !$this->isName($node->returnType, 'array')) {
+            return null;
+        }
+        $onlyReturnWithExpr = $this->returnNodeFinder->findOnlyReturnWithExpr($node);
+        if (!$onlyReturnWithExpr instanceof Return_) {
+            return null;
+        }
+        $returnedExpr = $onlyReturnWithExpr->expr;
+        if (!$returnedExpr instanceof Expr) {
+            return null;
+        }
+        if (!$this->isJsonDecodeToArray($returnedExpr)) {
+            return null;
+        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($phpDocInfo->getReturnTagValue())) {
+            return null;
+        }
+        $hasChanged = $this->phpDocTypeChanger->changeReturnType($node, $phpDocInfo, new ArrayType(new StringType(), new MixedType()));
+        if (!$hasChanged) {
+            return null;
+        }
+        return $node;
+    }
+    private function isJsonDecodeToArray(Expr $expr): bool
+    {
+        if ($expr instanceof FuncCall) {
+            if (!$this->isName($expr, 'json_decode')) {
+                return \false;
+            }
+            if ($expr->isFirstClassCallable()) {
+                return \false;
+            }
+            $arg = $expr->getArg('associative', 1);
+            if (!$arg instanceof Arg) {
+                return \false;
+            }
+            return $this->valueResolver->isTrue($arg->value);
+        }
+        if ($expr instanceof StaticCall) {
+            if (!$this->isName($expr->class, NetteClassName::JSON)) {
+                return \false;
+            }
+            if (!$this->isName($expr->name, 'decode')) {
+                return \false;
+            }
+            if ($expr->isFirstClassCallable()) {
+                return \false;
+            }
+            $arg = $expr->getArg('forceArrays', 1);
+            if (!$arg instanceof Arg) {
+                return \false;
+            }
+            return $this->valueResolver->isTrue($arg->value);
+        }
+        return \false;
+    }
+}

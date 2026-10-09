@@ -1,0 +1,42 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\StaticTypeMapper\PhpParser;
+
+use PhpParser\Node;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PHPStan\Type\IntersectionType;
+use Flames\Code\Upgrade\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
+/**
+ * @implements PhpParserNodeMapperInterface<Node\IntersectionType>
+ */
+final readonly class IntersectionTypeNodeMapper implements PhpParserNodeMapperInterface
+{
+    public function __construct(private \Flames\Code\Upgrade\StaticTypeMapper\PhpParser\FullyQualifiedNodeMapper $fullyQualifiedNodeMapper, private \Flames\Code\Upgrade\StaticTypeMapper\PhpParser\NameNodeMapper $nameNodeMapper, private \Flames\Code\Upgrade\StaticTypeMapper\PhpParser\IdentifierNodeMapper $identifierNodeMapper)
+    {
+    }
+    public function getNodeType(): string
+    {
+        return Node\IntersectionType::class;
+    }
+    /**
+     * @param Node\IntersectionType $node
+     */
+    public function mapToPHPStan(Node $node): IntersectionType
+    {
+        $types = [];
+        foreach ($node->types as $intersectionedType) {
+            if ($intersectionedType instanceof FullyQualified) {
+                $types[] = $this->fullyQualifiedNodeMapper->mapToPHPStan($intersectionedType);
+                continue;
+            }
+            if ($intersectionedType instanceof Name) {
+                $types[] = $this->nameNodeMapper->mapToPHPStan($intersectionedType);
+                continue;
+            }
+            $types[] = $this->identifierNodeMapper->mapToPHPStan($intersectionedType);
+        }
+        return new IntersectionType($types);
+    }
+}

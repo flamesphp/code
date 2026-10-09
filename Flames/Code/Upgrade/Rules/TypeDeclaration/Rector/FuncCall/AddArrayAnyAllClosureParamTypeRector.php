@@ -1,0 +1,56 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\TypeDeclaration\Rector\FuncCall;
+
+use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\Rules\TypeDeclaration\NodeAnalyzer\ArrayCallbackParamTypeResolver;
+use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
+use Flames\Code\Upgrade\VersionBonding\Contract\MinPhpVersionInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\Rules\TypeDeclaration\Rector\FuncCall\AddArrayAnyAllClosureParamTypeRectorTest
+ */
+final class AddArrayAnyAllClosureParamTypeRector extends AbstractRector implements MinPhpVersionInterface
+{
+    /**
+     * @var string[]
+     */
+    private const array FUNCTION_NAMES = ['array_any', 'array_all'];
+    public function __construct(private readonly ArrayCallbackParamTypeResolver $arrayCallbackParamTypeResolver)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Add a type to an untyped array_any()/array_all() closure param, based on the array item type', [new CodeSample(<<<'CODE_SAMPLE'
+/** @var string[] $items */
+array_any($items, fn ($item): bool => $item !== '');
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+/** @var string[] $items */
+array_any($items, fn (string $item): bool => $item !== '');
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [FuncCall::class];
+    }
+    /**
+     * @param FuncCall $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        return $this->arrayCallbackParamTypeResolver->refactorFirstParamType($node, self::FUNCTION_NAMES, \false);
+    }
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::ARRAY_ANY;
+    }
+}

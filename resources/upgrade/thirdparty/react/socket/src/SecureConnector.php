@@ -1,0 +1,97 @@
+<?php
+
+namespace FlamesPrefix202610\React\Socket;
+
+use FlamesPrefix202610\React\EventLoop\Loop;
+use FlamesPrefix202610\React\EventLoop\LoopInterface;
+use FlamesPrefix202610\React\Promise;
+use BadMethodCallException;
+use InvalidArgumentException;
+use UnexpectedValueException;
+final class SecureConnector implements ConnectorInterface
+{
+    private $streamEncryption;
+    /**
+     * @param ConnectorInterface $connector
+     * @param ?LoopInterface $loop
+     * @param array $context
+     */
+    public function __construct(private readonly ConnectorInterface $connector, $loop = null, private readonly array $context = [])
+    {
+        if ($loop !== null && !$loop instanceof LoopInterface) {
+            // manual type check to support legacy PHP < 7.1
+            throw new \InvalidArgumentException('Argument #2 ($loop) expected null|React\EventLoop\LoopInterface');
+        }
+        $this->streamEncryption = new StreamEncryption($loop ?: Loop::get(), \false);
+    }
+    public function connect($uri)
+    {
+        if (!\function_exists('stream_socket_enable_crypto') && !\function_exists('FlamesPrefix202610\stream_socket_enable_crypto')) {
+            return Promise\reject(new \BadMethodCallException('Encryption not supported on your platform (HHVM < 3.8?)'));
+            // @codeCoverageIgnore
+        }
+        if (!str_contains($uri, '://')) {
+            $uri = 'tls://' . $uri;
+        }
+        $parts = \parse_url($uri);
+        if (!$parts || !isset($parts['scheme']) || $parts['scheme'] !== 'tls') {
+            return Promise\reject(new \InvalidArgumentException('Given URI "' . $uri . '" is invalid (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : (\defined('PCNTL_EINVAL') ? \PCNTL_EINVAL : 22)));
+        }
+        $context = $this->context;
+        $encryption = $this->streamEncryption;
+        $connected = \false;
+        /** @var \React\Promise\PromiseInterface<ConnectionInterface> $promise */
+        $promise = $this->connector->connect(\str_replace('tls://', '', $uri))->then(function (ConnectionInterface $connection) use ($context, $encryption, $uri, &$promise, &$connected) {
+            // (unencrypted) TCP/IP connection succeeded
+            $connected = \true;
+            if (!$connection instanceof Connection) {
+                $connection->close();
+                throw new \UnexpectedValueException('Base connector does not use internal Connection class exposing stream resource');
+            }
+            // set required SSL/TLS context options
+            foreach ($context as $name => $value) {
+                \stream_context_set_option($connection->stream, 'ssl', $name, $value);
+            }
+            // try to enable encryption
+            return $promise = $encryption->enable($connection)->then(null, function ($error) use ($connection, $uri) {
+                // establishing encryption failed => close invalid connection and return error
+                $connection->close();
+                throw new \RuntimeException('Connection to ' . $uri . ' failed during TLS handshake: ' . $error->getMessage(), $error->getCode());
+            });
+        }, function (\Exception $e) use ($uri) {
+            if ($e instanceof \RuntimeException) {
+                $message = \preg_replace('/^Connection to [^ ]+/', '', $e->getMessage());
+                $e = new \RuntimeException('Connection to ' . $uri . $message, $e->getCode(), $e);
+                // avoid garbage references by replacing all closures in call stack.
+                // what a lovely piece of code!
+                $r = new \ReflectionProperty('Exception', 'trace');
+                if (\PHP_VERSION_ID < 80100) {
+                }
+                $trace = $r->getValue($e);
+                // Exception trace arguments are not available on some PHP 7.4 installs
+                // @codeCoverageIgnoreStart
+                foreach ($trace as $ti => $one) {
+                    if (isset($one['args'])) {
+                        foreach ($one['args'] as $ai => $arg) {
+                            if ($arg instanceof \Closure) {
+                                $trace[$ti]['args'][$ai] = 'Object(' . $arg::class . ')';
+                            }
+                        }
+                    }
+                }
+                // @codeCoverageIgnoreEnd
+                $r->setValue($e, $trace);
+            }
+            throw $e;
+        });
+        return new \FlamesPrefix202610\React\Promise\Promise(function ($resolve, $reject) use ($promise) {
+            $promise->then($resolve, $reject);
+        }, function ($_, $reject) use (&$promise, $uri, &$connected) {
+            if ($connected) {
+                $reject(new \RuntimeException('Connection to ' . $uri . ' cancelled during TLS handshake (ECONNABORTED)', \defined('SOCKET_ECONNABORTED') ? \SOCKET_ECONNABORTED : 103));
+            }
+            $promise->cancel();
+            $promise = null;
+        });
+    }
+}

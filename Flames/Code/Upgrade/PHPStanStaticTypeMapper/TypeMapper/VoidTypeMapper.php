@@ -1,0 +1,52 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\PHPStanStaticTypeMapper\TypeMapper;
+
+use PhpParser\Node;
+use PhpParser\Node\Identifier;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Type;
+use PHPStan\Type\VoidType;
+use Flames\Code\Upgrade\Php\PhpVersionProvider;
+use Flames\Code\Upgrade\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Flames\Code\Upgrade\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
+/**
+ * @implements TypeMapperInterface<VoidType>
+ */
+final readonly class VoidTypeMapper implements TypeMapperInterface
+{
+    private const string VOID = 'void';
+    public function __construct(private PhpVersionProvider $phpVersionProvider)
+    {
+    }
+    /**
+     * @return array<class-string<Type>>
+     */
+    public function getNodeClasses(): array
+    {
+        return [VoidType::class];
+    }
+    /**
+     * @param VoidType $type
+     */
+    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    {
+        return $type->toPhpDocNode();
+    }
+    /**
+     * @param TypeKind::* $typeKind
+     * @param VoidType $type
+     */
+    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
+    {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::VOID_TYPE)) {
+            return null;
+        }
+        if (in_array($typeKind, [TypeKind::PARAM, TypeKind::PROPERTY, TypeKind::UNION], \true)) {
+            return null;
+        }
+        return new Identifier(self::VOID);
+    }
+}

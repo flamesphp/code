@@ -1,0 +1,36 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+$codeRoot = dirname(__DIR__, 3);
+$projectRoot = dirname($codeRoot, 3) . '/';
+
+if (! defined('ROOT_PATH')) {
+    define('ROOT_PATH', $projectRoot);
+}
+
+if (! defined('APP_PATH')) {
+    define('APP_PATH', ROOT_PATH . 'App/');
+}
+
+define('__FLAMES_CODE_UPGRADE_RUNNING__', true);
+
+require_once __DIR__ . '/../bootstrap-thirdparty.php';
+
+if (is_file(__DIR__ . '/../preload.php') && is_dir(__DIR__ . '/../thirdparty')) {
+    require_once __DIR__ . '/../preload.php';
+}
+
+require_once __DIR__ . '/../bootstrap-phpstan.php';
+
+$flamesAutoload = ROOT_PATH . 'vendor/flamesphp/autoload/Flames/Autoload/Autoload.php';
+
+if (is_file($flamesAutoload)) {
+    require_once $flamesAutoload;
+    \Flames\Autoload\Autoload::run();
+}
+
+require_once __DIR__ . '/../bootstrap-flames-project.php';
+
+require __DIR__ . '/code-upgrade.php';

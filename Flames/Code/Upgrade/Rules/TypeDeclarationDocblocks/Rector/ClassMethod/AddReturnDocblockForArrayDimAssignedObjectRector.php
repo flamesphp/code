@@ -1,0 +1,181 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks\Rector\ClassMethod;
+
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Return_;
+use PhpParser\NodeVisitor;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
+use Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks\NodeDocblockTypeDecorator;
+use Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks\NodeFinder\ReturnNodeFinder;
+use Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForArrayDimAssignedObjectRectorTest
+ */
+final class AddReturnDocblockForArrayDimAssignedObjectRector extends AbstractRector
+{
+    public function __construct(private readonly PhpDocInfoFactory $phpDocInfoFactory, private readonly ReturnNodeFinder $returnNodeFinder, private readonly UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer, private readonly NodeDocblockTypeDecorator $nodeDocblockTypeDecorator)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Add @return docblock array of objects, that are dim assigned to returned variable', [new CodeSample(<<<'CODE_SAMPLE'
+final class ItemProvider
+{
+    public function provide(array $input): array
+    {
+        $items = [];
+
+        foreach ($input as $value) {
+            $items[] = new Item($value);
+        }
+
+        return $items;
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+final class ItemProvider
+{
+    /**
+     * @return Item[]
+     */
+    public function provide(array $input): array
+    {
+        $items = [];
+
+        foreach ($input as $value) {
+            $items[] = new Item($value);
+        }
+
+        return $items;
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [ClassMethod::class, Function_::class];
+    }
+    /**
+     * @param ClassMethod|Function_ $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        // definitely not an array return
+        if ($node->returnType instanceof Node && !$this->isName($node->returnType, 'array')) {
+            return null;
+        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $returnType = $phpDocInfo->getReturnType();
+        if ($returnType instanceof ArrayType && !$returnType->getItemType() instanceof MixedType) {
+            return null;
+        }
+        if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($phpDocInfo->getReturnTagValue())) {
+            return null;
+        }
+        $onlyReturnWithExpr = $this->returnNodeFinder->findOnlyReturnWithExpr($node);
+        if (!$onlyReturnWithExpr instanceof Return_ || !$onlyReturnWithExpr->expr instanceof Variable) {
+            return null;
+        }
+        // is expr only used to array dim assign?
+        $returnedType = $this->getType($onlyReturnWithExpr->expr);
+        $returnedVariableName = $this->getName($onlyReturnWithExpr->expr);
+        if (!is_string($returnedVariableName)) {
+            return null;
+        }
+        if ($this->isVariableExclusivelyArrayDimAssigned($node, $returnedVariableName) === \false) {
+            return null;
+        }
+        $arrayObjectType = $this->matchArrayObjectType($returnedType);
+        if (!$arrayObjectType instanceof ObjectType) {
+            return null;
+        }
+        $objectTypeArrayType = new ArrayType(new MixedType(), $arrayObjectType);
+        if (!$this->nodeDocblockTypeDecorator->decorateGenericIterableReturnType($objectTypeArrayType, $phpDocInfo, $node)) {
+            return null;
+        }
+        return $node;
+    }
+    private function matchArrayObjectType(Type $type): ?Type
+    {
+        if (!$type instanceof ArrayType) {
+            return null;
+        }
+        if (!$type->getItemType() instanceof ObjectType) {
+            return null;
+        }
+        return $type->getItemType();
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    private function isVariableExclusivelyArrayDimAssigned($functionLike, string $variableName): bool
+    {
+        $isVariableExclusivelyArrayDimAssigned = \true;
+        $this->traverseNodesWithCallable((array) $functionLike->stmts, function ($node) use ($variableName, &$isVariableExclusivelyArrayDimAssigned): ?int {
+            if ($node instanceof Assign) {
+                if ($node->var instanceof ArrayDimFetch) {
+                    $arrayDimFetch = $node->var;
+                    if (!$arrayDimFetch->var instanceof Variable) {
+                        $isVariableExclusivelyArrayDimAssigned = \false;
+                        return null;
+                    }
+                    if ($this->isName($arrayDimFetch->var, $variableName)) {
+                        if ($arrayDimFetch->dim instanceof Expr) {
+                            $isVariableExclusivelyArrayDimAssigned = \false;
+                        }
+                        $assignedType = $this->getType($node->expr);
+                        if (!$assignedType instanceof ObjectType) {
+                            $isVariableExclusivelyArrayDimAssigned = \false;
+                        }
+                        if ($assignedType instanceof NonExistingObjectType) {
+                            $isVariableExclusivelyArrayDimAssigned = \false;
+                        }
+                        // ignore lower value
+                        return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                    }
+                }
+                if ($node->var instanceof Variable && $this->isName($node->var, $variableName) && $node->expr instanceof Array_) {
+                    if ($node->expr->items === []) {
+                        // ignore empty array assignment
+                        return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                    }
+                    $isVariableExclusivelyArrayDimAssigned = \false;
+                }
+            }
+            if ($node instanceof Return_ && $node->expr instanceof Variable) {
+                if ($this->isName($node->expr, $variableName)) {
+                    // ignore lower value
+                    return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                }
+                $isVariableExclusivelyArrayDimAssigned = \false;
+            }
+            if ($node instanceof Variable && $this->isName($node, $variableName)) {
+                $isVariableExclusivelyArrayDimAssigned = \false;
+            }
+            return null;
+        });
+        return $isVariableExclusivelyArrayDimAssigned;
+    }
+}

@@ -1,0 +1,74 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Set\ValueObject;
+
+use FlamesPrefix202610\Composer\Semver\Semver;
+use FlamesPrefix202610\Nette\Utils\Strings;
+use Flames\Code\Upgrade\Composer\ValueObject\InstalledPackage;
+use Flames\Code\Upgrade\Set\Contract\SetInterface;
+use FlamesPrefix202610\Webmozart\Assert\Assert;
+/**
+ * @api used by extensions
+ *
+ * @deprecated Bond the rules themselves instead, by implementing the ComposerPackageConstraintInterface. A set
+ * triggered on a single major version has to be repeated for every version an upgrade passes through, while a bonded
+ * rule states the exact package version its target API is available from and applies from there upwards.
+ *
+ * @see \Flames\Code\Upgrade\VersionBonding\Contract\ComposerPackageConstraintInterface
+ * @see https://github.com/rectorphp/rector-src/pull/8296
+ *
+ * @see \Flames\Code\Upgrade\Tests\Set\ValueObject\ComposerTriggeredSetTest
+ */
+final readonly class ComposerTriggeredSet implements SetInterface
+{
+    /**
+     * @see https://regex101.com/r/ioYomu/1
+     */
+    private const string PACKAGE_REGEX = '#^[a-z0-9-]+\/([a-z0-9-_]+|\*)$#';
+    /**
+     * A bare "10.0" version, that is turned into a "^10.0" constraint
+     *
+     * @see https://regex101.com/r/vTJXPU/1
+     */
+    private const string BARE_VERSION_REGEX = '#^\d+(\.\d+)*$#';
+    public function __construct(private string $groupName, private string $packageName, private string $version, private string $setFilePath)
+    {
+        Assert::regex($this->packageName, self::PACKAGE_REGEX);
+        Assert::fileExists($this->setFilePath);
+    }
+    public function getGroupName(): string
+    {
+        return $this->groupName;
+    }
+    public function getSetFilePath(): string
+    {
+        return $this->setFilePath;
+    }
+    /**
+     * @param array<string, InstalledPackage> $installedPackages
+     */
+    public function matchInstalledPackages(array $installedPackages): bool
+    {
+        $package = $installedPackages[$this->packageName] ?? null;
+        if (!$package instanceof InstalledPackage) {
+            return \false;
+        }
+        return Semver::satisfies($package->getVersion(), $this->resolveVersionConstraint());
+    }
+    public function getName(): string
+    {
+        return $this->packageName . ' ' . $this->version;
+    }
+    /**
+     * A bare version means "this major version", e.g. "10.0" is "^10.0". Anything else is used as is,
+     * to allow a set that spans multiple major versions, e.g. ">=10.0" or ">=10.0 <13.0".
+     */
+    private function resolveVersionConstraint(): string
+    {
+        if (Strings::match($this->version, self::BARE_VERSION_REGEX) !== null) {
+            return '^' . $this->version;
+        }
+        return $this->version;
+    }
+}

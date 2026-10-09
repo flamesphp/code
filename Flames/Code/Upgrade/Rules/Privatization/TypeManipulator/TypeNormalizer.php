@@ -1,0 +1,177 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\Privatization\TypeManipulator;
+
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Accessory\AccessoryLiteralStringType;
+use PHPStan\Type\Accessory\AccessoryNonEmptyStringType;
+use PHPStan\Type\Accessory\AccessoryNonFalsyStringType;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\BooleanType;
+use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\Constant\ConstantBooleanType;
+use PHPStan\Type\Constant\ConstantFloatType;
+use PHPStan\Type\Constant\ConstantIntegerType;
+use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\FloatType;
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\StringType;
+use PHPStan\Type\Type;
+use PHPStan\Type\TypeTraverser;
+use PHPStan\Type\UnionType;
+use Flames\Code\Upgrade\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Flames\Code\Upgrade\NodeTypeResolver\PHPStan\TypeHasher;
+use Flames\Code\Upgrade\StaticTypeMapper\StaticTypeMapper;
+use Flames\Code\Upgrade\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
+final readonly class TypeNormalizer
+{
+    private const int MAX_PRINTED_UNION_DOC_LENGTH = 77;
+    public function __construct(private TypeFactory $typeFactory, private StaticTypeMapper $staticTypeMapper, private \Flames\Code\Upgrade\Rules\Privatization\TypeManipulator\ArrayTypeLeastCommonDenominatorResolver $arrayTypeLeastCommonDenominatorResolver, private TypeHasher $typeHasher)
+    {
+    }
+    /**
+     * Generalize false/true constantArrayType to bool,
+     * as mostly default value but accepts both
+     */
+    public function generalizeConstantTypes(Type $type): Type
+    {
+        $deep = 0;
+        return TypeTraverser::map($type, function (Type $type, callable $traverseCallback) use (&$deep): Type {
+            ++$deep;
+            if ($type instanceof AccessoryNonFalsyStringType || $type instanceof AccessoryLiteralStringType || $type instanceof AccessoryNonEmptyStringType) {
+                return new StringType();
+            }
+            if ($type instanceof ConstantBooleanType) {
+                return new BooleanType();
+            }
+            if ($type instanceof ConstantStringType) {
+                return new StringType();
+            }
+            if ($type instanceof ConstantFloatType) {
+                return new FloatType();
+            }
+            if ($type instanceof ConstantIntegerType) {
+                return new IntegerType();
+            }
+            if ($type instanceof ConstantArrayType) {
+                // is relevant int constantArrayType?
+                if ($this->isImplicitNumberedListKeyType($type)) {
+                    $keyType = $deep === 1 ? new MixedType() : new IntegerType();
+                } else {
+                    $keyType = $this->generalizeConstantTypes($type->getKeyType());
+                }
+                // should be string[]
+                $itemType = $traverseCallback($type->getItemType(), $traverseCallback);
+                if ($itemType instanceof ConstantStringType) {
+                    $itemType = new StringType();
+                }
+                if ($itemType instanceof ConstantArrayType) {
+                    $itemType = $this->generalizeConstantTypes($itemType);
+                }
+                return new ArrayType($keyType, $itemType);
+            }
+            if ($type instanceof UnionType) {
+                $generalizedUnionedTypes = [];
+                foreach ($type->getTypes() as $unionedType) {
+                    $generalizedUnionedType = $this->generalizeConstantTypes($unionedType);
+                    if ($generalizedUnionedType instanceof ArrayType) {
+                        $keyType = $this->typeHasher->createTypeHash($generalizedUnionedType->getKeyType());
+                        foreach ($generalizedUnionedTypes as $key => $existingUnionedType) {
+                            if (!$existingUnionedType instanceof ArrayType) {
+                                continue;
+                            }
+                            $existingKeyType = $this->typeHasher->createTypeHash($existingUnionedType->getKeyType());
+                            if ($keyType !== $existingKeyType) {
+                                continue;
+                            }
+                            $uniqueTypes = $this->typeFactory->uniquateTypes([$existingUnionedType->getItemType(), $generalizedUnionedType->getItemType()]);
+                            if (count($uniqueTypes) !== 1) {
+                                continue;
+                            }
+                            $generalizedUnionedTypes[$key] = new ArrayType($existingUnionedType->getKeyType(), $uniqueTypes[0]);
+                            continue 2;
+                        }
+                    }
+                    $generalizedUnionedTypes[] = $generalizedUnionedType;
+                }
+                $uniqueGeneralizedUnionTypes = $this->typeFactory->uniquateTypes($generalizedUnionedTypes);
+                if (count($uniqueGeneralizedUnionTypes) > 1) {
+                    $generalizedUnionType = new UnionType($uniqueGeneralizedUnionTypes);
+                    $shortUnionedDocType = $this->resolveNameShortDocTypeNode($generalizedUnionType);
+                    if (strlen((string) $shortUnionedDocType) > self::MAX_PRINTED_UNION_DOC_LENGTH && $this->avoidPrintedDocblockTrimming($generalizedUnionType) === \false) {
+                        $alwaysKnownArrayType = $this->narrowToAlwaysKnownArrayType($generalizedUnionType);
+                        if ($alwaysKnownArrayType instanceof ArrayType) {
+                            return $alwaysKnownArrayType;
+                        }
+                        return new MixedType();
+                    }
+                    return $generalizedUnionType;
+                }
+                return $uniqueGeneralizedUnionTypes[0];
+            }
+            $convertedType = $traverseCallback($type, $traverseCallback);
+            if ($convertedType instanceof NeverType) {
+                return new MixedType();
+            }
+            return $convertedType;
+        });
+    }
+    private function isImplicitNumberedListKeyType(ConstantArrayType $constantArrayType): bool
+    {
+        if (!$constantArrayType->getKeyType() instanceof UnionType) {
+            return \false;
+        }
+        foreach ($constantArrayType->getKeyType()->getTypes() as $key => $keyType) {
+            if ($keyType instanceof ConstantIntegerType) {
+                if ($keyType->getValue() === $key) {
+                    continue;
+                }
+                return \false;
+            }
+            return \false;
+        }
+        return \true;
+    }
+    private function narrowToAlwaysKnownArrayType(UnionType $unionType): ?ArrayType
+    {
+        // always an array?
+        if (count($unionType->getArrays()) !== count($unionType->getTypes())) {
+            return null;
+        }
+        $sharedArrayStructure = $this->arrayTypeLeastCommonDenominatorResolver->sharedArrayStructure(...$unionType->getTypes());
+        if (!$sharedArrayStructure instanceof ArrayType) {
+            return null;
+        }
+        return $sharedArrayStructure;
+    }
+    /**
+     * Is object only? avoid trimming, as auto import handles it better
+     */
+    private function avoidPrintedDocblockTrimming(UnionType $unionType): bool
+    {
+        if ($unionType->getConstantScalarTypes() !== []) {
+            return \false;
+        }
+        if ($unionType->getConstantArrays() !== []) {
+            return \false;
+        }
+        return $unionType->getObjectClassNames() !== [];
+    }
+    private function resolveNameShortDocTypeNode(UnionType $unionType): TypeNode
+    {
+        // we have to convert name to short here, to make sure the not FQN, but short name is counted to the full length
+        $objectShortGeneralizedUnionType = TypeTraverser::map($unionType, function (Type $type, callable $traverseCallback): Type {
+            if ($type instanceof ObjectType && str_contains($type->getClassName(), '\\')) {
+                // after last "\\"
+                $shortClassName = (string) substr($type->getClassName(), strrpos($type->getClassName(), '\\') + 1);
+                return new ShortenedObjectType($shortClassName, $type->getClassName());
+            }
+            return $traverseCallback($type, $traverseCallback);
+        });
+        return $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($objectShortGeneralizedUnionType);
+    }
+}

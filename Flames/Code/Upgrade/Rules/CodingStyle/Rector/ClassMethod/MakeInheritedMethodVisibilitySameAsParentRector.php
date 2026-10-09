@@ -1,0 +1,138 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\CodingStyle\Rector\ClassMethod;
+
+use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ClassReflection;
+use Flames\Code\Upgrade\Rules\Privatization\NodeManipulator\VisibilityManipulator;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\Reflection\ReflectionResolver;
+use ReflectionMethod;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\Rules\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRectorTest
+ */
+final class MakeInheritedMethodVisibilitySameAsParentRector extends AbstractRector
+{
+    public function __construct(private readonly VisibilityManipulator $visibilityManipulator, private readonly ReflectionResolver $reflectionResolver)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Make method visibility same as parent one', [new CodeSample(<<<'CODE_SAMPLE'
+class ChildClass extends ParentClass
+{
+    public function run()
+    {
+    }
+}
+
+class ParentClass
+{
+    protected function run()
+    {
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+class ChildClass extends ParentClass
+{
+    protected function run()
+    {
+    }
+}
+
+class ParentClass
+{
+    protected function run()
+    {
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [Class_::class];
+    }
+    /**
+     * @param Class_ $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if ($node->isAnonymous()) {
+            return null;
+        }
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+        if (!$classReflection instanceof ClassReflection) {
+            return null;
+        }
+        $parentClassReflections = $classReflection->getParents();
+        if ($parentClassReflections === []) {
+            return null;
+        }
+        $hasChanged = \false;
+        $interfaces = $classReflection->getInterfaces();
+        foreach ($node->getMethods() as $classMethod) {
+            if ($classMethod->isMagic()) {
+                continue;
+            }
+            /** @var string $methodName */
+            $methodName = $this->getName($classMethod->name);
+            if ($classMethod->isPublic()) {
+                foreach ($interfaces as $interface) {
+                    if ($interface->hasNativeMethod($methodName)) {
+                        continue 2;
+                    }
+                }
+            }
+            foreach ($parentClassReflections as $parentClassReflection) {
+                $nativeClassReflection = $parentClassReflection->getNativeReflection();
+                // the class reflection above takes also @method annotations into an account
+                if (!$nativeClassReflection->hasMethod($methodName)) {
+                    continue;
+                }
+                /** @var ReflectionMethod $parentReflectionMethod */
+                $parentReflectionMethod = $nativeClassReflection->getMethod($methodName);
+                // private methods are not inherited, so the child method does not override them
+                // and its visibility must not be aligned to them
+                if ($parentReflectionMethod->isPrivate()) {
+                    continue;
+                }
+                if ($this->isClassMethodCompatibleWithParentReflectionMethod($classMethod, $parentReflectionMethod)) {
+                    continue 2;
+                }
+                $this->changeClassMethodVisibilityBasedOnReflectionMethod($classMethod, $parentReflectionMethod);
+                $hasChanged = \true;
+            }
+        }
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
+    }
+    private function isClassMethodCompatibleWithParentReflectionMethod(ClassMethod $classMethod, ReflectionMethod $reflectionMethod): bool
+    {
+        if ($reflectionMethod->isPublic() && $classMethod->isPublic()) {
+            return \true;
+        }
+        return $reflectionMethod->isProtected() && $classMethod->isProtected();
+    }
+    private function changeClassMethodVisibilityBasedOnReflectionMethod(ClassMethod $classMethod, ReflectionMethod $reflectionMethod): void
+    {
+        if ($reflectionMethod->isPublic()) {
+            $this->visibilityManipulator->makePublic($classMethod);
+            return;
+        }
+        if ($reflectionMethod->isProtected()) {
+            $this->visibilityManipulator->makeProtected($classMethod);
+        }
+    }
+}

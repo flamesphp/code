@@ -1,0 +1,121 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\CodingStyle\Node;
+
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\GroupUse;
+use PhpParser\Node\Stmt\Use_;
+use Flames\Code\Upgrade\Rules\CodingStyle\ClassNameImport\ClassNameImportSkipper;
+use Flames\Code\Upgrade\Rules\Naming\Naming\AliasNameResolver;
+use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
+use Flames\Code\Upgrade\PhpParser\Node\FileNode;
+use Flames\Code\Upgrade\StaticTypeMapper\PhpParser\FullyQualifiedNodeMapper;
+use Flames\Code\Upgrade\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Flames\Code\Upgrade\ValueObject\Application\File;
+final readonly class NameImporter
+{
+    public function __construct(private ClassNameImportSkipper $classNameImportSkipper, private FullyQualifiedNodeMapper $fullyQualifiedNodeMapper, private AliasNameResolver $aliasNameResolver)
+    {
+    }
+    /**
+     * @param array<Use_|GroupUse> $currentUses
+     */
+    public function importName(FullyQualified $fullyQualified, File $file, array $currentUses): ?Name
+    {
+        if ($this->classNameImportSkipper->shouldSkipName($fullyQualified, $currentUses)) {
+            return null;
+        }
+        $staticType = $this->fullyQualifiedNodeMapper->mapToPHPStan($fullyQualified);
+        if (!$staticType instanceof FullyQualifiedObjectType) {
+            return null;
+        }
+        return $this->importNameAndCollectNewUseStatement($file, $fullyQualified, $staticType, $currentUses);
+    }
+    /**
+     * @param array<Use_|GroupUse> $currentUses
+     */
+    private function resolveNameInUse(FullyQualified $fullyQualified, array $currentUses): ?Name
+    {
+        $aliasName = $this->aliasNameResolver->resolveByName($fullyQualified, $currentUses);
+        if (is_string($aliasName)) {
+            return new Name($aliasName);
+        }
+        if (substr_count($fullyQualified->toCodeString(), '\\') === 1) {
+            return null;
+        }
+        $lastName = $fullyQualified->getLast();
+        foreach ($currentUses as $currentUse) {
+            foreach ($currentUse->uses as $useUse) {
+                if ($useUse->name->getLast() !== $lastName) {
+                    continue;
+                }
+                if ($useUse->alias instanceof Identifier && $useUse->alias->toString() !== $lastName) {
+                    return new Name($lastName);
+                }
+            }
+        }
+        return null;
+    }
+    /**
+     * @param array<Use_|GroupUse> $currentUses
+     */
+    private function importNameAndCollectNewUseStatement(File $file, FullyQualified $fullyQualified, FullyQualifiedObjectType $fullyQualifiedObjectType, array $currentUses): ?Name
+    {
+        // make use of existing use import
+        $nameInUse = $this->resolveNameInUse($fullyQualified, $currentUses);
+        if ($nameInUse instanceof Name) {
+            $nameInUse->setAttribute(AttributeKey::NAMESPACED_NAME, $fullyQualified->toString());
+            return $nameInUse;
+        }
+        // the same end is already imported → skip
+        if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType($file, $fullyQualified, $fullyQualifiedObjectType)) {
+            return null;
+        }
+        $fileNode = $file->getFileNode();
+        if (!$fileNode instanceof FileNode) {
+            return null;
+        }
+        $pendingImports = $fileNode->getPendingImports();
+        if ($pendingImports->isShortImported($fullyQualifiedObjectType)) {
+            if ($pendingImports->isImportShortable($fullyQualifiedObjectType)) {
+                return $fullyQualifiedObjectType->getShortNameNode();
+            }
+            return null;
+        }
+        $this->addUseImport($fileNode, $fullyQualified, $fullyQualifiedObjectType);
+        $name = $fullyQualifiedObjectType->getShortNameNode();
+        $oldTokens = $file->getOldTokens();
+        $startTokenPos = $fullyQualified->getStartTokenPos();
+        if (!isset($oldTokens[$startTokenPos])) {
+            return $name;
+        }
+        $tokenShortName = $oldTokens[$startTokenPos];
+        if (str_starts_with($tokenShortName->text, '\\')) {
+            return $name;
+        }
+        if (str_contains($tokenShortName->text, '\\')) {
+            return $name;
+        }
+        if ($name->toString() !== $tokenShortName->text) {
+            return $name;
+        }
+        return null;
+    }
+    private function addUseImport(FileNode $fileNode, FullyQualified $fullyQualified, FullyQualifiedObjectType $fullyQualifiedObjectType): void
+    {
+        if ($fileNode->hasImport($fullyQualifiedObjectType)) {
+            return;
+        }
+        $pendingImports = $fileNode->getPendingImports();
+        if ($fullyQualified->getAttribute(AttributeKey::IS_FUNCCALL_NAME) === \true) {
+            $pendingImports->addFunctionUseImport($fullyQualifiedObjectType);
+        } elseif ($fullyQualified->getAttribute(AttributeKey::IS_CONSTFETCH_NAME) === \true) {
+            $pendingImports->addConstantUseImport($fullyQualifiedObjectType);
+        } else {
+            $pendingImports->addUseImport($fullyQualifiedObjectType);
+        }
+    }
+}

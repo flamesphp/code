@@ -1,0 +1,36 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\Php80\Guard;
+
+use PhpParser\Node;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ClassReflection;
+use Flames\Code\Upgrade\Rules\Php74\Guard\PropertyTypeChangeGuard;
+final readonly class MakePropertyPromotionGuard
+{
+    public function __construct(private PropertyTypeChangeGuard $propertyTypeChangeGuard)
+    {
+    }
+    public function isLegal(Class_ $class, ClassReflection $classReflection, Property $property, Param $param, bool $inlinePublic = \true): bool
+    {
+        if (!$this->propertyTypeChangeGuard->isLegal($property, $classReflection, $inlinePublic, \true)) {
+            return \false;
+        }
+        if ($class->isFinal()) {
+            return \true;
+        }
+        if ($inlinePublic) {
+            return \true;
+        }
+        if ($property->isPrivate()) {
+            return \true;
+        }
+        if (!$param->type instanceof Node) {
+            return \true;
+        }
+        return $property->type instanceof Node;
+    }
+}

@@ -1,0 +1,24 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\ChangesReporting\ValueObjectFactory;
+
+use PHPStan\AnalysedCodeException;
+use Flames\Code\Upgrade\FileSystem\FilePathHelper;
+use Flames\Code\Upgrade\ValueObject\Error\SystemError;
+final readonly class ErrorFactory
+{
+    public function __construct(private FilePathHelper $filePathHelper)
+    {
+    }
+    public function createAutoloadError(AnalysedCodeException $analysedCodeException, string $filePath): SystemError
+    {
+        $message = $this->createExceptionMessage($analysedCodeException);
+        $relativeFilePath = $this->filePathHelper->relativePath($filePath);
+        return new SystemError($message, $relativeFilePath);
+    }
+    private function createExceptionMessage(AnalysedCodeException $analysedCodeException): string
+    {
+        return sprintf('Analyze error: "%s". Include your files in "$rectorConfig->autoloadPaths([...]);" or "$rectorConfig->bootstrapFiles([...]);" in "code-upgrade.php" config.%sSee https://github.com/rectorphp/rector#configuration', $analysedCodeException->getMessage(), \PHP_EOL);
+    }
+}

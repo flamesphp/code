@@ -1,0 +1,47 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\NodeAnalyzer;
+
+use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
+use Flames\Code\Upgrade\NodeTypeResolver\NodeTypeResolver;
+use Flames\Code\Upgrade\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
+use Flames\Code\Upgrade\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
+final readonly class PropertyAnalyzer
+{
+    public function __construct(private NodeTypeResolver $nodeTypeResolver)
+    {
+    }
+    public function hasForbiddenType(Property $property): bool
+    {
+        $propertyType = $this->nodeTypeResolver->getType($property);
+        if ($propertyType->isNull()->yes()) {
+            return \true;
+        }
+        if ($this->isForbiddenType($propertyType)) {
+            return \true;
+        }
+        if (!$propertyType instanceof UnionType) {
+            return \false;
+        }
+        $types = $propertyType->getTypes();
+        $found = array_any($types, fn($type) => $this->isForbiddenType($type));
+        return $found;
+    }
+    public function isForbiddenType(Type $type): bool
+    {
+        if ($type instanceof NonExistingObjectType) {
+            return \true;
+        }
+        return $this->isCallableType($type);
+    }
+    private function isCallableType(Type $type): bool
+    {
+        if (ClassNameFromObjectTypeResolver::resolve($type) === 'Closure') {
+            return \false;
+        }
+        return $type->isCallable()->yes();
+    }
+}

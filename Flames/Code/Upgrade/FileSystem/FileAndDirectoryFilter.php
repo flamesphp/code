@@ -1,0 +1,29 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\FileSystem;
+
+/**
+ * @see \Flames\Code\Upgrade\Tests\FileSystem\FileAndDirectoryFilter\FileAndDirectoryFilterTest
+ */
+final class FileAndDirectoryFilter
+{
+    /**
+     * @param string[] $filesAndDirectories
+     * @return string[]
+     */
+    public function filterDirectories(array $filesAndDirectories): array
+    {
+        $directories = array_filter($filesAndDirectories, \is_dir(...));
+        return array_values($directories);
+    }
+    /**
+     * @param string[] $filesAndDirectories
+     * @return string[]
+     */
+    public function filterFiles(array $filesAndDirectories): array
+    {
+        $files = array_filter($filesAndDirectories, \is_file(...));
+        return array_values($files);
+    }
+}

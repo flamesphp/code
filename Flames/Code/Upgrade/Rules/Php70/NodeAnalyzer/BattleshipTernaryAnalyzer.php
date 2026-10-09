@@ -1,0 +1,117 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\Php70\NodeAnalyzer;
+
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\Greater;
+use PhpParser\Node\Expr\BinaryOp\Smaller;
+use PhpParser\Node\Expr\Ternary;
+use Flames\Code\Upgrade\Rules\Php70\Enum\BattleshipCompareOrder;
+use Flames\Code\Upgrade\Rules\Php70\ValueObject\ComparedExprs;
+use Flames\Code\Upgrade\PhpParser\Comparing\NodeComparator;
+use Flames\Code\Upgrade\PhpParser\Node\Value\ValueResolver;
+final readonly class BattleshipTernaryAnalyzer
+{
+    public function __construct(private NodeComparator $nodeComparator, private ValueResolver $valueResolver)
+    {
+    }
+    /**
+     * @return BattleshipCompareOrder::*|null
+     */
+    public function isGreaterLowerCompareReturnOneAndMinusOne(Ternary $ternary, ComparedExprs $comparedExprs): ?string
+    {
+        if ($ternary->cond instanceof Greater) {
+            return $this->evaluateGreater($ternary->cond, $ternary, $comparedExprs);
+        }
+        if ($ternary->cond instanceof Smaller) {
+            return $this->evaluateSmaller($ternary->cond, $ternary, $comparedExprs);
+        }
+        return null;
+    }
+    /**
+     * We look for:
+     *
+     * $firstValue > $secondValue ? 1 : -1
+     *
+     * @return BattleshipCompareOrder::*|null
+     */
+    private function evaluateGreater(Greater $greater, Ternary $ternary, ComparedExprs $comparedExprs): ?string
+    {
+        if (!$ternary->if instanceof Expr) {
+            return null;
+        }
+        if ($this->nodeComparator->areNodesEqual($greater->left, $comparedExprs->getFirstExpr()) && $this->nodeComparator->areNodesEqual($greater->right, $comparedExprs->getSecondExpr())) {
+            return $this->evaluateTernaryDesc($ternary);
+        }
+        if (!$this->nodeComparator->areNodesEqual($greater->right, $comparedExprs->getFirstExpr())) {
+            return null;
+        }
+        if (!$this->nodeComparator->areNodesEqual($greater->left, $comparedExprs->getSecondExpr())) {
+            return null;
+        }
+        return $this->evaluateTernaryAsc($ternary);
+    }
+    /**
+     * We look for:
+     *
+     * $firstValue < $secondValue ? -1 : 1
+     *
+     * @return BattleshipCompareOrder::*|null
+     */
+    private function evaluateSmaller(Smaller $smaller, Ternary $ternary, ComparedExprs $comparedExprs): ?string
+    {
+        if (!$ternary->if instanceof Expr) {
+            return null;
+        }
+        if ($this->nodeComparator->areNodesEqual($smaller->left, $comparedExprs->getFirstExpr()) && $this->nodeComparator->areNodesEqual($smaller->right, $comparedExprs->getSecondExpr())) {
+            return $this->evaluateTernaryAsc($ternary);
+        }
+        if (!$this->nodeComparator->areNodesEqual($smaller->right, $comparedExprs->getFirstExpr())) {
+            return null;
+        }
+        if (!$this->nodeComparator->areNodesEqual($smaller->left, $comparedExprs->getSecondExpr())) {
+            return null;
+        }
+        return $this->evaluateTernaryDesc($ternary);
+    }
+    private function isValueOneAndMinusOne(Expr $firstExpr, Expr $secondExpr): bool
+    {
+        if (!$this->valueResolver->isValue($firstExpr, 1)) {
+            return \false;
+        }
+        return $this->valueResolver->isValue($secondExpr, -1);
+    }
+    /**
+     * @return BattleshipCompareOrder::*|null
+     */
+    private function evaluateTernaryAsc(Ternary $ternary): ?string
+    {
+        if (!$ternary->if instanceof Expr) {
+            return null;
+        }
+        if ($this->isValueOneAndMinusOne($ternary->if, $ternary->else)) {
+            return BattleshipCompareOrder::ASC;
+        }
+        if ($this->isValueOneAndMinusOne($ternary->else, $ternary->if)) {
+            return BattleshipCompareOrder::DESC;
+        }
+        return null;
+    }
+    /**
+     * @return BattleshipCompareOrder::*|null
+     */
+    private function evaluateTernaryDesc(Ternary $ternary): ?string
+    {
+        if (!$ternary->if instanceof Expr) {
+            return null;
+        }
+        if ($this->isValueOneAndMinusOne($ternary->if, $ternary->else)) {
+            return BattleshipCompareOrder::DESC;
+        }
+        if ($this->isValueOneAndMinusOne($ternary->else, $ternary->if)) {
+            return BattleshipCompareOrder::ASC;
+        }
+        return null;
+    }
+}

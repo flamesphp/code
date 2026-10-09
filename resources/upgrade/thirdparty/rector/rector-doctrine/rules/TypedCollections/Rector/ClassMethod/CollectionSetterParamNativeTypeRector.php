@@ -1,0 +1,121 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\TypedCollections\Rector\ClassMethod;
+
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Flames\Code\Upgrade\Doctrine\Enum\DoctrineClass;
+use Flames\Code\Upgrade\Doctrine\TypedCollections\DocBlockAnalyzer\CollectionTagValueNodeAnalyzer;
+use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
+use Flames\Code\Upgrade\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\TypedCollections\Rector\ClassMethod\CollectionSetterParamNativeTypeRectorTest
+ */
+final class CollectionSetterParamNativeTypeRector extends AbstractRector
+{
+    public function __construct(private readonly TestsNodeAnalyzer $testsNodeAnalyzer, private readonly PhpDocInfoFactory $phpDocInfoFactory, private readonly CollectionTagValueNodeAnalyzer $collectionTagValueNodeAnalyzer)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Add native param type to a Collection setter', [new CodeSample(<<<'CODE_SAMPLE'
+use Doctrine\Common\Collections\Collection;
+
+final class SomeClass
+{
+    private $items;
+
+    /**
+     * @param Collection<int, string> $items
+     */
+    public function setItems($items): void
+    {
+        $this->items = $items;
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+use Doctrine\Common\Collections\Collection;
+
+final class SomeClass
+{
+    private $items;
+
+    /**
+     * @param Collection<int, string> $items
+     */
+    public function setItems(Collection $items): void
+    {
+        $this->items = $items;
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    public function getNodeTypes(): array
+    {
+        return [ClassMethod::class];
+    }
+    /**
+     * @param ClassMethod $node
+     */
+    public function refactor(Node $node): ?ClassMethod
+    {
+        if ($node->isAbstract()) {
+            return null;
+        }
+        $isInTests = $this->testsNodeAnalyzer->isInTestClass($node);
+        $hasChanged = \false;
+        $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        if (!$classMethodPhpDocInfo instanceof PhpDocInfo) {
+            return null;
+        }
+        if ($classMethodPhpDocInfo->getParamTagValueNodes() === []) {
+            return null;
+        }
+        foreach ($node->params as $param) {
+            if ($param->type instanceof Node) {
+                continue;
+            }
+            $paramTagValueNode = $classMethodPhpDocInfo->getParamTagValueByName($this->getName($param));
+            if (!$paramTagValueNode instanceof ParamTagValueNode) {
+                continue;
+            }
+            if (!$this->collectionTagValueNodeAnalyzer->detect($paramTagValueNode)) {
+                continue;
+            }
+            $hasChanged = \true;
+            $param->type = new FullyQualified(DoctrineClass::COLLECTION);
+            // fix reprint position of type
+            $param->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            // make nullable only 1st param, as others might require a null
+            if ($param->default instanceof Expr) {
+                if ($isInTests === \false) {
+                    // remove default param, as no longer needed; empty collection should be passed instead
+                    $param->default = null;
+                } else {
+                    // make type explicitly nullable
+                    $collectionFullyQualified = new FullyQualified(DoctrineClass::COLLECTION);
+                    $param->type = new NullableType($collectionFullyQualified);
+                    $param->default = new ConstFetch(new Name('null'));
+                }
+            }
+        }
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
+    }
+}

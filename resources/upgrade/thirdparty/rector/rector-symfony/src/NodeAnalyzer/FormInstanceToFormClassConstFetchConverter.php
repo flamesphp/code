@@ -1,0 +1,69 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Symfony\NodeAnalyzer;
+
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\Variable;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\TypeWithClassName;
+use Flames\Code\Upgrade\Exception\ShouldNotHappenException;
+use Flames\Code\Upgrade\NodeTypeResolver\NodeTypeResolver;
+use Flames\Code\Upgrade\PhpParser\Node\NodeFactory;
+use Flames\Code\Upgrade\Symfony\NodeAnalyzer\FormType\CreateFormTypeOptionsArgMover;
+use Flames\Code\Upgrade\Symfony\NodeAnalyzer\FormType\FormTypeClassResolver;
+use ReflectionMethod;
+final readonly class FormInstanceToFormClassConstFetchConverter
+{
+    public function __construct(private CreateFormTypeOptionsArgMover $createFormTypeOptionsArgMover, private NodeFactory $nodeFactory, private FormTypeClassResolver $formTypeClassResolver, private NodeTypeResolver $nodeTypeResolver)
+    {
+    }
+    public function processNewInstance(MethodCall $methodCall, int $position, int $optionsPosition): ?MethodCall
+    {
+        $args = $methodCall->getArgs();
+        if (!isset($args[$position])) {
+            return null;
+        }
+        $argValue = $args[$position]->value;
+        $formClassName = $this->formTypeClassResolver->resolveFromExpr($argValue);
+        if ($formClassName === null) {
+            return null;
+        }
+        // better skip and handle manually
+        if ($argValue instanceof Variable && $this->isVariableOfTypeWithRequiredConstructorParameters($argValue)) {
+            return null;
+        }
+        if ($argValue instanceof New_ && $argValue->getArgs() !== []) {
+            $methodCall = $this->createFormTypeOptionsArgMover->moveArgumentsToOptions($methodCall, $position, $optionsPosition, $formClassName, $argValue->getArgs());
+            if (!$methodCall instanceof MethodCall) {
+                throw new ShouldNotHappenException();
+            }
+        }
+        $classConstFetch = $this->nodeFactory->createClassConstReference($formClassName);
+        $currentArg = $methodCall->getArgs()[$position];
+        $currentArg->value = $classConstFetch;
+        return $methodCall;
+    }
+    private function isVariableOfTypeWithRequiredConstructorParameters(Variable $variable): bool
+    {
+        // if form type is object with constructor args, handle manually
+        $variableType = $this->nodeTypeResolver->getType($variable);
+        if (!$variableType instanceof TypeWithClassName) {
+            return \false;
+        }
+        $classReflection = $variableType->getClassReflection();
+        if (!$classReflection instanceof ClassReflection) {
+            return \false;
+        }
+        if (!$classReflection->hasConstructor()) {
+            return \false;
+        }
+        $nativeReflection = $classReflection->getNativeReflection();
+        $reflectionMethod = $nativeReflection->getConstructor();
+        if (!$reflectionMethod instanceof ReflectionMethod) {
+            return \false;
+        }
+        return $reflectionMethod->getNumberOfRequiredParameters() > 0;
+    }
+}

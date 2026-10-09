@@ -1,0 +1,61 @@
+<?php
+
+declare (strict_types=1);
+namespace FlamesPrefix202610\Entropy\Console\ValueObject;
+
+use FlamesPrefix202610\Entropy\Validation\Assert;
+/**
+ * @see \Entropy\Tests\Console\ValueObject\CLIRequestTest
+ */
+final class CLIRequest
+{
+    /**
+     * @param mixed[] $arguments
+     * @param array<string, mixed> $options
+     */
+    public function __construct(private readonly ?string $commandName, private readonly array $arguments = [], private array $options = [])
+    {
+        Assert::allString(array_keys($this->options));
+    }
+    public function getCommandName(): ?string
+    {
+        return $this->commandName;
+    }
+    /**
+     * @return mixed[]
+     */
+    public function getArguments(): array
+    {
+        return $this->arguments;
+    }
+    /**
+     * Re-interpret a leading token (mistaken for a command name) as the first
+     * positional argument of the resolved command.
+     */
+    public function withCommandNameAndPrependedArgument(string $commandName, string $argument): self
+    {
+        return new self($commandName, array_merge([$argument], $this->arguments), $this->options);
+    }
+    /**
+     * @return array<string, mixed>
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+    /**
+     * @param mixed $default
+     * @return mixed
+     */
+    public function option(string $name, $default = null)
+    {
+        return $this->options[$name] ?? $default;
+    }
+    public function isCommandHelp(): bool
+    {
+        if ($this->commandName === null) {
+            return \false;
+        }
+        return array_intersect(['h', 'help'], array_keys($this->options)) !== [];
+    }
+}

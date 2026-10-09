@@ -1,0 +1,36 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Caching;
+
+use Flames\Code\Upgrade\Caching\Detector\ChangedFilesDetector;
+use Flames\Code\Upgrade\Configuration\Option;
+use Flames\Code\Upgrade\Configuration\Parameter\SimpleParameterProvider;
+final readonly class UnchangedFilesFilter
+{
+    public function __construct(private ChangedFilesDetector $changedFilesDetector)
+    {
+    }
+    /**
+     * @param string[] $filePaths
+     * @return string[]
+     */
+    public function filterFilePaths(array $filePaths): array
+    {
+        $changedFileInfos = [];
+        $filePaths = array_unique($filePaths);
+        foreach ($filePaths as $filePath) {
+            if (!$this->changedFilesDetector->hasFileChanged($filePath)) {
+                continue;
+            }
+            $changedFileInfos[] = $filePath;
+            $this->changedFilesDetector->invalidateFile($filePath);
+        }
+        // some files were served from cache, so rules ran on a subset only - unused skip reporting
+        // would then flag every cached file's skip as falsely unused
+        if (count($changedFileInfos) < count($filePaths)) {
+            SimpleParameterProvider::setParameter(Option::IS_CACHED_RUN, \true);
+        }
+        return $changedFileInfos;
+    }
+}

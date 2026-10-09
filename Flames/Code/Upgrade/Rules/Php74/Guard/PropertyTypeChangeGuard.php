@@ -1,0 +1,57 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\Php74\Guard;
+
+use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ClassReflection;
+use Flames\Code\Upgrade\NodeAnalyzer\PropertyAnalyzer;
+use Flames\Code\Upgrade\NodeManipulator\PropertyManipulator;
+use Flames\Code\Upgrade\NodeNameResolver\NodeNameResolver;
+use Flames\Code\Upgrade\Rules\Privatization\Guard\ParentPropertyLookupGuard;
+final readonly class PropertyTypeChangeGuard
+{
+    public function __construct(private NodeNameResolver $nodeNameResolver, private PropertyAnalyzer $propertyAnalyzer, private PropertyManipulator $propertyManipulator, private ParentPropertyLookupGuard $parentPropertyLookupGuard)
+    {
+    }
+    public function isLegal(Property $property, ClassReflection $classReflection, bool $inlinePublic = \true, bool $isConstructorPromotion = \false): bool
+    {
+        if (count($property->props) > 1) {
+            return \false;
+        }
+        /**
+         * - trait properties are unpredictable based on class context they appear in
+         * - on interface properties as well, as interface not allowed to have property
+         */
+        if (!$classReflection->isClass()) {
+            return \false;
+        }
+        $propertyName = $this->nodeNameResolver->getName($property);
+        if ($this->propertyManipulator->hasTraitWithSamePropertyOrWritten($classReflection, $propertyName)) {
+            return \false;
+        }
+        if ($this->propertyAnalyzer->hasForbiddenType($property)) {
+            return \false;
+        }
+        if ($inlinePublic) {
+            return \true;
+        }
+        if ($property->isPrivate()) {
+            return \true;
+        }
+        if ($isConstructorPromotion) {
+            return \true;
+        }
+        return $this->isSafeProtectedProperty($classReflection, $property);
+    }
+    private function isSafeProtectedProperty(ClassReflection $classReflection, Property $property): bool
+    {
+        if (!$property->isProtected()) {
+            return \false;
+        }
+        if (!$classReflection->isFinalByKeyword()) {
+            return \false;
+        }
+        return $this->parentPropertyLookupGuard->isLegal($property, $classReflection);
+    }
+}

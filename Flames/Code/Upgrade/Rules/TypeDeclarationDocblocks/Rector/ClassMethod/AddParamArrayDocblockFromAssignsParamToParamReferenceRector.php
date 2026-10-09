@@ -1,0 +1,106 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks\Rector\ClassMethod;
+
+use PhpParser\Node;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\MixedType;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks\NodeDocblockTypeDecorator;
+use Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks\NodeFinder\ArrayDimFetchFinder;
+use Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromAssignsParamToParamReferenceRectorTest
+ */
+final class AddParamArrayDocblockFromAssignsParamToParamReferenceRector extends AbstractRector
+{
+    public function __construct(private readonly PhpDocInfoFactory $phpDocInfoFactory, private readonly ArrayDimFetchFinder $arrayDimFetchFinder, private readonly UsefulArrayTagNodeAnalyzer $usefulArrayTagNodeAnalyzer, private readonly NodeDocblockTypeDecorator $nodeDocblockTypeDecorator)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Add @param docblock array type, based on type to assigned parameter reference', [new CodeSample(<<<'CODE_SAMPLE'
+final class SomeClass
+{
+    private function run(array &$names): void
+    {
+        $names[] = 'John';
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+final class SomeClass
+{
+    /**
+     * @param string[] $names
+     */
+    private function run(array &$names): void
+    {
+        $names[] = 'John';
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [ClassMethod::class];
+    }
+    /**
+     * @param ClassMethod $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        $hasChanged = \false;
+        if ($node->getParams() === []) {
+            return null;
+        }
+        // a by-ref param type is invariant in PHPStan; narrowing it below array breaks callers passing a plain array, which are invisible for a non-private method
+        if (!$node->isPrivate()) {
+            return null;
+        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        foreach ($node->getParams() as $param) {
+            if (!$param->byRef) {
+                continue;
+            }
+            if (!$param->type instanceof Identifier) {
+                continue;
+            }
+            if (!$this->isName($param->type, 'array')) {
+                continue;
+            }
+            $paramName = $this->getName($param);
+            $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
+            // already defined, lets skip it
+            if ($this->usefulArrayTagNodeAnalyzer->isUsefulArrayTag($paramTagValueNode)) {
+                continue;
+            }
+            $exprs = $this->arrayDimFetchFinder->findDimFetchAssignToVariableName($node, $paramName);
+            // to kick off with one
+            if (count($exprs) !== 1) {
+                continue;
+            }
+            $assignedExprType = $this->getType($exprs[0]);
+            $iterableType = new ArrayType(new MixedType(), $assignedExprType);
+            $hasParamTypeChanged = $this->nodeDocblockTypeDecorator->decorateGenericIterableParamType($iterableType, $phpDocInfo, $node, $param, $paramName);
+            if (!$hasParamTypeChanged) {
+                continue;
+            }
+            $hasChanged = \true;
+        }
+        if (!$hasChanged) {
+            return null;
+        }
+        return $node;
+    }
+}

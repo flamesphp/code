@@ -1,0 +1,65 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\Php74\Rector\Ternary;
+
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Ternary;
+use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
+use Flames\Code\Upgrade\Rules\Php74\Tokenizer\ParenthesizedNestedTernaryAnalyzer;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
+use Flames\Code\Upgrade\VersionBonding\Contract\MinPhpVersionInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\Rules\Php74\Rector\Ternary\ParenthesizeNestedTernaryRectorTest
+ */
+final class ParenthesizeNestedTernaryRector extends AbstractRector implements MinPhpVersionInterface
+{
+    public function __construct(private readonly ParenthesizedNestedTernaryAnalyzer $parenthesizedNestedTernaryAnalyzer)
+    {
+    }
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::DEPRECATE_NESTED_TERNARY;
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Add parentheses to nested ternary', [new CodeSample(<<<'CODE_SAMPLE'
+$value = $a ? $b : $a ?: null;
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+$value = ($a ? $b : $a) ?: null;
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [Ternary::class];
+    }
+    /**
+     * @param Ternary $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if ($node->cond instanceof Ternary || $node->else instanceof Ternary) {
+            // Chaining of short-ternaries (elvis operator) is stable and behaves reasonably
+            $isElvis = $node->cond instanceof Ternary && !$node->cond->if instanceof Expr;
+            if ($isElvis) {
+                return null;
+            }
+            if ($this->parenthesizedNestedTernaryAnalyzer->isParenthesized($this->getFile(), $node)) {
+                return null;
+            }
+            // re-print with brackets
+            $node->cond->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            return $node;
+        }
+        return null;
+    }
+}
