@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\TypeDeclaration\AlreadyAssignDetector;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
 final class PropertyDefaultAssignDetector
 {
     public function detect(ClassLike $classLike, string $propertyName): bool

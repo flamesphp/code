@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\DeadCode\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PropertyFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
 use Flames\Code\Upgrade\NodeNameResolver\NodeNameResolver;
 final readonly class UsedVariableNameAnalyzer
 {

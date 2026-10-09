@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks;
 
-use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
 use Flames\Code\Upgrade\Configuration\Parameter\FeatureFlags;
 final class PrivateMethodFlagger
 {

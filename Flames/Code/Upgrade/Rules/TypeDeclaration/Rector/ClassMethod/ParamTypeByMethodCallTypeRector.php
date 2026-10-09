@@ -5,8 +5,8 @@ namespace Flames\Code\Upgrade\Rules\TypeDeclaration\Rector\ClassMethod;
 
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * Handles the remaining compound param type group: everything that is neither a pure object,
  * a pure scalar, nor a pure array (e.g. cross-group unions like array|string, iterable, callable).

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Configuration\Parameter;
 
-use PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
 use Flames\Code\Upgrade\Configuration\Option;
 /**
  * Class to manage feature flags,

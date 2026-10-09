@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Console;
 
-use FlamesPrefix202610\Symfony\Component\Console\Command\Command;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Command\Command;
 /**
  * @api
  */

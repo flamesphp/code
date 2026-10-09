@@ -3,24 +3,24 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\CodeQuality\Rector\If_;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp\Equal;
-use PhpParser\Node\Expr\BinaryOp\Identical;
-use PhpParser\Node\Expr\BinaryOp\NotEqual;
-use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Stmt\Else_;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Return_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Equal;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Identical;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\NotEqual;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BooleanNot;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Else_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Return_;
 use Flames\Code\Upgrade\BetterPhpDocParser\Comment\CommentsMerger;
 use Flames\Code\Upgrade\Rules\CodeQuality\NodeManipulator\ExprBoolCaster;
 use Flames\Code\Upgrade\PhpParser\Enum\NodeGroup;
 use Flames\Code\Upgrade\PhpParser\Node\Value\ValueResolver;
 use Flames\Code\Upgrade\PhpParser\Printer\BetterStandardPrinter;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\CodeQuality\Rector\If_\SimplifyIfReturnBoolRectorTest
  */

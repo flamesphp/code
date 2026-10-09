@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php74\Tokenizer;
 
-use PhpParser\Node\Expr\Ternary;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Ternary;
 use Flames\Code\Upgrade\ValueObject\Application\File;
 final class ParenthesizedNestedTernaryAnalyzer
 {

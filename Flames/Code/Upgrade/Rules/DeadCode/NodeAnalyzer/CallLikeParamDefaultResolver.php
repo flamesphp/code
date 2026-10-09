@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\DeadCode\NodeAnalyzer;
 
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\StaticCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\New_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
@@ -20,7 +20,7 @@ final readonly class CallLikeParamDefaultResolver
     }
     /**
      * @return int[]
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\FuncCall $callLike
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\New_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall $callLike
      */
     public function resolveNullPositions($callLike): array
     {
@@ -48,7 +48,7 @@ final readonly class CallLikeParamDefaultResolver
         return $nullPositions;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\FuncCall $callLike
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\New_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall $callLike
      */
     public function resolvePositionParameterByName($callLike, string $parameterName): ?int
     {

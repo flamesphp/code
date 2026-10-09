@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\TypeDeclaration\Rector\ClassMethod;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Return_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Flames\Code\Upgrade\NodeAnalyzer\ArgsAnalyzer;
 use Flames\Code\Upgrade\PhpParser\Node\Value\ValueResolver;
@@ -16,8 +16,8 @@ use Flames\Code\Upgrade\Rector\AbstractRector;
 use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
 use Flames\Code\Upgrade\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Flames\Code\Upgrade\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromSymfonySerializerRectorTest
  */

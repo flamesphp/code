@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\TypeDeclaration\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Attribute;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Property;
-use Flames\Code\Upgrade\Doctrine\CodeQuality\Enum\CollectionMapping;
-use Flames\Code\Upgrade\Doctrine\NodeAnalyzer\AttributeFinder;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Attribute;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\ThirdParty\Doctrine\CodeQuality\Enum\CollectionMapping;
+use Flames\Code\Upgrade\ThirdParty\Doctrine\NodeAnalyzer\AttributeFinder;
 use Flames\Code\Upgrade\Enum\ClassName;
 use Flames\Code\Upgrade\Rules\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Flames\Code\Upgrade\PhpParser\Node\Value\ValueResolver;

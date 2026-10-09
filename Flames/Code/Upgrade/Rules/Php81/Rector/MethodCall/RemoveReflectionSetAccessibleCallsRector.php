@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php81\Rector\MethodCall;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\NodeVisitor;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor;
 use PHPStan\Type\ObjectType;
 use Flames\Code\Upgrade\Rector\AbstractRector;
 use Flames\Code\Upgrade\ValueObject\PhpVersion;
 use Flames\Code\Upgrade\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * As of PHP 8.1.0, calling `Reflection*::setAccessible()` has no effect.
  *

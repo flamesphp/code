@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Flames\Code\Upgrade\Validation;
 
 use Flames\Code\Upgrade\Util\StringUtils;
-use FlamesPrefix202610\Webmozart\Assert\InvalidArgumentException;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\InvalidArgumentException;
 /**
  * @see \Flames\Code\Upgrade\Tests\Validation\RectorAssertTest
  */

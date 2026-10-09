@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\StaticTypeMapper\PhpParser;
 
-use PhpParser\Node;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\NullableType;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\NullableType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Flames\Code\Upgrade\NodeTypeResolver\PHPStan\Type\TypeFactory;

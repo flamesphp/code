@@ -5,7 +5,7 @@ namespace Flames\Code\Upgrade\Configuration\Levels;
 
 use Flames\Code\Upgrade\Contract\Rector\RectorInterface;
 use Flames\Code\Upgrade\Exception\ShouldNotHappenException;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 final class LevelRulesResolver
 {
     /**

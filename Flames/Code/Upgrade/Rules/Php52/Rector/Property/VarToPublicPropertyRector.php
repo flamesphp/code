@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php52\Rector\Property;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
 use Flames\Code\Upgrade\Rules\Privatization\NodeManipulator\VisibilityManipulator;
 use Flames\Code\Upgrade\Rector\AbstractRector;
 use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
 use Flames\Code\Upgrade\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\Php52\Rector\Property\VarToPublicPropertyRectorTest
  */

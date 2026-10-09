@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\CodingStyle\Rector\Use_;
 
-use PhpParser\Node;
-use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\TraitUse;
-use PhpParser\Node\Stmt\Use_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Namespace_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\TraitUse;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Use_;
 use Flames\Code\Upgrade\PhpParser\Node\FileNode;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\CodingStyle\Rector\Use_\SeparateMultiUseImportsRectorTest
  */
@@ -49,7 +49,7 @@ CODE_SAMPLE
     }
     /**
      * @param FileNode|Namespace_|Class_ $node
-     * @return \Flames\Code\Upgrade\PhpParser\Node\FileNode|\PhpParser\Node\Stmt\Namespace_|\PhpParser\Node\Stmt\Class_|null
+     * @return \Flames\Code\Upgrade\PhpParser\Node\FileNode|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Namespace_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_|null
      */
     public function refactor(Node $node)
     {

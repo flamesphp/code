@@ -3,36 +3,36 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpParser\Printer;
 
-use FlamesPrefix202610\Nette\Utils\Strings;
-use PhpParser\Comment;
-use PhpParser\Internal\TokenStream;
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\AssignOp;
-use PhpParser\Node\Expr\AssignRef;
-use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Expr\BinaryOp\BooleanOr;
-use PhpParser\Node\Expr\BinaryOp\Pipe;
-use PhpParser\Node\Expr\CallLike;
-use PhpParser\Node\Expr\Instanceof_;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Print_;
-use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Expr\Yield_;
-use PhpParser\Node\Expr\YieldFrom;
-use PhpParser\Node\InterpolatedStringPart;
-use PhpParser\Node\Scalar\InterpolatedString;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Declare_;
-use PhpParser\Node\Stmt\InlineHTML;
-use PhpParser\Node\Stmt\Nop;
-use PhpParser\PrettyPrinter\Standard;
-use PhpParser\Token;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Comment;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Internal\TokenStream;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Arg;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Array_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrowFunction;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\AssignOp;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\AssignRef;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Pipe;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\CallLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Instanceof_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Print_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Ternary;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Yield_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\YieldFrom;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\InterpolatedStringPart;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\InterpolatedString;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\String_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Declare_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\InlineHTML;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Nop;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\PrettyPrinter\Standard;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Token;
 use Flames\Code\Upgrade\Configuration\Option;
 use Flames\Code\Upgrade\Configuration\Parameter\SimpleParameterProvider;
 use Flames\Code\Upgrade\NodeAnalyzer\ExprAnalyzer;
@@ -41,7 +41,7 @@ use Flames\Code\Upgrade\PhpParser\Node\FileNode;
 use Flames\Code\Upgrade\Util\NewLineSplitter;
 use Flames\Code\Upgrade\Util\Reflection\PrivatesAccessor;
 /**
- * @see \Flames\Code\Upgrade\Tests\PhpParser\Printer\BetterStandardPrinterTest
+ * @see \Flames\Code\Upgrade\Tests\Flames\Code\Upgrade\PhpParser\Printer\BetterStandardPrinterTest
  *
  * @property array<string, array{string, bool, string, null}> $insertionMap
  */

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Console\Command;
 
-use FlamesPrefix202610\Nette\Utils\Json;
+use Flames\Code\Upgrade\ThirdParty\Nette\Json;
 use Flames\Code\Upgrade\ChangesReporting\Output\ConsoleOutputFormatter;
 use Flames\Code\Upgrade\ChangesReporting\Output\JsonOutputFormatter;
 use Flames\Code\Upgrade\Configuration\Option;
@@ -12,11 +12,11 @@ use Flames\Code\Upgrade\Reporting\DeprecatedRulesReporter;
 use Flames\Code\Upgrade\Reporting\MissConfigurationReporter;
 use Flames\Code\Upgrade\Skipper\SkipCriteriaResolver\SkippedClassResolver;
 use Flames\Code\Upgrade\ValueObject\Configuration;
-use FlamesPrefix202610\Symfony\Component\Console\Command\Command;
-use FlamesPrefix202610\Symfony\Component\Console\Input\InputInterface;
-use FlamesPrefix202610\Symfony\Component\Console\Input\InputOption;
-use FlamesPrefix202610\Symfony\Component\Console\Output\OutputInterface;
-use FlamesPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Command\Command;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\InputInterface;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\InputOption;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Output\OutputInterface;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * @see \Flames\Code\Upgrade\Tests\Console\Command\ValidateConfigCommandTest
  */

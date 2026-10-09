@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Renaming\NodeManipulator;
 
-use PhpParser\Node\Scalar\Int_;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Break_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\Int_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Break_;
 final class SwitchManipulator
 {
     /**

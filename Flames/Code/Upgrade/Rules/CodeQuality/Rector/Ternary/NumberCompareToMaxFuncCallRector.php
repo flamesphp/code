@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\CodeQuality\Rector\Ternary;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\Greater;
-use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
-use PhpParser\Node\Expr\BinaryOp\Smaller;
-use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
-use PhpParser\Node\Expr\Ternary;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Greater;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Smaller;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Ternary;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\CodeQuality\Rector\Ternary\NumberCompareToMaxFuncCallRectorTest
  */

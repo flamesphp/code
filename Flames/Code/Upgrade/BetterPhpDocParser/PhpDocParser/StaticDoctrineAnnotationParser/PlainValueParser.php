@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser;
 
-use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Lexer\Lexer;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\ConstExpr\ConstExprFalseNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\ConstExpr\ConstExprIntegerNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\ConstExpr\ConstExprNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\ConstExpr\ConstExprTrueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\IdentifierTypeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Lexer\Lexer;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDoc\StringNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
@@ -115,7 +115,7 @@ final class PlainValueParser
         $identifierTypeNode->setAttribute(PhpDocAttributeKey::RESOLVED_CLASS, $fullyQualifiedAnnotationClass);
         return new DoctrineAnnotationTagValueNode($identifierTypeNode, $annotationShortName, $values);
     }
-    private function matchConstantValue(string $currentTokenValue): ?\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode
+    private function matchConstantValue(string $currentTokenValue): ?\Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\ConstExpr\ConstExprNode
     {
         if (strtolower($currentTokenValue) === 'false') {
             return new ConstExprFalseNode();

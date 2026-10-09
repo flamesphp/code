@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Naming\PhpDoc;
 
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\VarTagValueNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Flames\Code\Upgrade\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 final class VarTagValueNodeRenamer

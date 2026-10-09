@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\TypeDeclaration\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\Param;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Arg;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrowFunction;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\NullableType;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Param;
 use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;

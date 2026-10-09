@@ -3,21 +3,21 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\DeadCode\Rector\Assign;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\AssignRef;
-use PhpParser\Node\Expr\Cast;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Include_;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Function_;
-use PhpParser\NodeVisitor;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\AssignRef;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Include_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use Flames\Code\Upgrade\Rules\DeadCode\NodeAnalyzer\NoDiscardCallAnalyzer;
@@ -30,8 +30,8 @@ use Flames\Code\Upgrade\PhpParser\Node\BetterNodeFinder;
 use Flames\Code\Upgrade\PhpParser\Node\Value\ValueResolver;
 use Flames\Code\Upgrade\Rector\AbstractRector;
 use Flames\Code\Upgrade\ValueObject\MethodName;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRectorTest
  */
@@ -70,7 +70,7 @@ CODE_SAMPLE
     }
     /**
      * @param ClassMethod|Function_ $node
-     * @return null|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_
+     * @return null|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_
      */
     public function refactor(Node $node)
     {

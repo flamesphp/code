@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php82\Rector\Param;
 
-use PhpParser\Node;
-use PhpParser\Node\Param;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Param;
 use Flames\Code\Upgrade\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Flames\Code\Upgrade\Contract\Rector\ConfigurableRectorInterface;
 use Flames\Code\Upgrade\Exception\ShouldNotHappenException;
 use Flames\Code\Upgrade\Rector\AbstractRector;
 use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
 use Flames\Code\Upgrade\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\ConfiguredCodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @deprecated This rule is deprecated, as it relies on a provided variable name list. Matching parameters by name is vague and risky, as the same name can hold a non-sensitive value. Add the #[\SensitiveParameter] attribute per case instead.
  */

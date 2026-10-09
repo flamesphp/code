@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\DeadCode\NodeManipulator;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp\Greater;
-use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
-use PhpParser\Node\Expr\BinaryOp\Smaller;
-use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Scalar\Int_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Greater;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Smaller;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\Int_;
 use PHPStan\Type\NeverType;
 use Flames\Code\Upgrade\NodeNameResolver\NodeNameResolver;
 use Flames\Code\Upgrade\NodeTypeResolver\NodeTypeResolver;

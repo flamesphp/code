@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Privatization\TypeManipulator;
 
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\TypeNode;
 use PHPStan\Type\Accessory\AccessoryLiteralStringType;
 use PHPStan\Type\Accessory\AccessoryNonEmptyStringType;
 use PHPStan\Type\Accessory\AccessoryNonFalsyStringType;

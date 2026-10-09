@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\CodingStyle\Rector\Stmt;
 
-use FlamesPrefix202610\Nette\Utils\Strings;
-use PhpParser\Node;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Use_;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Namespace_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Use_;
 use Flames\Code\Upgrade\PhpParser\Node\FileNode;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\CodingStyle\Rector\Stmt\RemoveUselessAliasInUseStatementRectorTest
  */
@@ -36,7 +36,7 @@ CODE_SAMPLE
     }
     /**
      * @param Namespace_|FileNode $node
-     * @return null|\Flames\Code\Upgrade\PhpParser\Node\FileNode|\PhpParser\Node\Stmt\Namespace_
+     * @return null|\Flames\Code\Upgrade\PhpParser\Node\FileNode|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Namespace_
      */
     public function refactor(Node $node)
     {

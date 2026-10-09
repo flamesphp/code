@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\CodeQuality\Rector\If_;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\If_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_;
 use Flames\Code\Upgrade\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Flames\Code\Upgrade\Exception\ShouldNotHappenException;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @deprecated This rule is deprecated, as merging `else`/`if` into `elseif` creates less readable code and breaks the logical reading of the if train.
  */

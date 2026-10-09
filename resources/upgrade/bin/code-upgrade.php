@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace FlamesPrefix202610;
+namespace Flames\Code\Upgrade;
 
-use FlamesPrefix202610\Nette\Utils\Json;
+use Flames\Code\Upgrade\ThirdParty\Nette\Json;
 use Flames\Code\Upgrade\Bootstrap\AutoloadFileParameterResolver;
 use Flames\Code\Upgrade\Bootstrap\UpgradeConfigsResolver;
 use Flames\Code\Upgrade\ChangesReporting\Output\JsonOutputFormatter;
@@ -12,9 +12,9 @@ use Flames\Code\Upgrade\Console\Style\SymfonyStyleFactory;
 use Flames\Code\Upgrade\DependencyInjection\LazyContainerFactory;
 use Flames\Code\Upgrade\DependencyInjection\UpgradeContainerFactory;
 use Flames\Code\Upgrade\Util\Reflection\PrivatesAccessor;
-use FlamesPrefix202610\Symfony\Component\Console\Application;
-use FlamesPrefix202610\Symfony\Component\Console\Command\Command;
-use FlamesPrefix202610\Symfony\Component\Console\Input\ArgvInput;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Application;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Command\Command;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\ArgvInput;
 // @ intentionally: continue anyway
 @\ini_set('memory_limit', '-1');
 // Performance boost
@@ -93,7 +93,7 @@ final class AutoloadIncluder
         require_once $filePath;
     }
 }
-\class_alias(\FlamesPrefix202610\AutoloadIncluder::class, 'AutoloadIncluder', \false);
+\class_alias(\Flames\Code\Upgrade\AutoloadIncluder::class, 'AutoloadIncluder', \false);
 // require rector-src on split packages
 if (\file_exists(__DIR__ . '/../preload-split-package.php') && \is_dir(__DIR__ . '/../../../../vendor')) {
     require_once __DIR__ . '/../preload-split-package.php';

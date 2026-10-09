@@ -3,21 +3,21 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\TypeDeclaration\Rector\While_;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use PhpParser\Node\Expr\Instanceof_;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\Do_;
-use PhpParser\Node\Stmt\While_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Instanceof_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Do_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\While_;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Flames\Code\Upgrade\PhpParser\Node\Value\ValueResolver;
 use Flames\Code\Upgrade\Rector\AbstractRector;
 use Flames\Code\Upgrade\Rules\TypeDeclaration\TypeAnalyzer\NullableTypeAnalyzer;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\TypeDeclaration\Rector\While_\WhileNullableToInstanceofRectorTest
  */
@@ -83,8 +83,8 @@ CODE_SAMPLE
         return new Instanceof_($expr, $fullyQualified);
     }
     /**
-     * @param \PhpParser\Node\Stmt\While_|\PhpParser\Node\Stmt\Do_ $while
-     * @return \PhpParser\Node\Stmt\While_|\PhpParser\Node\Stmt\Do_|null
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\While_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Do_ $while
+     * @return \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\While_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Do_|null
      */
     private function refactorNotIdentical($while, NotIdentical $notIdentical)
     {

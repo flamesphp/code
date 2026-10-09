@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Config;
 
-use FlamesPrefix202610\Composer\Semver\Semver;
+use Flames\Code\Upgrade\ThirdParty\Composer\Semver;
 use Deprecated;
-use FlamesPrefix202610\Entropy\Container\Container;
+use Flames\Code\Upgrade\ThirdParty\Entropy\Container\Container;
 use Flames\Code\Upgrade\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
-use Flames\Code\Upgrade\Composer\InstalledPackageResolver;
+use Flames\Code\Upgrade\ThirdParty\Composer\InstalledPackageResolver;
 use Flames\Code\Upgrade\Configuration\Option;
 use Flames\Code\Upgrade\Configuration\Parameter\SimpleParameterProvider;
 use Flames\Code\Upgrade\Configuration\UpgradeConfigBuilder;
@@ -22,8 +22,8 @@ use Flames\Code\Upgrade\ValueObject\Configuration\LevelOverflow;
 use Flames\Code\Upgrade\ValueObject\PhpVersion;
 use Flames\Code\Upgrade\ValueObject\PolyfillPackage;
 use Flames\Code\Upgrade\VersionBonding\ValueObject\ComposerBoundRuleConfiguration;
-use FlamesPrefix202610\Symfony\Component\Console\Command\Command;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Command\Command;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 /**
  * @api
  * @see \Flames\Code\Upgrade\Tests\Config\UpgradeConfigTest

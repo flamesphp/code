@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser\PhpDoc;
 
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PhpDocTagNode;
 use Stringable;
 /**
  * Useful for annotation class based annotation, e.g. @ORM\Entity to prevent space

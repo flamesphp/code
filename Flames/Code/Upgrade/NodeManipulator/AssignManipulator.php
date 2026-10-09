@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeManipulator;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\ErrorSuppress;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\List_;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\FunctionLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ErrorSuppress;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\List_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PropertyFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticPropertyFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\FunctionLike;
 use Flames\Code\Upgrade\NodeAnalyzer\PropertyFetchAnalyzer;
 use Flames\Code\Upgrade\NodeNameResolver\NodeNameResolver;
 use Flames\Code\Upgrade\NodeNestingScope\ContextAnalyzer;

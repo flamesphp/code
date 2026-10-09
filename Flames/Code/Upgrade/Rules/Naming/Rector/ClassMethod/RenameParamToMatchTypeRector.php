@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Naming\Rector\ClassMethod;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrowFunction;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Param;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_;
 use PHPStan\Reflection\ClassReflection;
 use Flames\Code\Upgrade\Rules\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Flames\Code\Upgrade\Rules\Naming\Guard\BreakingVariableRenameGuard;
@@ -20,8 +20,8 @@ use Flames\Code\Upgrade\Rector\AbstractRector;
 use Flames\Code\Upgrade\Reflection\ReflectionResolver;
 use Flames\Code\Upgrade\Skipper\FileSystem\PathNormalizer;
 use Flames\Code\Upgrade\ValueObject\MethodName;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\Naming\Rector\ClassMethod\RenameParamToMatchTypeRectorTest
  */
@@ -133,7 +133,7 @@ CODE_SAMPLE
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $classMethod
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrowFunction $classMethod
      */
     private function shouldSkipParam(Param $param, string $expectedName, $classMethod): bool
     {

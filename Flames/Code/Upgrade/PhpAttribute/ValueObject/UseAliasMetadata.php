@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpAttribute\ValueObject;
 
-use PhpParser\Node\UseItem;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\UseItem;
 final readonly class UseAliasMetadata
 {
     public function __construct(private string $shortAttributeName, private string $useImportName, private UseItem $useItem)

@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php80\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Match_;
-use PhpParser\Node\Expr\Throw_;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Switch_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrayDimFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Match_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Throw_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Return_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Switch_;
 use Flames\Code\Upgrade\NodeNameResolver\NodeNameResolver;
 use Flames\Code\Upgrade\Rules\Php80\Enum\MatchKind;
 use Flames\Code\Upgrade\Rules\Php80\ValueObject\CondAndExpr;

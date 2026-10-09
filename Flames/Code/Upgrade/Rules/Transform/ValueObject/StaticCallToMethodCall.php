@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Transform\ValueObject;
 
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
 use PHPStan\Type\ObjectType;
 use Flames\Code\Upgrade\Validation\RectorAssert;
 final readonly class StaticCallToMethodCall

@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\CodingStyle\Rector\Encapsed;
 
-use PhpParser\Node;
-use PhpParser\Node\Scalar\InterpolatedString;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\InterpolatedString;
 use Flames\Code\Upgrade\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Flames\Code\Upgrade\Contract\Rector\ConfigurableRectorInterface;
 use Flames\Code\Upgrade\Exception\ShouldNotHappenException;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\ConfiguredCodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @deprecated This rule is deprecated, as turning "{$string}" interpolation into sprintf() or concat is a matter of personal preference. It can worsen readability and is rather a coding standard change.
  */

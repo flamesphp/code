@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\DeadCode\TypeNodeAnalyzer;
 
-use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\GenericTypeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\TypeNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 final class GenericTypeNodeAnalyzer
 {

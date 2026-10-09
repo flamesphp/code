@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\CodeQuality\NodeManipulator;
 
-use PhpParser\Node\Arg;
-use PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Arg;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;

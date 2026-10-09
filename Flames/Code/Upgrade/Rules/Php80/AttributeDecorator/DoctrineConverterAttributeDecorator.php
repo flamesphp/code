@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php80\AttributeDecorator;
 
-use PhpParser\Node\Attribute;
-use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\String_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Attribute;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ConstFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\String_;
 use Flames\Code\Upgrade\Rules\Php80\Contract\ConverterAttributeDecoratorInterface;
 final class DoctrineConverterAttributeDecorator implements ConverterAttributeDecoratorInterface
 {

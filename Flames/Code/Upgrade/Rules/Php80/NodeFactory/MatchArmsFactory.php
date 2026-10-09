@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php80\NodeFactory;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\MatchArm;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\MatchArm;
 use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
 use Flames\Code\Upgrade\Rules\Php80\ValueObject\CondAndExpr;
 final class MatchArmsFactory

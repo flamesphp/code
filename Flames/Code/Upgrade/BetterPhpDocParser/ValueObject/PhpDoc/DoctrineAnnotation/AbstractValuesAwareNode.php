@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation;
 
-use PHPStan\PhpDocParser\Ast\NodeAttributes;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\NodeAttributes;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PhpDocTagValueNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDoc\StringNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;

@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser\Comment;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\InlineHTML;
-use PhpParser\Node\Stmt\Nop;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\InlineHTML;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Nop;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
 use Flames\Code\Upgrade\PhpParser\Comparing\NodeComparator;

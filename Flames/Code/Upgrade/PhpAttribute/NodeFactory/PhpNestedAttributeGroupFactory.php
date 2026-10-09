@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpAttribute\NodeFactory;
 
-use FlamesPrefix202610\Nette\Utils\Strings;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Attribute;
-use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\Nop;
-use PhpParser\Node\Stmt\Use_;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Arg;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Attribute;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\AttributeGroup;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Array_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Nop;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Use_;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\IdentifierTypeNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\NodeDecorator\DoctrineAnnotationDecorator;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
@@ -26,7 +26,7 @@ use Flames\Code\Upgrade\Rules\Php80\ValueObject\AnnotationPropertyToAttributeCla
 use Flames\Code\Upgrade\Rules\Php80\ValueObject\NestedAnnotationToAttribute;
 use Flames\Code\Upgrade\PhpAttribute\AnnotationToAttributeMapper;
 use Flames\Code\Upgrade\PhpAttribute\AttributeArrayNameInliner;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 final readonly class PhpNestedAttributeGroupFactory
 {
     public function __construct(private AnnotationToAttributeMapper $annotationToAttributeMapper, private \Flames\Code\Upgrade\PhpAttribute\NodeFactory\AttributeNameFactory $attributeNameFactory, private \Flames\Code\Upgrade\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory, private AttributeArrayNameInliner $attributeArrayNameInliner, private TokenIteratorFactory $tokenIteratorFactory, private StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser)
@@ -93,7 +93,7 @@ final readonly class PhpNestedAttributeGroupFactory
     }
     /**
      * @todo improve this hardcoded approach later
-     * @return \PhpParser\Node\Name\FullyQualified|\PhpParser\Node\Name
+     * @return \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name
      */
     private function resolveAliasedAttributeName(string $originalIdentifier, AnnotationPropertyToAttributeClass $annotationPropertyToAttributeClass)
     {

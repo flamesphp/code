@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\EarlyReturn\NodeTransformer;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Expr\BooleanNot;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BooleanNot;
 use Flames\Code\Upgrade\NodeManipulator\BinaryOpManipulator;
 final readonly class ConditionInverter
 {

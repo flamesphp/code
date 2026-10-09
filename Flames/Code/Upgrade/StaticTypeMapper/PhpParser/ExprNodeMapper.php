@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\StaticTypeMapper\PhpParser;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;

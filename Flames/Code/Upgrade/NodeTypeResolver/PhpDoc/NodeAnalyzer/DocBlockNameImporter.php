@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 
-use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PhpDocNode;
 use Flames\Code\Upgrade\NodeTypeResolver\PhpDocNodeVisitor\NameImportingPhpDocNodeVisitor;
 use Flames\Code\Upgrade\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 final readonly class DocBlockNameImporter

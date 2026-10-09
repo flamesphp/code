@@ -33,10 +33,24 @@ services:
         arguments!: []
         autowired: no
 
+    rectorPhpParserFactory:
+        class: Flames\Code\Upgrade\ThirdParty\PhpParser\ParserFactory
+        autowired: false
+
+    currentPhpVersionPhpParser:
+        factory: [@rectorPhpParserFactory, createForHostVersion]
+        autowired: false
+
+    rectorPhpParserNameResolver:
+        class: Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor\NameResolver
+        autowired: false
+
     rectorRichParserFactory:
         class: Flames\Code\Upgrade\DependencyInjection\PHPStan\RichParserFactory
         arguments:
             parser: @currentPhpVersionPhpParser
+            nameResolver: @rectorPhpParserNameResolver
+            ignoreLexer: @PHPStan\Analyser\Ignore\IgnoreLexer
             nodeVisitors:
                 - @PHPStan\Parser\AnonymousClassVisitor
                 - @PHPStan\Parser\ArrayMapArgVisitor

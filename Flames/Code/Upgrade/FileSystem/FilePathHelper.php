@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\FileSystem;
 
-use FlamesPrefix202610\Nette\Utils\Strings;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
 use Flames\Code\Upgrade\Skipper\FileSystem\PathNormalizer;
-use FlamesPrefix202610\Symfony\Component\Filesystem\Filesystem;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Filesystem\Filesystem;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 /**
  * @see \Flames\Code\Upgrade\Tests\FileSystem\FilePathHelperTest
  */

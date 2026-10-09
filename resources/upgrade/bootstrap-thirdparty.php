@@ -8,11 +8,12 @@ if (defined('__FLAMES_THIRDPARTY_AUTOLOAD_CONFIGURED__')) {
 
 define('__FLAMES_THIRDPARTY_AUTOLOAD_CONFIGURED__', true);
 
-$loader = require __DIR__ . '/thirdparty/scoper-autoload.php';
+$upgradeDir = __DIR__;
 
-if ($loader instanceof \Composer\Autoload\ClassLoader) {
-    // PSR-4 paths (rector-phpunit, rector-symfony, …) are not fully classmapped.
-    $loader->setClassMapAuthoritative(false);
+// Legacy scoper autoload (composer classmap + function aliases for polyfills).
+$scoperAutoload = $upgradeDir . '/thirdparty/scoper-autoload.php';
+if (is_file($scoperAutoload)) {
+    require_once $scoperAutoload;
 }
 
-return $loader;
+return null;

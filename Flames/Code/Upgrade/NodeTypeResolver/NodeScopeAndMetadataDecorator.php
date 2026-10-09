@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeTypeResolver;
 
-use PhpParser\Node\Stmt;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\CloningVisitor;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeTraverser;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor\CloningVisitor;
 use Flames\Code\Upgrade\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 final readonly class NodeScopeAndMetadataDecorator
 {

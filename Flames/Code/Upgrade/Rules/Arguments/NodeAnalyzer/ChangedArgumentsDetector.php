@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Arguments\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Param;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Param;
 use PHPStan\Type\Type;
 use Flames\Code\Upgrade\NodeTypeResolver\TypeComparator\TypeComparator;
 use Flames\Code\Upgrade\PhpParser\Node\Value\ValueResolver;

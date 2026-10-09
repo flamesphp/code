@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpAttribute\NodeFactory;
 
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\Use_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Use_;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Flames\Code\Upgrade\Rules\Php80\Contract\ValueObject\AnnotationToAttributeInterface;
 use Flames\Code\Upgrade\PhpAttribute\UseAliasNameMatcher;
@@ -17,7 +17,7 @@ final readonly class AttributeNameFactory
     }
     /**
      * @param Use_[] $uses
-     * @return \PhpParser\Node\Name\FullyQualified|\PhpParser\Node\Name
+     * @return \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name
      */
     public function create(AnnotationToAttributeInterface $annotationToAttribute, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, array $uses)
     {

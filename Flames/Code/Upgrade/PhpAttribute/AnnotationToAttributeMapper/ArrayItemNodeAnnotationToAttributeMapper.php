@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpAttribute\AnnotationToAttributeMapper;
 
-use PhpParser\Node\ArrayItem;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Scalar\String_;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\ArrayItem;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\String_;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\IdentifierTypeNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDoc\StringNode;
@@ -14,7 +14,7 @@ use Flames\Code\Upgrade\PhpAttribute\AnnotationToAttributeMapper;
 use Flames\Code\Upgrade\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Flames\Code\Upgrade\PhpAttribute\Enum\DocTagNodeState;
 use Flames\Code\Upgrade\Validation\RectorAssert;
-use FlamesPrefix202610\Webmozart\Assert\InvalidArgumentException;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\InvalidArgumentException;
 /**
  * @implements AnnotationToAttributeMapperInterface<ArrayItemNode>
  */

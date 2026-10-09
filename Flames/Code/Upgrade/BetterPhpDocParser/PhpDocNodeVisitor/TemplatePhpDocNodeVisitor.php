@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser\PhpDocNodeVisitor;
 
-use PHPStan\PhpDocParser\Ast\Attribute;
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
-use PHPStan\PhpDocParser\Lexer\Lexer;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Attribute;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Node;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\TemplateTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Lexer\Lexer;
 use Flames\Code\Upgrade\BetterPhpDocParser\Attributes\AttributeMirrorer;
 use Flames\Code\Upgrade\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Flames\Code\Upgrade\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider;

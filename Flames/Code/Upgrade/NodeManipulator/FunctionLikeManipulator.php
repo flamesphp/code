@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeManipulator;
 
-use PhpParser\Node\FunctionLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\FunctionLike;
 use Flames\Code\Upgrade\NodeNameResolver\NodeNameResolver;
 final readonly class FunctionLikeManipulator
 {

@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser\PhpDoc;
 
-use PhpParser\Node\Scalar\String_;
-use PHPStan\PhpDocParser\Ast\NodeAttributes;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\String_;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\NodeAttributes;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PhpDocTagValueNode;
 use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
 use Stringable;
 final class StringNode implements PhpDocTagValueNode

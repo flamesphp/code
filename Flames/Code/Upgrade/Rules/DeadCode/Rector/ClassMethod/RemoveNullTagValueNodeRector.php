@@ -3,24 +3,24 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\DeadCode\Rector\ClassMethod;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\Node as AstNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Node as AstNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\ParamTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PhpDocTagNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\ReturnTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\VarTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\IdentifierTypeNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Flames\Code\Upgrade\Comments\NodeDocBlock\DocBlockUpdater;
 use Flames\Code\Upgrade\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\DeadCode\Rector\ClassMethod\RemoveNullTagValueNodeRectorTest
  */
@@ -96,7 +96,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $tag
+     * @param \Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\VarTagValueNode|\Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\ParamTagValueNode|\Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\ReturnTagValueNode $tag
      */
     private function isNull($tag): bool
     {
@@ -122,7 +122,7 @@ CODE_SAMPLE
         });
     }
     /**
-     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Property $node
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property $node
      */
     private function processVarTagNull($node): ?Node
     {

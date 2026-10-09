@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpParser\Node;
 
-use PhpParser\Node;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Declare_;
-use PhpParser\Node\Stmt\GroupUse;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Nop;
-use PhpParser\Node\Stmt\Use_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Declare_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\GroupUse;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Namespace_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Nop;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Use_;
 use Flames\Code\Upgrade\Rules\CodingStyle\ClassNameImport\ValueObject\PendingImports;
 use Flames\Code\Upgrade\Rules\CodingStyle\ClassNameImport\ValueObject\UsedImports;
 use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
@@ -293,7 +293,7 @@ final class FileNode extends Stmt
     }
     /**
      * @return Nop[]
-     * @param $this|\PhpParser\Node\Stmt\Namespace_ $node
+     * @param $this|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Namespace_ $node
      */
     private function resolveInsertNop($node): array
     {

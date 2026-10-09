@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeCollector\NodeAnalyzer;
 
-use PhpParser\Node\ArrayItem;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Scalar\MagicConst\Class_;
-use PhpParser\Node\Scalar\String_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\ArrayItem;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Array_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ClassConstFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\MagicConst\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
@@ -112,7 +112,7 @@ final readonly class ArrayCallableMethodMatcher
         return in_array($fromFuncCallName, $functionNames, \true);
     }
     /**
-     * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Scalar\MagicConst\Class_ $classContext
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ClassConstFetch|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\MagicConst\Class_ $classContext
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\ObjectType
      */
     private function resolveClassContextType($classContext, Scope $scope, ?string $classMethodName)

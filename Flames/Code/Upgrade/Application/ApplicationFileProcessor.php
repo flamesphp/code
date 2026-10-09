@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Application;
 
-use FlamesPrefix202610\Nette\Utils\FileSystem as UtilsFileSystem;
+use Flames\Code\Upgrade\ThirdParty\Nette\FileSystem as UtilsFileSystem;
 use PHPStan\Parser\ParserErrorsException;
 use Flames\Code\Upgrade\Application\Provider\CurrentFileProvider;
 use Flames\Code\Upgrade\Caching\Detector\ChangedFilesDetector;
@@ -25,8 +25,8 @@ use Flames\Code\Upgrade\ValueObject\Error\SystemError;
 use Flames\Code\Upgrade\ValueObject\FileProcessResult;
 use Flames\Code\Upgrade\ValueObject\ProcessResult;
 use Flames\Code\Upgrade\ValueObject\Reporting\FileDiff;
-use FlamesPrefix202610\Symfony\Component\Console\Input\InputInterface;
-use FlamesPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\InputInterface;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 final class ApplicationFileProcessor
 {

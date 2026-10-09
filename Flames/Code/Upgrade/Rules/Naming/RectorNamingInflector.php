@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Naming;
 
-use FlamesPrefix202610\Doctrine\Inflector\Inflector;
-use FlamesPrefix202610\Nette\Utils\Strings;
+use Flames\Code\Upgrade\ThirdParty\Doctrine\Inflector;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
 final readonly class RectorNamingInflector
 {
     /**

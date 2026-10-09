@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\ChangesReporting\Output\Factory;
 
-use FlamesPrefix202610\Nette\Utils\Json;
+use Flames\Code\Upgrade\ThirdParty\Nette\Json;
 use Flames\Code\Upgrade\Parallel\ValueObject\Bridge;
 use Flames\Code\Upgrade\ValueObject\Configuration;
 use Flames\Code\Upgrade\ValueObject\Error\SystemError;

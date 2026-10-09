@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php55;
 
-use FlamesPrefix202610\Nette\Utils\Strings;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp\Concat;
-use PhpParser\Node\Scalar\String_;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Concat;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\String_;
 final class RegexMatcher
 {
     /**
@@ -23,7 +23,7 @@ final class RegexMatcher
      */
     private const array ALL_MODIFIERS_VALUES = ['i', 'm', 's', 'x', 'e', 'A', 'D', 'S', 'U', 'X', 'J', 'u'];
     /**
-     * @return \PhpParser\Node\Expr\BinaryOp\Concat|\PhpParser\Node\Scalar\String_|null
+     * @return \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Concat|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\String_|null
      */
     public function resolvePatternExpressionWithoutEIfFound(Expr $expr)
     {

@@ -3,20 +3,20 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpParser\NodeVisitor;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Global_;
-use PhpParser\Node\Stmt\Static_;
-use PhpParser\NodeVisitor;
-use PhpParser\NodeVisitorAbstract;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Global_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Static_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitorAbstract;
 use Flames\Code\Upgrade\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
 use Flames\Code\Upgrade\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Flames\Code\Upgrade\PhpParser\Enum\NodeGroup;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 /**
  * Marks variables declared "global $x;" (IS_GLOBAL_VAR) and "static $x;" (IS_STATIC_VAR),
  * then decorates their later uses in the same stmt scope in one shared traversal.

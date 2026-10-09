@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeTypeResolver\NodeTypeResolver;
 
-use PhpParser\Node;
-use PhpParser\Node\InterpolatedStringPart;
-use PhpParser\Node\Scalar;
-use PhpParser\Node\Scalar\Float_;
-use PhpParser\Node\Scalar\Int_;
-use PhpParser\Node\Scalar\InterpolatedString;
-use PhpParser\Node\Scalar\MagicConst;
-use PhpParser\Node\Scalar\String_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\InterpolatedStringPart;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\Float_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\Int_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\InterpolatedString;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\MagicConst;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\String_;
 use PHPStan\Type\Constant\ConstantFloatType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;

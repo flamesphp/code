@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Util;
 
-use FlamesPrefix202610\Nette\Utils\Strings;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
 use Flames\Code\Upgrade\Exception\Configuration\InvalidConfigurationException;
 use Flames\Code\Upgrade\ValueObject\Configuration;
 /**

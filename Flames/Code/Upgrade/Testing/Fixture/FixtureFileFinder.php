@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Flames\Code\Upgrade\Testing\Fixture;
 
 use Iterator;
-use FlamesPrefix202610\Symfony\Component\Finder\Finder;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Finder\Finder;
 final class FixtureFileFinder
 {
     /**

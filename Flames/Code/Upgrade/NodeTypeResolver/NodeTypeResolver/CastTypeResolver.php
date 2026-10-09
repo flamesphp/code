@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeTypeResolver\NodeTypeResolver;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Cast;
-use PhpParser\Node\Expr\Cast\Array_;
-use PhpParser\Node\Expr\Cast\Bool_;
-use PhpParser\Node\Expr\Cast\Double;
-use PhpParser\Node\Expr\Cast\Int_;
-use PhpParser\Node\Expr\Cast\Object_;
-use PhpParser\Node\Expr\Cast\String_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Array_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Bool_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Double;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Int_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Object_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\String_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;

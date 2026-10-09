@@ -3,26 +3,26 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Transform\Rector\Attribute;
 
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Arg;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\AttributeGroup;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrowFunction;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ClassConstFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Param;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Interface_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
 use Flames\Code\Upgrade\Contract\Rector\ConfigurableRectorInterface;
 use Flames\Code\Upgrade\PhpParser\Node\Value\ValueResolver;
 use Flames\Code\Upgrade\Rector\AbstractRector;
 use Flames\Code\Upgrade\Rules\Transform\ValueObject\AttributeKeyToClassConstFetch;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\ConfiguredCodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 /**
  * @api used in rector-doctrine
  * @see \Flames\Code\Upgrade\Rules\Transform\Rector\Attribute\AttributeKeyToClassConstFetchRectorTest

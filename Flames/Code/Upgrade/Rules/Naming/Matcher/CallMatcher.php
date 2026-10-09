@@ -3,17 +3,17 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Naming\Matcher;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt\Foreach_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Foreach_;
 final class CallMatcher
 {
     /**
      * @return FuncCall|StaticCall|MethodCall|null
-     * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Stmt\Foreach_ $node
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Foreach_ $node
      */
     public function matchCall($node): ?Node
     {

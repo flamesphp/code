@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php80\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Break_;
-use PhpParser\Node\Stmt\Case_;
-use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Switch_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Break_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Case_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Return_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Switch_;
 use PHPStan\Type\MixedType;
 use Flames\Code\Upgrade\NodeTypeResolver\NodeTypeResolver;
 use Flames\Code\Upgrade\NodeTypeResolver\PHPStan\Type\TypeFactory;

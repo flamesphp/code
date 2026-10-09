@@ -3,22 +3,22 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php81\Rector\MethodCall;
 
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp\Identical;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Arg;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Identical;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ClassConstFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PropertyFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Flames\Code\Upgrade\Rector\AbstractRector;
 use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
 use Flames\Code\Upgrade\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\Php81\Rector\MethodCall\MyCLabsMethodCallToEnumConstRectorTest
  */
@@ -153,7 +153,7 @@ CODE_SAMPLE
         return new Identical($expr, $right);
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall $node
      */
     private function isCallerClassEnum($node): bool
     {
@@ -190,7 +190,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @return null|\PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr
+     * @return null|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ClassConstFetch|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr
      */
     private function getValidEnumExpr(Node $node)
     {
@@ -205,8 +205,8 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\Variable $expr
-     * @return null|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\Variable
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PropertyFetch|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable $expr
+     * @return null|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PropertyFetch|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable
      */
     private function getPropertyFetchOrVariable($expr)
     {
@@ -215,7 +215,7 @@ CODE_SAMPLE
         }
         return $expr;
     }
-    private function getEnumConstFetch(StaticCall $staticCall): ?\PhpParser\Node\Expr\ClassConstFetch
+    private function getEnumConstFetch(StaticCall $staticCall): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ClassConstFetch
     {
         $className = $this->getName($staticCall->class);
         if ($className === null) {
@@ -231,7 +231,7 @@ CODE_SAMPLE
         return $this->nodeFactory->createClassConstFetch($className, $enumCaseName);
     }
     /**
-     * @return null|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\BinaryOp\Identical
+     * @return null|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PropertyFetch|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Identical
      */
     private function refactorMethodCall(MethodCall $methodCall, string $methodName)
     {

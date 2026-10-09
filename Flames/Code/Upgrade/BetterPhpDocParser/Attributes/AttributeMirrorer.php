@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser\Attributes;
 
-use PHPStan\PhpDocParser\Ast\Node;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Node;
 use Flames\Code\Upgrade\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 final class AttributeMirrorer
 {

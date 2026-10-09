@@ -1,0 +1,39 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc;
+
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\NodeAttributes;
+use function trim;
+class TypelessParamTagValueNode implements \Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PhpDocTagValueNode
+{
+    use NodeAttributes;
+    public function __construct(
+        public bool $isVariadic,
+        public string $parameterName,
+        /** @var string (may be empty) */
+        public string $description,
+        public bool $isReference
+    )
+    {
+    }
+    public function __toString(): string
+    {
+        $reference = $this->isReference ? '&' : '';
+        $variadic = $this->isVariadic ? '...' : '';
+        return trim("{$reference}{$variadic}{$this->parameterName} {$this->description}");
+    }
+    /**
+     * @param array<string, mixed> $properties
+     */
+    public static function __set_state(array $properties): self
+    {
+        $instance = new self($properties['isVariadic'], $properties['parameterName'], $properties['description'], $properties['isReference']);
+        if (isset($properties['attributes'])) {
+            foreach ($properties['attributes'] as $key => $value) {
+                $instance->setAttribute($key, $value);
+            }
+        }
+        return $instance;
+    }
+}

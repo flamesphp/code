@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Comments\NodeVisitor;
 
-use PhpParser\Node;
-use PhpParser\NodeVisitorAbstract;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitorAbstract;
 use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
 final class CommentRemovingNodeVisitor extends NodeVisitorAbstract
 {

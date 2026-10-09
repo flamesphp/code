@@ -5,7 +5,7 @@ namespace Flames\Code\Upgrade\Bootstrap;
 
 use Flames\Code\Upgrade\Configuration\Option;
 use Flames\Code\Upgrade\Configuration\Parameter\SimpleParameterProvider;
-use FlamesPrefix202610\Symfony\Component\Console\Input\ArgvInput;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\ArgvInput;
 /**
  * A different extra autoload changes what PHPStan can resolve, so cached results
  * must not survive it. Registering the file as a parameter folds it into the

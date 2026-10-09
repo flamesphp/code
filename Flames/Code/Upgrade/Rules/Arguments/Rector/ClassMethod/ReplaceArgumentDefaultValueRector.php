@@ -3,19 +3,19 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Arguments\Rector\ClassMethod;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\New_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
 use Flames\Code\Upgrade\Rules\Arguments\ArgumentDefaultValueReplacer;
 use Flames\Code\Upgrade\Rules\Arguments\ValueObject\ReplaceArgumentDefaultValue;
 use Flames\Code\Upgrade\Contract\Rector\ConfigurableRectorInterface;
 use Flames\Code\Upgrade\Rector\AbstractRector;
 use Flames\Code\Upgrade\ValueObject\MethodName;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\ConfiguredCodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 /**
  * @api used in rector-symfony
  * @see \Flames\Code\Upgrade\Rules\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRectorTest
@@ -50,7 +50,7 @@ CODE_SAMPLE
     }
     /**
      * @param MethodCall|StaticCall|ClassMethod|New_ $node
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\New_|null
+     * @return \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\New_|null
      */
     public function refactor(Node $node)
     {

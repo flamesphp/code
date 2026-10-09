@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Unambiguous\Rector\Expression;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Return_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Return_;
 use Flames\Code\Upgrade\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Flames\Code\Upgrade\Exception\ShouldNotHappenException;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @deprecated This rule is deprecated, as breaking a fluent setter chain into standalone calls needs a more complex approach that depends on the use case - the safe transformation differs per method return semantics.
  */

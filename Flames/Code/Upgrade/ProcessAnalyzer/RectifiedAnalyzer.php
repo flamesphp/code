@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\ProcessAnalyzer;
 
-use PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
 use Flames\Code\Upgrade\Contract\Rector\RectorInterface;
 use Flames\Code\Upgrade\NodeAnalyzer\ScopeAnalyzer;
 use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;

@@ -64,8 +64,8 @@ abstract class AbstractLazyTestCase extends TestCase
                 require_once __DIR__ . '/../../../preload-split-package.php';
             }
         }
-        if (\file_exists(__DIR__ . '/../../../../../resources/upgrade/thirdparty/scoper-autoload.php')) {
-            require_once __DIR__ . '/../../../../../resources/upgrade/thirdparty/scoper-autoload.php';
+        if (\file_exists(__DIR__ . '/../../../../../Flames/Code/Upgrade/scoper-autoload.php')) {
+            require_once __DIR__ . '/../../../../../Flames/Code/Upgrade/scoper-autoload.php';
         }
     }
 }

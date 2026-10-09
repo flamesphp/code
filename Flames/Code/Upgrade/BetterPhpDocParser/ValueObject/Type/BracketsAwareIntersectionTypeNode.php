@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser\ValueObject\Type;
 
-use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\IntersectionTypeNode;
 use Stringable;
 final class BracketsAwareIntersectionTypeNode extends IntersectionTypeNode
 {

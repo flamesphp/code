@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpAttribute\AnnotationToAttributeMapper;
 
-use PhpParser\BuilderHelpers;
-use PhpParser\Node\Expr;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\BuilderHelpers;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\ConstExpr\ConstExprFalseNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\ConstExpr\ConstExprIntegerNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\ConstExpr\ConstExprNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\ConstExpr\ConstExprTrueNode;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\Constant\ConstantFloatType;
 use Flames\Code\Upgrade\Exception\NotImplementedYetException;

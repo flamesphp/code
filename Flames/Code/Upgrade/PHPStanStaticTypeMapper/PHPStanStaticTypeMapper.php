@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PHPStanStaticTypeMapper;
 
-use PhpParser\Node\ComplexType;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\ComplexType;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use Flames\Code\Upgrade\Exception\NotImplementedYetException;
 use Flames\Code\Upgrade\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Flames\Code\Upgrade\PHPStanStaticTypeMapper\Enum\TypeKind;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 final readonly class PHPStanStaticTypeMapper
 {
     /**
@@ -31,7 +31,7 @@ final readonly class PHPStanStaticTypeMapper
     }
     /**
      * @param TypeKind::* $typeKind
-     * @return \PhpParser\Node\Name|\PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|null
+     * @return \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\ComplexType|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier|null
      */
     public function mapToPhpParserNode(Type $type, string $typeKind)
     {

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeCollector\ValueObject;
 
-use PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
 use Flames\Code\Upgrade\Validation\RectorAssert;
 final readonly class ArrayCallable
 {

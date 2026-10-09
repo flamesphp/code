@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpDocParser\PhpDocParser;
 
-use PHPStan\PhpDocParser\Ast\Node;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Node;
 use Flames\Code\Upgrade\PhpDocParser\PhpDocParser\Contract\PhpDocNodeVisitorInterface;
 use Flames\Code\Upgrade\PhpDocParser\PhpDocParser\Exception\InvalidTraverseException;
 use Flames\Code\Upgrade\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor;

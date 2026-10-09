@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\ValueObject;
 
-use PhpParser\Modifiers;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Modifiers;
 final class Visibility
 {
     public const int PUBLIC = Modifiers::PUBLIC;

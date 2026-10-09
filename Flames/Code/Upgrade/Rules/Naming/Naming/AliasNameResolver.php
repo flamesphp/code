@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Naming\Naming;
 
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\GroupUse;
-use PhpParser\Node\Stmt\Use_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\GroupUse;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Use_;
 final readonly class AliasNameResolver
 {
     public function __construct(private \Flames\Code\Upgrade\Rules\Naming\Naming\UseImportsResolver $useImportsResolver)

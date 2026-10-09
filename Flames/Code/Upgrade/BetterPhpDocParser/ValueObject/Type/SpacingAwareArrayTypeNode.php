@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser\ValueObject\Type;
 
-use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\ArrayTypeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\CallableTypeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\GenericTypeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\TypeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\UnionTypeNode;
 use Flames\Code\Upgrade\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper;
 use Stringable;
 final class SpacingAwareArrayTypeNode extends ArrayTypeNode

@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\CodeQuality\NodeFactory;
 
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Arg;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
 use Flames\Code\Upgrade\Rules\CodeQuality\ValueObject\ComparedExprAndValueExpr;
 use Flames\Code\Upgrade\NodeAnalyzer\ExprAnalyzer;
 use Flames\Code\Upgrade\PhpParser\Comparing\NodeComparator;

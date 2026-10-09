@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpDocParser\PhpDocParser\PhpDocNodeVisitor;
 
-use PHPStan\PhpDocParser\Ast\Node;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Node;
 use Flames\Code\Upgrade\PhpDocParser\PhpDocParser\ValueObject\PhpDocAttributeKey;
 /**
  * @api

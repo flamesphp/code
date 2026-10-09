@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\CodeQuality\Rector\BooleanNot;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BooleanNot;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ConstFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
 use Flames\Code\Upgrade\PhpParser\Node\Value\ValueResolver;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * Replace negated boolean literals with their simplified equivalents
  *

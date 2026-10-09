@@ -1,0 +1,157 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\DowngradePhp80\Rector\New_;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrayDimFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\AssignOp;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\AssignRef;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Instanceof_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\New_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PropertyFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticPropertyFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\NodeFactory\NamedVariableFactory;
+use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
+use Flames\Code\Upgrade\PhpParser\Node\BetterNodeFinder;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
+/**
+ * @changelog https://wiki.php.net/rfc/variable_syntax_tweaks#arbitrary_expression_support_for_new_and_instanceof
+ *
+ * @see \Flames\Code\Upgrade\DowngradePhp80\Rector\New_\DowngradeArbitraryExpressionsSupportRectorTest
+ */
+final class DowngradeArbitraryExpressionsSupportRector extends AbstractRector
+{
+    public function __construct(private readonly NamedVariableFactory $namedVariableFactory, private readonly BetterNodeFinder $betterNodeFinder)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Replace arbitrary expressions used with new or instanceof', [new CodeSample(<<<'CODE_SAMPLE'
+function getObjectClassName() {
+    return stdClass::class;
+}
+
+$object = new (getObjectClassName());
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+function getObjectClassName() {
+    return stdClass::class;
+}
+
+$className = getObjectClassName();
+$object = new $className();
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [Expression::class];
+    }
+    /**
+     * @param Expression $node
+     * @return Expression[]|null
+     */
+    public function refactor(Node $node): ?array
+    {
+        /** @var Assign[] $assigns */
+        $assigns = $this->betterNodeFinder->findInstancesOf($node, [Assign::class]);
+        if ($assigns !== []) {
+            return $this->refactorAssign($assigns, $node);
+        }
+        /** @var Instanceof_[] $instancesOf */
+        $instancesOf = $this->betterNodeFinder->findInstancesOf($node, [Instanceof_::class]);
+        if ($instancesOf !== []) {
+            return $this->refactorInstanceof($instancesOf[0], $node);
+        }
+        return null;
+    }
+    private function isAllowed(Expr $expr): bool
+    {
+        return $expr instanceof Variable || $expr instanceof ArrayDimFetch || $expr instanceof PropertyFetch || $expr instanceof StaticPropertyFetch;
+    }
+    private function isAssign(Expr $expr): bool
+    {
+        return $expr instanceof Assign || $expr instanceof AssignRef || $expr instanceof AssignOp;
+    }
+    private function isBetweenParentheses(Node $node): bool
+    {
+        $oldTokens = $this->file->getOldTokens();
+        $previousTokenPos = $node->getStartTokenPos() - 1;
+        while ($previousTokenPos >= 0) {
+            $token = $oldTokens[$previousTokenPos] ?? null;
+            --$previousTokenPos;
+            if ((string) $token === '(') {
+                return \true;
+            }
+            if (!in_array((string) $token, [\T_COMMENT, \T_WHITESPACE], \true)) {
+                continue;
+            }
+        }
+        return \false;
+    }
+    /**
+     * @param Assign[] $assigns
+     * @return Expression[]|null
+     */
+    private function refactorAssign(array $assigns, Expression $expression): ?array
+    {
+        foreach ($assigns as $assign) {
+            if (!$assign->expr instanceof New_ && !$assign->expr instanceof Instanceof_) {
+                continue;
+            }
+            $newOrInstanceof = $assign->expr;
+            if (!$newOrInstanceof->class instanceof Expr) {
+                continue;
+            }
+            $isAllowed = $this->isAllowed($newOrInstanceof->class);
+            if ($isAllowed && $this->isBetweenParentheses($newOrInstanceof)) {
+                continue;
+            }
+            // mandatory to remove parentheses
+            $newOrInstanceof->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            if ($isAllowed) {
+                continue;
+            }
+            if ($this->isAssign($newOrInstanceof->class)) {
+                /** @var Assign|AssignRef|AssignOp $exprAssign */
+                $exprAssign = $newOrInstanceof->class;
+                $variable = $exprAssign->var;
+            } else {
+                $variable = $this->namedVariableFactory->createVariable('className', $expression);
+                $exprAssign = new Assign($variable, $newOrInstanceof->class);
+            }
+            $newOrInstanceof->class = $variable;
+            return [new Expression($exprAssign), $expression];
+        }
+        return null;
+    }
+    /**
+     * @return Expression[]|null
+     */
+    private function refactorInstanceof(Instanceof_ $instanceof, Expression $expression): ?array
+    {
+        if (!$instanceof->class instanceof Expr) {
+            return null;
+        }
+        $isAllowed = $this->isAllowed($instanceof->class);
+        if ($isAllowed && $this->isBetweenParentheses($instanceof)) {
+            return null;
+        }
+        // mandatory to remove parentheses
+        $instanceof->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        $variable = $this->namedVariableFactory->createVariable('className', $expression);
+        $exprAssign = new Assign($variable, $instanceof->class);
+        $instanceof->class = $variable;
+        return [new Expression($exprAssign), $expression];
+    }
+}

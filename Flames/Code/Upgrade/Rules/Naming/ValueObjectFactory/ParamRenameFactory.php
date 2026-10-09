@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Naming\ValueObjectFactory;
 
-use PhpParser\Node\Expr\Error;
-use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Param;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Error;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\FunctionLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Param;
 use Flames\Code\Upgrade\Rules\Naming\ValueObject\ParamRename;
 use Flames\Code\Upgrade\NodeNameResolver\NodeNameResolver;
 final readonly class ParamRenameFactory

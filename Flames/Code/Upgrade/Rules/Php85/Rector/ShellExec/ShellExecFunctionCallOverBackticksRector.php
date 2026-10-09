@@ -3,17 +3,17 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php85\Rector\ShellExec;
 
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\BinaryOp\Concat;
-use PhpParser\Node\Expr\ShellExec;
-use PhpParser\Node\InterpolatedStringPart;
-use PhpParser\Node\Scalar\String_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Arg;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Concat;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ShellExec;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\InterpolatedStringPart;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\String_;
 use Flames\Code\Upgrade\Rector\AbstractRector;
 use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
 use Flames\Code\Upgrade\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_backticks_as_an_alias_for_shell_exec
  * @see \Flames\Code\Upgrade\Rules\Php85\Rector\ShellExec\ShellExecFunctionCallOverBackticksRectorTest

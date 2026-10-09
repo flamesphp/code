@@ -3,21 +3,21 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\CodeQuality\Rector\FuncCall;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Cast;
-use PhpParser\Node\Expr\Cast\Array_;
-use PhpParser\Node\Expr\Cast\Bool_;
-use PhpParser\Node\Expr\Cast\Double;
-use PhpParser\Node\Expr\Cast\Int_;
-use PhpParser\Node\Expr\Cast\Object_;
-use PhpParser\Node\Expr\Cast\String_;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Array_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Bool_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Double;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Int_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Object_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\String_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
 use Flames\Code\Upgrade\PhpParser\Node\Value\ValueResolver;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\CodeQuality\Rector\FuncCall\SetTypeToCastRectorTest
  */
@@ -62,7 +62,7 @@ CODE_SAMPLE
     /**
      * @param Expression $node
      */
-    public function refactor(Node $node): ?\PhpParser\Node\Stmt\Expression
+    public function refactor(Node $node): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression
     {
         // skip expr that are not standalone line, as settype() returns success bool value
         // and cannot be casted
@@ -75,7 +75,7 @@ CODE_SAMPLE
         }
         return new Expression($assign);
     }
-    private function refactorFuncCall(FuncCall $funcCall): ?\PhpParser\Node\Expr\Assign
+    private function refactorFuncCall(FuncCall $funcCall): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign
     {
         if (!$this->isName($funcCall, 'setType')) {
             return null;

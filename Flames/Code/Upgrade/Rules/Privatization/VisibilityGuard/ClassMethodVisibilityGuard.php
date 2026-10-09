@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Privatization\VisibilityGuard;
 
-use PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use Flames\Code\Upgrade\NodeNameResolver\NodeNameResolver;
 final readonly class ClassMethodVisibilityGuard

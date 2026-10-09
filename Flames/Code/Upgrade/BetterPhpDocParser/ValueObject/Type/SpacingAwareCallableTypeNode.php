@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser\ValueObject\Type;
 
-use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\CallableTypeNode;
 use Stringable;
 final class SpacingAwareCallableTypeNode extends CallableTypeNode
 {

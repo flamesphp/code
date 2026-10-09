@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php73\Rector\FuncCall;
 
-use PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
 use Flames\Code\Upgrade\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Flames\Code\Upgrade\Exception\ShouldNotHappenException;
 use Flames\Code\Upgrade\PhpParser\Enum\NodeGroup;
 use Flames\Code\Upgrade\Rector\AbstractRector;
 use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
 use Flames\Code\Upgrade\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @deprecated This rule is deprecated, as it can cause BC breaks. Adding JSON_THROW_ON_ERROR turns silent false/null results into a thrown JsonException, so every call site has to be reviewed manually. Use a wrapper tool like nette/utils Json instead, to get clear error reporting on any PHP version.
  */

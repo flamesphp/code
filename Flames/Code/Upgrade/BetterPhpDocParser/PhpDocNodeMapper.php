@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser;
 
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PhpDocNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Flames\Code\Upgrade\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider;
 use Flames\Code\Upgrade\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Flames\Code\Upgrade\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Flames\Code\Upgrade\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\CloningPhpDocNodeVisitor;
 use Flames\Code\Upgrade\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitor;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 /**
  * @see \Flames\Code\Upgrade\Tests\BetterPhpDocParser\PhpDocNodeMapperTest
  */

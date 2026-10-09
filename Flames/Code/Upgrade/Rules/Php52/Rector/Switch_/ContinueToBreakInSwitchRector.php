@@ -3,29 +3,29 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php52\Rector\Switch_;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\Int_;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Break_;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Continue_;
-use PhpParser\Node\Stmt\Do_;
-use PhpParser\Node\Stmt\For_;
-use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Switch_;
-use PhpParser\Node\Stmt\While_;
-use PhpParser\NodeVisitor;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\Int_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Break_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Continue_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Do_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\For_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Foreach_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Switch_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\While_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use Flames\Code\Upgrade\PhpParser\Node\Value\ValueResolver;
 use Flames\Code\Upgrade\Rector\AbstractRector;
 use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
 use Flames\Code\Upgrade\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\Php52\Rector\Switch_\ContinueToBreakInSwitchRectorTest
  */
@@ -127,7 +127,7 @@ CODE_SAMPLE
         });
     }
     /**
-     * @return \PhpParser\Node\Stmt\Continue_|\PhpParser\Node\Stmt\Break_
+     * @return \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Continue_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Break_
      */
     private function processVariableNum(Continue_ $continue, Variable $numVariable)
     {

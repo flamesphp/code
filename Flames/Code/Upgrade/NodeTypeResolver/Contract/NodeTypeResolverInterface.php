@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeTypeResolver\Contract;
 
-use PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
 use PHPStan\Type\Type;
 /**
- * @template TNode as \PhpParser\Node
+ * @template TNode as \Flames\Code\Upgrade\ThirdParty\PhpParser\Node
  */
 interface NodeTypeResolverInterface
 {

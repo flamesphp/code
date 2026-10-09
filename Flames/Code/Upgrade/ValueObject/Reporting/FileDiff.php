@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\ValueObject\Reporting;
 
-use FlamesPrefix202610\Nette\Utils\Strings;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
 use Flames\Code\Upgrade\ChangesReporting\ValueObject\UpgradeWithLineChange;
 use Flames\Code\Upgrade\Contract\Rector\RectorInterface;
 use Flames\Code\Upgrade\Parallel\Contract\SerializableInterface;
 use Flames\Code\Upgrade\Parallel\ValueObject\BridgeItem;
 use Flames\Code\Upgrade\Util\UpgradeClassesSorter;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 /**
  * @see \Flames\Code\Upgrade\Tests\ValueObject\Reporting\FileDiffTest
  */

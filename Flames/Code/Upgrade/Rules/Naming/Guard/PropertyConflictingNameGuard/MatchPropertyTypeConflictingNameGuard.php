@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Naming\Guard\PropertyConflictingNameGuard;
 
-use PhpParser\Node\Stmt\ClassLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassLike;
 use Flames\Code\Upgrade\Rules\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver;
 use Flames\Code\Upgrade\Rules\Naming\PhpArray\ArrayFilter;
 use Flames\Code\Upgrade\Rules\Naming\ValueObject\PropertyRename;

@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php80\Rector\Class_;
 
-use FlamesPrefix202610\Nette\Utils\Strings;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PhpDocTagNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Flames\Code\Upgrade\Rules\Php80\ValueObject\AnnotationToAttribute;
 use Flames\Code\Upgrade\Rules\Php80\ValueObject\AttributeValueAndDocComment;

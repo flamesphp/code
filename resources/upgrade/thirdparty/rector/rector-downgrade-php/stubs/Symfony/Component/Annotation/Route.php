@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace FlamesPrefix202610\Symfony\Component\Routing\Annotation;
+namespace Flames\Code\Upgrade\Symfony\Component\Routing\Annotation;
 
 if (class_exists('Symfony\Component\Routing\Annotation\Route')) {
     return;

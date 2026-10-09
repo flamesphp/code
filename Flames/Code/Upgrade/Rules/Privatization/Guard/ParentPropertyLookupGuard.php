@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Privatization\Guard;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PropertyFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
 use Flames\Code\Upgrade\Enum\ObjectReference;
 use Flames\Code\Upgrade\NodeAnalyzer\PropertyFetchAnalyzer;
@@ -31,7 +31,7 @@ final readonly class ParentPropertyLookupGuard
     {
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|string $property
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property|string $property
      */
     public function isLegal($property, ?ClassReflection $classReflection): bool
     {

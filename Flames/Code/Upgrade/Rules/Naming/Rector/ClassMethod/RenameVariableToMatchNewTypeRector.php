@@ -3,18 +3,18 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Naming\Rector\ClassMethod;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\New_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
 use Flames\Code\Upgrade\Rules\Naming\Guard\BreakingVariableRenameGuard;
 use Flames\Code\Upgrade\Rules\Naming\Naming\ExpectedNameResolver;
 use Flames\Code\Upgrade\Rules\Naming\VariableRenamer;
 use Flames\Code\Upgrade\PhpParser\Node\BetterNodeFinder;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRectorTest
  */

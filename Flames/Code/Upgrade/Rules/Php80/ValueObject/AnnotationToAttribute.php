@@ -5,7 +5,7 @@ namespace Flames\Code\Upgrade\Rules\Php80\ValueObject;
 
 use Flames\Code\Upgrade\Rules\Php80\Contract\ValueObject\AnnotationToAttributeInterface;
 use Flames\Code\Upgrade\Validation\RectorAssert;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 final readonly class AnnotationToAttribute implements AnnotationToAttributeInterface
 {
     /**

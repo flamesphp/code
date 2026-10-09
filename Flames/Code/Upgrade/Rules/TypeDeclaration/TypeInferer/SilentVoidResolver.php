@@ -3,33 +3,33 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\TypeDeclaration\TypeInferer;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\Exit_;
-use PhpParser\Node\Expr\Throw_;
-use PhpParser\Node\Expr\Yield_;
-use PhpParser\Node\Expr\YieldFrom;
-use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Break_;
-use PhpParser\Node\Stmt\Case_;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Continue_;
-use PhpParser\Node\Stmt\Do_;
-use PhpParser\Node\Stmt\Else_;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Finally_;
-use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Goto_;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Switch_;
-use PhpParser\Node\Stmt\TryCatch;
-use PhpParser\Node\Stmt\While_;
-use PhpParser\NodeVisitor;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrowFunction;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Exit_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Throw_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Yield_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\YieldFrom;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\FunctionLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Break_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Case_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Continue_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Do_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Else_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Finally_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Goto_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Return_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Switch_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\TryCatch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\While_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor;
 use PHPStan\Reflection\ClassReflection;
 use Flames\Code\Upgrade\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Flames\Code\Upgrade\PhpParser\Node\BetterNodeFinder;
@@ -42,7 +42,7 @@ final readonly class SilentVoidResolver
     {
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_ $functionLike
      */
     public function hasExclusiveVoid($functionLike): bool
     {
@@ -95,7 +95,7 @@ final readonly class SilentVoidResolver
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Do_|\PhpParser\Node\Stmt\While_ $node
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Do_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\While_ $node
      */
     private function isFoundLoopControl($node): bool
     {
@@ -125,7 +125,7 @@ final readonly class SilentVoidResolver
         return $stmt instanceof Do_ && !$this->isFoundLoopControl($stmt);
     }
     /**
-     * @param \PhpParser\Node\Stmt|\PhpParser\Node\Expr $stmt
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr $stmt
      */
     private function isIfReturn($stmt, bool $withNativeNeverType): bool
     {

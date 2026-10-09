@@ -23,11 +23,11 @@ use Flames\Code\Upgrade\Util\MemoryLimiter;
 use Flames\Code\Upgrade\ValueObject\Configuration;
 use Flames\Code\Upgrade\ValueObject\Configuration\LevelOverflow;
 use Flames\Code\Upgrade\ValueObject\ProcessResult;
-use FlamesPrefix202610\Symfony\Component\Console\Application;
-use FlamesPrefix202610\Symfony\Component\Console\Command\Command;
-use FlamesPrefix202610\Symfony\Component\Console\Input\InputInterface;
-use FlamesPrefix202610\Symfony\Component\Console\Output\OutputInterface;
-use FlamesPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Application;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Command\Command;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\InputInterface;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Output\OutputInterface;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Style\SymfonyStyle;
 final class ProcessCommand extends Command
 {
     public function __construct(private readonly AdditionalAutoloader $additionalAutoloader, private readonly ChangedFilesDetector $changedFilesDetector, private readonly ConfigInitializer $configInitializer, private readonly ApplicationFileProcessor $applicationFileProcessor, private readonly DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, private readonly OutputFormatterCollector $outputFormatterCollector, private readonly SymfonyStyle $symfonyStyle, private readonly MemoryLimiter $memoryLimiter, private readonly ConfigurationFactory $configurationFactory, private readonly DeprecatedRulesReporter $deprecatedRulesReporter, private readonly MissConfigurationReporter $missConfigurationReporter, private readonly ConfigurationRuleFilter $configurationRuleFilter, private readonly SkippedClassResolver $skippedClassResolver)

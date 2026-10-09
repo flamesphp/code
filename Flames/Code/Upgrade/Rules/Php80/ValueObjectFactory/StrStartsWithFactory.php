@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php80\ValueObjectFactory;
 
-use PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
 use Flames\Code\Upgrade\Rules\Php80\ValueObject\StrStartsWith;
 final class StrStartsWithFactory
 {

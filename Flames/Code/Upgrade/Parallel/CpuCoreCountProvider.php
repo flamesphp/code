@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Parallel;
 
-use FlamesPrefix202610\Fidry\CpuCoreCounter\CpuCoreCounter;
-use FlamesPrefix202610\Fidry\CpuCoreCounter\NumberOfCpuCoreNotFound;
+use Flames\Code\Upgrade\ThirdParty\Fidry\CpuCoreCounter;
+use Flames\Code\Upgrade\ThirdParty\Fidry\NumberOfCpuCoreNotFound;
 final class CpuCoreCountProvider
 {
     private const int DEFAULT_CORE_COUNT = 2;

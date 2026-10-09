@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\ValueObject;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
 final readonly class FuncCallAndExpr
 {
     public function __construct(private FuncCall $funcCall, private Expr $expr)

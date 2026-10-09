@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace Flames\Code\Upgrade\Configuration;
 
 use Deprecated;
-use FlamesPrefix202610\DrupalFlames\Code\Upgrade\Set\DrupalSetList;
-use FlamesPrefix202610\Nette\Utils\Strings;
-use PhpParser\NodeVisitor;
+use Flames\Code\Upgrade\DrupalSet\DrupalSetList;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor;
 use Flames\Code\Upgrade\Bridge\SetRectorsResolver;
 use Flames\Code\Upgrade\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Flames\Code\Upgrade\Config\Level\CodeQualityLevel;
@@ -20,7 +20,7 @@ use Flames\Code\Upgrade\Configuration\Parameter\SimpleParameterProvider;
 use Flames\Code\Upgrade\Console\Notifier;
 use Flames\Code\Upgrade\Contract\Rector\ConfigurableRectorInterface;
 use Flames\Code\Upgrade\Contract\Rector\RectorInterface;
-use Flames\Code\Upgrade\Doctrine\Set\DoctrineSetList;
+use Flames\Code\Upgrade\ThirdParty\Doctrine\Set\DoctrineSetList;
 use Flames\Code\Upgrade\Enum\Config\Defaults;
 use Flames\Code\Upgrade\Exception\Configuration\InvalidConfigurationException;
 use Flames\Code\Upgrade\Php\PhpVersionResolver\ComposerJsonPhpVersionResolver;
@@ -33,8 +33,8 @@ use Flames\Code\Upgrade\Symfony\Set\TwigSetList;
 use Flames\Code\Upgrade\ValueObject\Configuration\LevelOverflow;
 use Flames\Code\Upgrade\ValueObject\PhpVersion;
 use RectorLaravel\Set\LaravelSetList;
-use FlamesPrefix202610\Symfony\Component\Finder\Finder;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Finder\Finder;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 /**
  * @api
  */
@@ -485,7 +485,7 @@ final class UpgradeConfigBuilder
         if ($laravel && class_exists('RectorLaravel\Set\LaravelSetList') && constant('RectorLaravel\Set\LaravelSetList::COMPOSER_BASED')) {
             $this->sets[] = LaravelSetList::COMPOSER_BASED;
         }
-        if ($drupal && class_exists('DrupalFlames\Code\Upgrade\Set\DrupalSetList') && constant('DrupalFlames\Code\Upgrade\Set\DrupalSetList::COMPOSER_BASED')) {
+        if ($drupal && class_exists('Drupal\Set\DrupalSetList') && constant('Drupal\Set\DrupalSetList::COMPOSER_BASED')) {
             // waits on https://github.com/palantirnet/drupal-rector/pull/419/files#diff-c6bd4ee854830efc1363a7d99c1b6a2e7e64f2499a51e503174ab777de7e64e5
             $this->sets[] = DrupalSetList::COMPOSER_BASED;
         }

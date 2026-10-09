@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks;
 
-use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\FunctionLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Param;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\ParamTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\ArrayTypeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\IdentifierTypeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\TypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
@@ -44,7 +44,7 @@ final readonly class NodeDocblockTypeDecorator
         return \true;
     }
     /**
-     * @param \PHPStan\Type\Type|\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeOrTypeNode
+     * @param \PHPStan\Type\Type|\Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\TypeNode $typeOrTypeNode
      */
     public function decorateGenericIterableReturnType($typeOrTypeNode, PhpDocInfo $classMethodPhpDocInfo, FunctionLike $functionLike): bool
     {

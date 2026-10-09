@@ -5,7 +5,7 @@ namespace Flames\Code\Upgrade\Configuration\Parameter;
 
 use Flames\Code\Upgrade\Configuration\Option;
 use Flames\Code\Upgrade\Exception\ShouldNotHappenException;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 /**
  * @api
  */

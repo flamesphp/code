@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeCollector;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp;
 /**
  * @see \Flames\Code\Upgrade\Tests\NodeCollector\BinaryOpConditionsCollectorTest
  */

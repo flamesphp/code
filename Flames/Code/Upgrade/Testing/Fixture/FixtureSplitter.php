@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Testing\Fixture;
 
-use FlamesPrefix202610\Nette\Utils\FileSystem;
+use Flames\Code\Upgrade\ThirdParty\Nette\FileSystem;
 /**
  * @api
  */

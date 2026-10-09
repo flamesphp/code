@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php70;
 
-use FlamesPrefix202610\Nette\Utils\Strings;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
 use Flames\Code\Upgrade\Rules\Php70\Exception\InvalidEregException;
 /**
  * @changelog https://gist.github.com/lifthrasiir/704754/7e486f43e62fd1c9d3669330c251f8ca4a59a3f8

@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeTypeResolver\PHPStan;
 
-use PhpParser\Node\Expr\CallLike;
-use PhpParser\Node\FunctionLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\CallLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\FunctionLike;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
@@ -14,7 +14,7 @@ final class ParametersAcceptorSelectorVariantsWrapper
 {
     /**
      * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection $reflection
-     * @param \PhpParser\Node\Expr\CallLike|\PhpParser\Node\FunctionLike $node
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\CallLike|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\FunctionLike $node
      */
     public static function select($reflection, $node, Scope $scope): ParametersAcceptor
     {

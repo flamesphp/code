@@ -1,0 +1,92 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\CodeQuality\Rector\MethodCall;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall;
+use Flames\Code\Upgrade\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
+/**
+ * @changelog https://github.com/symfony/symfony/pull/29685/files
+ *
+ * @see \Flames\Code\Upgrade\Rules\CodeQuality\Rector\MethodCall\UseSpecificWillMethodRectorTest
+ */
+final class UseSpecificWithMethodRector extends AbstractRector
+{
+    public function __construct(private readonly TestsNodeAnalyzer $testsNodeAnalyzer)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Changes ->with() to more specific method', [new CodeSample(<<<'CODE_SAMPLE'
+class SomeClass extends PHPUnit\Framework\TestCase
+{
+    public function test()
+    {
+        $translator = $this->createMock('SomeClass');
+
+        $translator->expects($this->any())
+            ->method('trans')
+            ->with($this->equalTo('old max {{ max }}!'));
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+class SomeClass extends PHPUnit\Framework\TestCase
+{
+    public function test()
+    {
+        $translator = $this->createMock('SomeClass');
+
+        $translator->expects($this->any())
+            ->method('trans')
+            ->with('old max {{ max }}!');
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [MethodCall::class, StaticCall::class];
+    }
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
+            return null;
+        }
+        // we cannot check caller types, as on old PHPUnit version, this the magic ->method() call result to a mixed type
+        if (!$this->isName($node->name, 'with')) {
+            return null;
+        }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
+        $hasChanged = \false;
+        foreach ($node->getArgs() as $i => $argNode) {
+            if (!$argNode->value instanceof MethodCall) {
+                continue;
+            }
+            $methodCall = $argNode->value;
+            if (!$this->isName($methodCall->name, 'equalTo')) {
+                continue;
+            }
+            $node->args[$i] = $methodCall->getArgs()[0];
+            $hasChanged = \true;
+        }
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
+    }
+}

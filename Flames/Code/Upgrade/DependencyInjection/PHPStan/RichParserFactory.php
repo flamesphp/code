@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\DependencyInjection\PHPStan;
 
-use PhpParser\NodeVisitor;
-use PhpParser\NodeVisitor\NameResolver;
-use PhpParser\Parser;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor\NameResolver;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Parser;
 use PHPStan\Analyser\Ignore\IgnoreLexer;
 use PHPStan\DependencyInjection\DirectExtensionsCollection;
 use PHPStan\Parser\RichParser;

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Skipper\Skipper;
 
-use PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
 use PHPStan\Reflection\ReflectionProvider;
 use Flames\Code\Upgrade\Contract\Rector\RectorInterface;
 use Flames\Code\Upgrade\ProcessAnalyzer\RectifiedAnalyzer;

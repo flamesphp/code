@@ -8,8 +8,8 @@ use Flames\Code\Upgrade\Configuration\Option;
 use Flames\Code\Upgrade\FileSystem\FilePathHelper;
 use Flames\Code\Upgrade\Parallel\Exception\ParallelShouldNotHappenException;
 use Flames\Code\Upgrade\Parallel\Reflection\CommandFromReflectionFactory;
-use FlamesPrefix202610\Symfony\Component\Console\Command\Command;
-use FlamesPrefix202610\Symfony\Component\Console\Input\InputInterface;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Command\Command;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\InputInterface;
 /**
  * @see \Flames\Code\Upgrade\Tests\Parallel\Command\WorkerCommandLineFactoryTest
  * @todo possibly extract to symplify/easy-parallel

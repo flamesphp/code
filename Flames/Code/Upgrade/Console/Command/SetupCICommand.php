@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Console\Command;
 
-use FlamesPrefix202610\Symfony\Component\Console\Command\Command;
-use FlamesPrefix202610\Symfony\Component\Console\Input\InputInterface;
-use FlamesPrefix202610\Symfony\Component\Console\Output\OutputInterface;
-use FlamesPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Command\Command;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\InputInterface;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Output\OutputInterface;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Style\SymfonyStyle;
 final class SetupCICommand extends Command
 {
     public function __construct(private readonly SymfonyStyle $symfonyStyle)

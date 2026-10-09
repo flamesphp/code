@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php80\AttributeDecorator;
 
-use PhpParser\Node\Attribute;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Attribute;
 use Flames\Code\Upgrade\Rules\Php80\Contract\ConverterAttributeDecoratorInterface;
 final class SensioParamConverterAttributeDecorator implements ConverterAttributeDecoratorInterface
 {

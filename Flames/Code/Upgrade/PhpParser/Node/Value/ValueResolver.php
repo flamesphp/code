@@ -4,18 +4,18 @@ declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpParser\Node\Value;
 
 use ArithmeticError;
-use PhpParser\ConstExprEvaluationException;
-use PhpParser\ConstExprEvaluator;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp\Concat;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\InterpolatedStringPart;
-use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\MagicConst\Class_;
-use PhpParser\Node\Scalar\MagicConst\Dir;
-use PhpParser\Node\Scalar\MagicConst\File;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\ConstExprEvaluationException;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\ConstExprEvaluator;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Arg;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Concat;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ClassConstFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ConstFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\InterpolatedStringPart;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\MagicConst\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\MagicConst\Dir;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\MagicConst\File;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -35,7 +35,7 @@ use Flames\Code\Upgrade\Reflection\ReflectionResolver;
 use Flames\Code\Upgrade\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use TypeError;
 /**
- * @see \Flames\Code\Upgrade\Tests\PhpParser\Node\Value\ValueResolverTest
+ * @see \Flames\Code\Upgrade\Tests\Flames\Code\Upgrade\PhpParser\Node\Value\ValueResolverTest
  * @todo make use of constant type of $scope->getType()
  */
 final class ValueResolver
@@ -52,7 +52,7 @@ final class ValueResolver
         return $this->getValue($expr) === $value;
     }
     /**
-     * @param \PhpParser\Node\Arg|\PhpParser\Node\Expr|\PhpParser\Node\InterpolatedStringPart $expr
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Arg|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\InterpolatedStringPart $expr
      * @return mixed
      */
     public function getValue($expr, bool $resolvedClassReference = \false)
@@ -136,7 +136,7 @@ final class ValueResolver
         return \true;
     }
     /**
-     * @param \PhpParser\Node\Expr|\PhpParser\Node\InterpolatedStringPart $expr
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\InterpolatedStringPart $expr
      * @return mixed
      */
     private function resolveExprValueForConst($expr)

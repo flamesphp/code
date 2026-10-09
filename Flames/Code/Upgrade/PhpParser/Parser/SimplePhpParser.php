@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpParser\Parser;
 
-use FlamesPrefix202610\Nette\Utils\FileSystem;
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\NodeTraverser;
-use PhpParser\Parser;
-use PhpParser\ParserFactory;
+use Flames\Code\Upgrade\ThirdParty\Nette\FileSystem;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeTraverser;
 use Flames\Code\Upgrade\PhpParser\NodeVisitor\AssignedToNodeVisitor;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Parser;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\ParserFactory;
 use Throwable;
 final readonly class SimplePhpParser
 {

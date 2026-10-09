@@ -3,25 +3,25 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo;
 
-use FlamesPrefix202610\Nette\Utils\Strings;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ExtendsTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ImplementsTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\ConstTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Lexer\Lexer;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\ConstExpr\ConstFetchNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Node;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\ExtendsTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\GenericTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\ImplementsTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\InvalidTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\MethodTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\ParamTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PhpDocChildNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PhpDocNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PhpDocTagNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PhpDocTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PropertyTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\ReturnTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\VarTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\ConstTypeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\IdentifierTypeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Lexer\Lexer;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Flames\Code\Upgrade\BetterPhpDocParser\Annotation\AnnotationNaming;
@@ -37,7 +37,7 @@ use Flames\Code\Upgrade\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Flames\Code\Upgrade\StaticTypeMapper\Naming\NameScopeFactory;
 use Flames\Code\Upgrade\StaticTypeMapper\StaticTypeMapper;
 use Flames\Code\Upgrade\Validation\RectorAssert;
-use FlamesPrefix202610\Webmozart\Assert\InvalidArgumentException;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\InvalidArgumentException;
 /**
  * @see \Flames\Code\Upgrade\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfo\PhpDocInfoTest
  */
@@ -53,7 +53,7 @@ final class PhpDocInfo
     private const array TAGS_TYPES_TO_NAMES = [ReturnTagValueNode::class => '@return', ParamTagValueNode::class => '@param', VarTagValueNode::class => '@var', MethodTagValueNode::class => '@method', PropertyTagValueNode::class => '@property', ExtendsTagValueNode::class => '@extends', ImplementsTagValueNode::class => '@implements'];
     private bool $isSingleLine = \false;
     private readonly PhpDocNode $originalPhpDocNode;
-    public function __construct(private readonly PhpDocNode $phpDocNode, private readonly BetterTokenIterator $betterTokenIterator, private readonly StaticTypeMapper $staticTypeMapper, private readonly \PhpParser\Node $node, private readonly AnnotationNaming $annotationNaming, private readonly PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder, private readonly NameScopeFactory $nameScopeFactory)
+    public function __construct(private readonly PhpDocNode $phpDocNode, private readonly BetterTokenIterator $betterTokenIterator, private readonly StaticTypeMapper $staticTypeMapper, private readonly \Flames\Code\Upgrade\ThirdParty\PhpParser\Node $node, private readonly AnnotationNaming $annotationNaming, private readonly PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder, private readonly NameScopeFactory $nameScopeFactory)
     {
         $this->originalPhpDocNode = clone $this->phpDocNode;
         if (!$this->betterTokenIterator->containsTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
@@ -193,7 +193,7 @@ final class PhpDocInfo
         return $foundTagValueNodes[0] ?? null;
     }
     /**
-     * @template T of \PHPStan\PhpDocParser\Ast\Node
+     * @template T of \Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Node
      * @param class-string<T> $typeToRemove
      */
     public function removeByType(string $typeToRemove, ?string $name = null): bool
@@ -318,7 +318,7 @@ final class PhpDocInfo
     {
         $this->isSingleLine = \false;
     }
-    public function getNode(): \PhpParser\Node
+    public function getNode(): \Flames\Code\Upgrade\ThirdParty\PhpParser\Node
     {
         return $this->node;
     }

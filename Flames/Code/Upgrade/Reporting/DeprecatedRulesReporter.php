@@ -9,7 +9,7 @@ use Flames\Code\Upgrade\Configuration\Parameter\SimpleParameterProvider;
 use Flames\Code\Upgrade\Contract\Rector\RectorInterface;
 use Flames\Code\Upgrade\PhpParser\Node\FileNode;
 use ReflectionMethod;
-use FlamesPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Style\SymfonyStyle;
 final readonly class DeprecatedRulesReporter
 {
     /**

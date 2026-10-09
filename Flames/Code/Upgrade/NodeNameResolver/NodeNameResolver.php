@@ -3,23 +3,23 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeNameResolver;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\CallLike;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\NullsafeMethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\Param;
-use PhpParser\Node\PropertyItem;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Const_;
-use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Trait_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\CallLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\NullsafeMethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Param;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\PropertyItem;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Const_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Interface_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use Flames\Code\Upgrade\Rules\CodingStyle\Naming\ClassNaming;
 use Flames\Code\Upgrade\Exception\ShouldNotHappenException;
@@ -80,7 +80,7 @@ final class NodeNameResolver
      *  ($node is Node\Const_ ? string :
      *  ($node is Name ? string :
      *      string|null )))))))))
-     * @param \PhpParser\Node|string $node
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node|string $node
      */
     public function getName($node): ?string
     {
@@ -140,7 +140,7 @@ final class NodeNameResolver
         return $names;
     }
     /**
-     * @param string|\PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\Stmt\ClassLike $name
+     * @param string|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassLike $name
      */
     public function getShortName($name): string
     {
@@ -166,7 +166,7 @@ final class NodeNameResolver
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Expr|\PhpParser\Node\Identifier $node
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier $node
      */
     private function isCallOrIdentifier($node): bool
     {

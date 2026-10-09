@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpAttribute;
 
-use PhpParser\BuilderHelpers;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Scalar\String_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\BuilderHelpers;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\String_;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDoc\StringNode;
 use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
 use Flames\Code\Upgrade\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Flames\Code\Upgrade\PhpAttribute\Enum\DocTagNodeState;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 /**
  * @see \Flames\Code\Upgrade\Tests\PhpAttribute\AnnotationToAttributeMapper\AnnotationToAttributeMapperTest
  */

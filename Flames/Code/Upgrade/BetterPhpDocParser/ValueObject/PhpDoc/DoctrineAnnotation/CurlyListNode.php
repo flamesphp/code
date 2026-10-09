@@ -5,7 +5,7 @@ namespace Flames\Code\Upgrade\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnno
 
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Stringable;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 final class CurlyListNode extends \Flames\Code\Upgrade\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\AbstractValuesAwareNode
 {
     /**

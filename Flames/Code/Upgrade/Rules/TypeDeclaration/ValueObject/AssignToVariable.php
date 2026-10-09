@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\TypeDeclaration\ValueObject;
 
-use PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
 final readonly class AssignToVariable
 {
     public function __construct(private string $variableName, private Expr $assignedExpr)

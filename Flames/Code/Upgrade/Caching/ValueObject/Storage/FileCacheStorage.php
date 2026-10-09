@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Flames\Code\Upgrade\Caching\ValueObject\Storage;
 
 use FilesystemIterator;
-use FlamesPrefix202610\Nette\Utils\FileSystem;
+use Flames\Code\Upgrade\ThirdParty\Nette\FileSystem;
 use Flames\Code\Upgrade\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Flames\Code\Upgrade\Caching\ValueObject\CacheFilePaths;
 use Flames\Code\Upgrade\Caching\ValueObject\CacheItem;
@@ -15,7 +15,7 @@ use Flames\Code\Upgrade\Exception\Cache\CachingException;
  */
 final readonly class FileCacheStorage implements CacheStorageInterface
 {
-    public function __construct(private string $directory, private \FlamesPrefix202610\Symfony\Component\Filesystem\Filesystem $filesystem)
+    public function __construct(private string $directory, private \Flames\Code\Upgrade\ThirdParty\Symfony\Component\Filesystem\Filesystem $filesystem)
     {
     }
     /**

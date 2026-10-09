@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace FlamesPrefix202610;
+namespace Flames\Code\Upgrade\Config\Set;
 
 use Flames\Code\Upgrade\Rules\CodeQuality\Rector\Attribute\ExplicitAttributeNamedArgsRector;
 use Flames\Code\Upgrade\Rules\CodeQuality\Rector\Attribute\SortAttributeNamedArgsRector;

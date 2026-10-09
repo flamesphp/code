@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\CodingStyle\Rector\ClassLike;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\EnumCase;
-use PhpParser\Node\Stmt\Nop;
-use PhpParser\Node\Stmt\TraitUse;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\EnumCase;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Nop;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\TraitUse;
 use Flames\Code\Upgrade\Comments\CommentResolver;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\CodingStyle\Rector\ClassLike\NewlineBetweenClassLikeStmtsRectorTest
  */
@@ -64,7 +64,7 @@ CODE_SAMPLE
     {
         return $this->processAddNewLine($node, \false);
     }
-    private function processAddNewLine(ClassLike $classLike, bool $hasChanged, int $jumpToKey = 0): ?\PhpParser\Node\Stmt\ClassLike
+    private function processAddNewLine(ClassLike $classLike, bool $hasChanged, int $jumpToKey = 0): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassLike
     {
         $totalKeys = array_key_last($classLike->stmts);
         for ($key = $jumpToKey; $key < $totalKeys; ++$key) {

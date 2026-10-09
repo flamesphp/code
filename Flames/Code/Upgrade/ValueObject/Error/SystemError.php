@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\ValueObject\Error;
 
-use FlamesPrefix202610\Nette\Utils\Strings;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
 use Flames\Code\Upgrade\Parallel\Contract\SerializableInterface;
 use Flames\Code\Upgrade\Parallel\ValueObject\BridgeItem;
 /**

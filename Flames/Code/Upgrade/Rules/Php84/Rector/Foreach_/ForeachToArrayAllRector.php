@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php84\Rector\Foreach_;
 
-use PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
 use Flames\Code\Upgrade\Rules\Php84\NodeFactory\ForeachToArrayAnyAllFactory;
 use Flames\Code\Upgrade\PhpParser\Enum\NodeGroup;
 use Flames\Code\Upgrade\Rector\AbstractRector;
@@ -11,8 +11,8 @@ use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
 use Flames\Code\Upgrade\ValueObject\PolyfillPackage;
 use Flames\Code\Upgrade\VersionBonding\Contract\MinPhpVersionInterface;
 use Flames\Code\Upgrade\VersionBonding\Contract\RelatedPolyfillInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\Php84\Rector\Foreach_\ForeachToArrayAllRectorTest
  */

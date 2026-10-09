@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Flames\Code\Upgrade\Set\ValueObject;
 
 use Flames\Code\Upgrade\Set\Contract\SetInterface;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 /**
  * @api used by extensions
  *

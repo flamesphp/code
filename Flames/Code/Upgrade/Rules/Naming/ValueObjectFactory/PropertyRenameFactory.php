@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Naming\ValueObjectFactory;
 
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
 use Flames\Code\Upgrade\Rules\Naming\ValueObject\PropertyRename;
 use Flames\Code\Upgrade\NodeNameResolver\NodeNameResolver;
-use FlamesPrefix202610\Webmozart\Assert\InvalidArgumentException;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\InvalidArgumentException;
 final readonly class PropertyRenameFactory
 {
     public function __construct(private NodeNameResolver $nodeNameResolver)

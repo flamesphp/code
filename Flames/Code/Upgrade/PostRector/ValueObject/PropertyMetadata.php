@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PostRector\ValueObject;
 
-use PhpParser\Modifiers;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Modifiers;
 use PHPStan\Type\Type;
 final readonly class PropertyMetadata
 {

@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Contract\Rector;
 
-use PhpParser\Node;
-use PhpParser\NodeVisitor;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor;
 
 interface RectorInterface extends NodeVisitor
 {
     /**
-     * List of nodes this class checks, classes that implements \PhpParser\Node
+     * List of nodes this class checks, classes that implements \Flames\Code\Upgrade\ThirdParty\PhpParser\Node
      * See beautiful map of all nodes https://github.com/rectorphp/php-parser-nodes-docs#node-overview
      *
      * @return array<class-string<Node>>

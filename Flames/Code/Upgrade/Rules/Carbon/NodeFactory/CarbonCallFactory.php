@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Carbon\NodeFactory;
 
-use FlamesPrefix202610\Nette\Utils\Strings;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Scalar\Int_;
-use PhpParser\Node\Scalar\String_;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Arg;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\Int_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\String_;
 final class CarbonCallFactory
 {
     /**
@@ -22,7 +22,7 @@ final class CarbonCallFactory
      */
     private const string STATIC_DATE_REGEX = '#now|yesterday|today|tomorrow#';
     /**
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall
+     * @return \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall
      */
     public function createFromDateTimeString(FullyQualified $carbonFullyQualified, String_ $string)
     {
@@ -64,7 +64,7 @@ final class CarbonCallFactory
         return new StaticCall($carbonFullyQualified, new Identifier($startDate));
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $carbonCall
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall $carbonCall
      */
     private function createModifyMethodCall($carbonCall, Int_ $int, string $unit, string $operator): ?MethodCall
     {
@@ -91,7 +91,7 @@ final class CarbonCallFactory
     }
     /**
      * @param MethodCall[] $callStack
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall
+     * @return \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall
      */
     private function rebuildCallStack(StaticCall $staticCall, array $callStack)
     {

@@ -4,85 +4,85 @@ declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeTypeResolver\PHPStan\Scope;
 
 use Error;
-use PhpParser\Node;
-use PhpParser\Node\ArrayItem;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\AssignOp;
-use PhpParser\Node\Expr\AssignRef;
-use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BitwiseNot;
-use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\CallLike;
-use PhpParser\Node\Expr\Cast;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\Clone_;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\Empty_;
-use PhpParser\Node\Expr\ErrorSuppress;
-use PhpParser\Node\Expr\Eval_;
-use PhpParser\Node\Expr\Exit_;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Include_;
-use PhpParser\Node\Expr\Instanceof_;
-use PhpParser\Node\Expr\Isset_;
-use PhpParser\Node\Expr\List_;
-use PhpParser\Node\Expr\Match_;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\NullsafeMethodCall;
-use PhpParser\Node\Expr\PostDec;
-use PhpParser\Node\Expr\PostInc;
-use PhpParser\Node\Expr\PreDec;
-use PhpParser\Node\Expr\PreInc;
-use PhpParser\Node\Expr\Print_;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Expr\Throw_;
-use PhpParser\Node\Expr\UnaryMinus;
-use PhpParser\Node\Expr\UnaryPlus;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Expr\Yield_;
-use PhpParser\Node\Expr\YieldFrom;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\IntersectionType;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Catch_;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassConst;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Do_;
-use PhpParser\Node\Stmt\Echo_;
-use PhpParser\Node\Stmt\ElseIf_;
-use PhpParser\Node\Stmt\Enum_;
-use PhpParser\Node\Stmt\EnumCase;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Finally_;
-use PhpParser\Node\Stmt\For_;
-use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Switch_;
-use PhpParser\Node\Stmt\Trait_;
-use PhpParser\Node\Stmt\TryCatch;
-use PhpParser\Node\Stmt\Unset_;
-use PhpParser\Node\Stmt\While_;
-use PhpParser\Node\UnionType;
-use PhpParser\NodeTraverser;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\ArrayItem;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Array_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrayDimFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrowFunction;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\AssignOp;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\AssignRef;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BitwiseNot;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BooleanNot;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\CallLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ClassConstFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Clone_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ConstFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Empty_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ErrorSuppress;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Eval_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Exit_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Include_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Instanceof_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Isset_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\List_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Match_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\New_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\NullsafeMethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PostDec;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PostInc;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PreDec;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PreInc;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Print_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PropertyFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticPropertyFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Ternary;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Throw_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\UnaryMinus;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\UnaryPlus;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Yield_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\YieldFrom;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\IntersectionType;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\NullableType;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Param;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Catch_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassConst;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Do_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Echo_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ElseIf_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Enum_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\EnumCase;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Finally_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\For_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Foreach_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Interface_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Return_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Switch_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Trait_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\TryCatch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Unset_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\While_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\UnionType;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeTraverser;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeCallbackScope;
 use PHPStan\Analyser\NodeScopeResolver;
@@ -96,7 +96,7 @@ use PHPStan\Node\StaticMethodCallableNode;
 use PHPStan\Node\UnreachableStatementNode;
 use PHPStan\Node\VirtualNode;
 use PHPStan\Parser\ParserErrorsException;
-use PHPStan\PhpDocParser\Parser\ParserException;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Parser\ParserException;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\ObjectType;
@@ -107,7 +107,7 @@ use Flames\Code\Upgrade\NodeNameResolver\NodeNameResolver;
 use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
 use Flames\Code\Upgrade\PhpParser\Node\FileNode;
 use Flames\Code\Upgrade\Util\Reflection\PrivatesAccessor;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
  * - https://github.com/silverstripe/silverstripe-upgrader/pull/57/commits/e5c7cfa166ad940d9d4ff69537d9f7608e992359#diff-5e0807bb3dc03d6a8d8b6ad049abd774
@@ -328,7 +328,7 @@ final readonly class PHPStanNodeScopeResolver
         }
     }
     /**
-     * @param \PhpParser\Node\Expr\Isset_|\PhpParser\Node\Stmt\Unset_ $node
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Isset_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Unset_ $node
      */
     private function processIssetOrUnset($node, MutatingScope $mutatingScope): void
     {
@@ -391,7 +391,7 @@ final readonly class PHPStanNodeScopeResolver
         }
     }
     /**
-     * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\AssignOp|\PhpParser\Node\Expr\AssignRef $assign
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\AssignOp|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\AssignRef $assign
      */
     private function processAssign($assign, MutatingScope $mutatingScope): void
     {
@@ -399,7 +399,7 @@ final readonly class PHPStanNodeScopeResolver
         $assign->expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
     }
     /**
-     * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $array
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\List_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Array_ $array
      */
     private function processArray($array, MutatingScope $mutatingScope): void
     {
@@ -505,7 +505,7 @@ final readonly class PHPStanNodeScopeResolver
         $ternary->else->setAttribute(AttributeKey::SCOPE, $mutatingScope);
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_ $classLike
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Interface_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Enum_ $classLike
      */
     private function resolveClassOrInterfaceScope($classLike, MutatingScope $mutatingScope): MutatingScope
     {
@@ -533,7 +533,7 @@ final readonly class PHPStanNodeScopeResolver
         return $mutatingScope;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Enum_ $classLike
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Interface_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Trait_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Enum_ $classLike
      */
     private function resolveClassName($classLike): string
     {

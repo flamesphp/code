@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php70\NodeAnalyzer;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp\Greater;
-use PhpParser\Node\Expr\BinaryOp\Smaller;
-use PhpParser\Node\Expr\Ternary;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Greater;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Smaller;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Ternary;
 use Flames\Code\Upgrade\Rules\Php70\Enum\BattleshipCompareOrder;
 use Flames\Code\Upgrade\Rules\Php70\ValueObject\ComparedExprs;
 use Flames\Code\Upgrade\PhpParser\Comparing\NodeComparator;

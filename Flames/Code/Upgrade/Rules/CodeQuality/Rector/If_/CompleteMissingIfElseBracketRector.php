@@ -3,17 +3,17 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\CodeQuality\Rector\If_;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Else_;
-use PhpParser\Node\Stmt\ElseIf_;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\Token;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Else_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ElseIf_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Token;
 use Flames\Code\Upgrade\Contract\Rector\HTMLAverseRectorInterface;
 use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\CodeQuality\Rector\If_\CompleteMissingIfElseBracketRectorTest
  */
@@ -69,7 +69,7 @@ CODE_SAMPLE
     }
     /**
      * @param Token[] $oldTokens
-     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\Else_ $if
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ElseIf_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Else_ $if
      */
     private function isIfConditionFollowedByOpeningCurlyBracket($if, array $oldTokens): bool
     {
@@ -96,7 +96,7 @@ CODE_SAMPLE
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\Else_ $if
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ElseIf_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Else_ $if
      */
     private function isBareNewNode($if): bool
     {

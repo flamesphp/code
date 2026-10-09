@@ -5,7 +5,7 @@ namespace Flames\Code\Upgrade\Bridge;
 
 use Flames\Code\Upgrade\Config\UpgradeConfig;
 use Flames\Code\Upgrade\Contract\Rector\RectorInterface;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 /**
  * @api
  * Utils class to ease building bridges by 3rd-party tools

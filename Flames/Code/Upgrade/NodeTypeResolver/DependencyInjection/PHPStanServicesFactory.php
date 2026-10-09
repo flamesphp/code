@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeTypeResolver\DependencyInjection;
 
-use PhpParser\Lexer;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Lexer;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\DependencyInjection\Container;
@@ -15,11 +15,11 @@ use PHPStan\Reflection\ReflectionProvider;
 use Flames\Code\Upgrade\Configuration\Option;
 use Flames\Code\Upgrade\Configuration\Parameter\SimpleParameterProvider;
 use Flames\Code\Upgrade\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
-use FlamesPrefix202610\Symfony\Component\Console\Input\ArrayInput;
-use FlamesPrefix202610\Symfony\Component\Console\Output\ConsoleOutput;
-use FlamesPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\ArrayInput;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Output\ConsoleOutput;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 /**
  * Factory so Symfony app can use services from PHPStan container
  *

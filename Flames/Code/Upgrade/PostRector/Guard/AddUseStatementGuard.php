@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PostRector\Guard;
 
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\InlineHTML;
-use PhpParser\Node\Stmt\Namespace_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\InlineHTML;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Namespace_;
 use Flames\Code\Upgrade\PhpParser\Node\BetterNodeFinder;
 use Flames\Code\Upgrade\PhpParser\Node\FileNode;
 final class AddUseStatementGuard

@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpParser\Parser;
 
-use PhpParser\Node\Stmt;
-use PhpParser\ParserFactory;
-use PhpParser\PhpVersion;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\ParserFactory;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\PhpVersion;
 use PHPStan\Parser\Parser;
 use PHPStan\Parser\RichParser;
 use Flames\Code\Upgrade\PhpParser\ValueObject\StmtsAndTokens;

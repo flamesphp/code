@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PostRector\Application;
 
-use PhpParser\Node\Stmt;
-use PhpParser\NodeTraverser;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeTraverser;
 use Flames\Code\Upgrade\Configuration\Option;
 use Flames\Code\Upgrade\Configuration\Parameter\SimpleParameterProvider;
 use Flames\Code\Upgrade\Configuration\RenamedClassesDataCollector;

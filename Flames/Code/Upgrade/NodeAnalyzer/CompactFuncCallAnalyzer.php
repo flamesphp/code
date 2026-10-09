@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeAnalyzer;
 
-use PhpParser\Node\Arg;
-use PhpParser\Node\ArgPlaceholder;
-use PhpParser\Node\ArrayItem;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\VariadicPlaceholder;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Arg;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\ArgPlaceholder;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\ArrayItem;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Array_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\String_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\VariadicPlaceholder;
 use Flames\Code\Upgrade\NodeNameResolver\NodeNameResolver;
 final readonly class CompactFuncCallAnalyzer
 {
@@ -53,7 +53,7 @@ final readonly class CompactFuncCallAnalyzer
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Arg|\PhpParser\Node\ArgPlaceholder|\PhpParser\Node\VariadicPlaceholder|\PhpParser\Node\ArrayItem|null $node
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Arg|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\ArgPlaceholder|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\VariadicPlaceholder|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\ArrayItem|null $node
      */
     private function shouldSkip($node): bool
     {

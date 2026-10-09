@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser\ValueObject\Parser;
 
-use PHPStan\PhpDocParser\Parser\TokenIterator;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Parser\TokenIterator;
 use Flames\Code\Upgrade\Exception\ShouldNotHappenException;
 final class BetterTokenIterator extends TokenIterator
 {

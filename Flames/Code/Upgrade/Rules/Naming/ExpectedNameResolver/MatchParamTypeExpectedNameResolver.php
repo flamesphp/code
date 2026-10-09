@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Naming\ExpectedNameResolver;
 
-use PhpParser\Node;
-use PhpParser\Node\Param;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Param;
 use Flames\Code\Upgrade\Rules\Naming\Naming\PropertyNaming;
 use Flames\Code\Upgrade\Rules\Naming\ValueObject\ExpectedName;
 use Flames\Code\Upgrade\StaticTypeMapper\StaticTypeMapper;

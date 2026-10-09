@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PHPStanStaticTypeMapper\TypeMapper;
 
-use PhpParser\Node;
-use PhpParser\Node\ComplexType;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\IntersectionType as PHPParserNodeIntersectionType;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\UnionType as PhpParserUnionType;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\ComplexType;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\IntersectionType as PHPParserNodeIntersectionType;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\NullableType;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
@@ -24,8 +24,8 @@ use Flames\Code\Upgrade\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Flames\Code\Upgrade\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Flames\Code\Upgrade\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
-use FlamesPrefix202610\Webmozart\Assert\InvalidArgumentException;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\InvalidArgumentException;
 /**
  * @implements TypeMapperInterface<UnionType>
  */
@@ -89,7 +89,7 @@ final class UnionTypeMapper implements TypeMapperInterface
     /**
      * If type is nullable, and has only one other value,
      * this creates at least "?Type" in case of PHP 7.1-7.4
-     * @return PhpParserUnionType|\PhpParser\Node\NullableType|null
+     * @return PhpParserUnionType|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\NullableType|null
      */
     private function resolveTypeWithNullablePHPParserUnionType(PhpParserUnionType $phpParserUnionType)
     {
@@ -119,7 +119,7 @@ final class UnionTypeMapper implements TypeMapperInterface
         return $this->resolveUnionTypes($phpParserUnionType);
     }
     /**
-     * @return null|\PhpParser\Node\NullableType|PhpParserUnionType
+     * @return null|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\NullableType|PhpParserUnionType
      */
     private function resolveNullableType(NullableType $nullableType)
     {

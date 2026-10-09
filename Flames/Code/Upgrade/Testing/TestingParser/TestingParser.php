@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Testing\TestingParser;
 
-use FlamesPrefix202610\Nette\Utils\FileSystem;
-use PhpParser\Node;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\NameResolver;
+use Flames\Code\Upgrade\ThirdParty\Nette\FileSystem;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeTraverser;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor\NameResolver;
 use Flames\Code\Upgrade\Application\Provider\CurrentFileProvider;
 use Flames\Code\Upgrade\Rules\CodingStyle\ClassNameImport\UsedImportsResolver;
 use Flames\Code\Upgrade\NodeTypeResolver\NodeScopeAndMetadataDecorator;

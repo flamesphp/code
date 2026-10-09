@@ -3,21 +3,21 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeAnalyzer;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\AssignOp;
-use PhpParser\Node\Expr\AssignRef;
-use PhpParser\Node\Expr\BitwiseNot;
-use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\Cast;
-use PhpParser\Node\Expr\ErrorSuppress;
-use PhpParser\Node\Expr\Instanceof_;
-use PhpParser\Node\Expr\Print_;
-use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Expr\UnaryMinus;
-use PhpParser\Node\Expr\UnaryPlus;
-use PhpParser\Node\Expr\Yield_;
-use PhpParser\Node\Expr\YieldFrom;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\AssignOp;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\AssignRef;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BitwiseNot;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BooleanNot;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ErrorSuppress;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Instanceof_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Print_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Ternary;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\UnaryMinus;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\UnaryPlus;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Yield_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\YieldFrom;
 /**
  * The ** operator binds tighter than most operators, so an operand that binds looser must be
  * wrapped in parentheses when placed next to it, e.g. pow(~3, 4) must become (~3) ** 4.

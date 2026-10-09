@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Set\ValueObject;
 
-use FlamesPrefix202610\Composer\Semver\Semver;
-use FlamesPrefix202610\Nette\Utils\Strings;
-use Flames\Code\Upgrade\Composer\ValueObject\InstalledPackage;
+use Flames\Code\Upgrade\ThirdParty\Composer\Semver;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
+use Flames\Code\Upgrade\ThirdParty\Composer\ValueObject\InstalledPackage;
 use Flames\Code\Upgrade\Set\Contract\SetInterface;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 /**
  * @api used by extensions
  *

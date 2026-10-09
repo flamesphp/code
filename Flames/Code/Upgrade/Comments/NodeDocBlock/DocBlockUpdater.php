@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Comments\NodeDocBlock;
 
-use PhpParser\Comment;
-use PhpParser\Comment\Doc;
-use PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Comment;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Comment\Doc;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Flames\Code\Upgrade\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;

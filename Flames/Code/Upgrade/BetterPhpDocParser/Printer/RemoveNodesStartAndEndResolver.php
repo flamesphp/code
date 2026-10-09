@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser\Printer;
 
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
-use PHPStan\PhpDocParser\Lexer\Lexer;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PhpDocChildNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PhpDocNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Lexer\Lexer;
 use Flames\Code\Upgrade\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Flames\Code\Upgrade\BetterPhpDocParser\ValueObject\StartAndEnd;
 final class RemoveNodesStartAndEndResolver

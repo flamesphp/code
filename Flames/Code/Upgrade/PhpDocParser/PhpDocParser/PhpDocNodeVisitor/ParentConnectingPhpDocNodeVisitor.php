@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpDocParser\PhpDocParser\PhpDocNodeVisitor;
 
-use PHPStan\PhpDocParser\Ast\Node;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Node;
 use Flames\Code\Upgrade\PhpDocParser\PhpDocParser\ValueObject\PhpDocAttributeKey;
 /**
  * @api
@@ -32,7 +32,7 @@ final class ParentConnectingPhpDocNodeVisitor extends \Flames\Code\Upgrade\PhpDo
         return $node;
     }
     /**
-     * @return null|int|\PhpParser\Node|Node[] Replacement node (or special return
+     * @return null|int|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node|Node[] Replacement node (or special return
      */
     public function leaveNode(Node $node)
     {

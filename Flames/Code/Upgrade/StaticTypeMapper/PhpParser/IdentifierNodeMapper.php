@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\StaticTypeMapper\PhpParser;
 
-use PhpParser\Node;
-use PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
 use PHPStan\Type\Type;
 use Flames\Code\Upgrade\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Flames\Code\Upgrade\StaticTypeMapper\Mapper\ScalarStringToTypeMapper;

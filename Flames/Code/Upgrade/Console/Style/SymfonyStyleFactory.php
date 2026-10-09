@@ -5,10 +5,10 @@ namespace Flames\Code\Upgrade\Console\Style;
 
 use Flames\Code\Upgrade\Agentic\TerminalDetector;
 use Flames\Code\Upgrade\Util\Reflection\PrivatesAccessor;
-use FlamesPrefix202610\Symfony\Component\Console\Application;
-use FlamesPrefix202610\Symfony\Component\Console\Input\ArgvInput;
-use FlamesPrefix202610\Symfony\Component\Console\Output\ConsoleOutput;
-use FlamesPrefix202610\Symfony\Component\Console\Output\OutputInterface;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Application;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\ArgvInput;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Output\ConsoleOutput;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Output\OutputInterface;
 final readonly class SymfonyStyleFactory
 {
     public function __construct(private PrivatesAccessor $privatesAccessor)

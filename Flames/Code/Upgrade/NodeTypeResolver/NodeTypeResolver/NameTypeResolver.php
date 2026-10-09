@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeTypeResolver\NodeTypeResolver;
 
-use PhpParser\Node;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
@@ -45,7 +45,7 @@ final class NameTypeResolver implements NodeTypeResolverInterface
         return new ObjectType($fullyQualifiedName);
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified $node
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified $node
      */
     private function resolveClassReflection($node): ?ClassReflection
     {

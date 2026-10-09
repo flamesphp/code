@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Arguments\NodeAnalyzer;
 
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
 use Flames\Code\Upgrade\Rules\Arguments\ValueObject\ArgumentAdder;
 use Flames\Code\Upgrade\Rules\Arguments\ValueObject\ArgumentAdderWithoutDefaultValue;
 use Flames\Code\Upgrade\Enum\ObjectReference;
@@ -28,7 +28,7 @@ final readonly class ArgumentAddingScope
     {
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $expr
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall $expr
      * @param \Flames\Code\Upgrade\Rules\Arguments\ValueObject\ArgumentAdder|\Flames\Code\Upgrade\Rules\Arguments\ValueObject\ArgumentAdderWithoutDefaultValue $argumentAdder
      */
     public function isInCorrectScope($expr, $argumentAdder): bool

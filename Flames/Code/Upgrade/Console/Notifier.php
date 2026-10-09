@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace Flames\Code\Upgrade\Console;
 
 use Flames\Code\Upgrade\Exception\Configuration\InvalidConfigurationException;
-use FlamesPrefix202610\Symfony\Component\Console\Input\ArgvInput;
-use FlamesPrefix202610\Symfony\Component\Console\Output\ConsoleOutput;
-use FlamesPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\ArgvInput;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Output\ConsoleOutput;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Style\SymfonyStyle;
 final class Notifier
 {
     public static function notifyNotSuitableMethodForPHP74(string $calledMethod): void

@@ -4,13 +4,13 @@ declare (strict_types=1);
 namespace Flames\Code\Upgrade\Testing\PHPUnit;
 
 use Iterator;
-use FlamesPrefix202610\Nette\Utils\FileSystem;
-use FlamesPrefix202610\Nette\Utils\Strings;
+use Flames\Code\Upgrade\ThirdParty\Nette\FileSystem;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
 use PHPUnit\Framework\ExpectationFailedException;
 use Flames\Code\Upgrade\Application\ApplicationFileProcessor;
 use Flames\Code\Upgrade\Autoloading\AdditionalAutoloader;
 use Flames\Code\Upgrade\Autoloading\BootstrapFilesIncluder;
-use Flames\Code\Upgrade\Composer\InstalledPackageResolver;
+use Flames\Code\Upgrade\ThirdParty\Composer\InstalledPackageResolver;
 use Flames\Code\Upgrade\Configuration\ConfigurationFactory;
 use Flames\Code\Upgrade\Configuration\Option;
 use Flames\Code\Upgrade\Configuration\Parameter\SimpleParameterProvider;

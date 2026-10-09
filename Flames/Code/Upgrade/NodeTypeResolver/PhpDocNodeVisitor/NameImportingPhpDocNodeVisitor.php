@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeTypeResolver\PhpDocNodeVisitor;
 
-use FlamesPrefix202610\Nette\Utils\Strings;
-use PhpParser\Node as PhpParserNode;
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node as PhpParserNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Node;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\TemplateTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\IdentifierTypeNode;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Type;
 use Flames\Code\Upgrade\Application\Provider\CurrentFileProvider;
@@ -30,7 +30,7 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     public function __construct(private readonly ClassNameImportSkipper $classNameImportSkipper, private readonly CurrentFileProvider $currentFileProvider, private readonly ReflectionProvider $reflectionProvider, private readonly IdentifierPhpDocTypeMapper $identifierPhpDocTypeMapper)
     {
     }
-    public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node): void
+    public function beforeTraverse(\Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Node $node): void
     {
         if (!$this->currentPhpParserNode instanceof PhpParserNode) {
             throw new ShouldNotHappenException('Set "$currentPhpParserNode" first');

@@ -1,0 +1,132 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\CodeQuality\Rector\CallLike;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Arg;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\ArrayItem;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\New_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\PhpParser\Node\Value\ValueResolver;
+use Flames\Code\Upgrade\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\Symfony\Enum\SymfonyClass;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\Rules\CodeQuality\Rector\CallLike\DirectInstanceOverMockArgRectorTest
+ */
+final class DirectInstanceOverMockArgRector extends AbstractRector
+{
+    public function __construct(private readonly ValueResolver $valueResolver, private readonly TestsNodeAnalyzer $testsNodeAnalyzer)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Use direct object instance over mock for specific objects in arg of PHPUnit tests', [new CodeSample(<<<'CODE_SAMPLE'
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+
+final class SomeTest extends TestCase
+{
+    public function test()
+    {
+        $this->someMethod($this->createMock(Request::class));
+    }
+
+    private function someMethod($someClass)
+    {
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+
+final class SomeTest extends TestCase
+{
+    public function test()
+    {
+        $this->someMethod(new Request());
+    }
+
+    private function someMethod($someClass)
+    {
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [StaticCall::class, MethodCall::class, New_::class, ArrayItem::class];
+    }
+    /**
+     * @param MethodCall|StaticCall|New_|ArrayItem $node
+     * @return \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\New_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\ArrayItem|null
+     */
+    public function refactor(Node $node)
+    {
+        // run on test classes only, non-test code may lack scope on args and crash the whole run
+        if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
+            return null;
+        }
+        $hasChanged = \false;
+        if ($node instanceof ArrayItem) {
+            return $this->refactorArrayItem($node);
+        }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
+        foreach ($node->getArgs() as $arg) {
+            $firstArg = $this->matchCreateMockMethodCallArg($arg->value);
+            if (!$firstArg instanceof Arg) {
+                continue;
+            }
+            $className = $this->valueResolver->getValue($firstArg->value);
+            if (!in_array($className, [SymfonyClass::REQUEST, SymfonyClass::REQUEST_STACK])) {
+                continue;
+            }
+            $arg->value = new New_(new FullyQualified($className));
+            $hasChanged = \true;
+        }
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
+    }
+    private function matchCreateMockMethodCallArg(Expr $expr): ?Arg
+    {
+        if (!$expr instanceof MethodCall) {
+            return null;
+        }
+        $methodCall = $expr;
+        if (!$this->isName($methodCall->name, 'createMock')) {
+            return null;
+        }
+        if ($methodCall->isFirstClassCallable()) {
+            return null;
+        }
+        return $methodCall->getArgs()[0];
+    }
+    private function refactorArrayItem(ArrayItem $arrayItem): ?ArrayItem
+    {
+        $mockedCallArg = $this->matchCreateMockMethodCallArg($arrayItem->value);
+        if (!$mockedCallArg instanceof Arg) {
+            return null;
+        }
+        $className = $this->valueResolver->getValue($mockedCallArg->value);
+        if (!in_array($className, [SymfonyClass::REQUEST, SymfonyClass::REQUEST_STACK])) {
+            return null;
+        }
+        $arrayItem->value = new New_(new FullyQualified($className));
+        return $arrayItem;
+    }
+}

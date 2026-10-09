@@ -4,19 +4,19 @@ declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rector;
 
 use Deprecated;
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Name;
-use PhpParser\Node\PropertyItem;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Const_;
-use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Trait_;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor;
-use PhpParser\NodeVisitor\CloningVisitor;
-use PhpParser\NodeVisitorAbstract;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\PropertyItem;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Const_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Interface_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Trait_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeTraverser;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor\CloningVisitor;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -49,7 +49,7 @@ A) Direct return null for no change:
 
 B) Remove the Node:
 
-    return \\PhpParser\\NodeVisitor::REMOVE_NODE;
+    return \\Flames\Code\Upgrade\ThirdParty\PhpParser\\NodeVisitor::REMOVE_NODE;
 CODE_SAMPLE;
     protected NodeNameResolver $nodeNameResolver;
     protected NodeTypeResolver $nodeTypeResolver;
@@ -149,7 +149,7 @@ CODE_SAMPLE;
     }
     /**
      * @deprecated no longer used
-     * @return mixed[]|int|\PhpParser\Node|null
+     * @return mixed[]|int|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node|null
      */
     final public function leaveNode(Node $node)
     {

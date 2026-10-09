@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Php\PhpVersionResolver;
 
-use FlamesPrefix202610\Composer\Semver\VersionParser;
+use Flames\Code\Upgrade\ThirdParty\Composer\VersionParser;
 use Flames\Code\Upgrade\Exception\Configuration\InvalidConfigurationException;
 use Flames\Code\Upgrade\FileSystem\JsonFileSystem;
 use Flames\Code\Upgrade\Util\PhpVersionFactory;

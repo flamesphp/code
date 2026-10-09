@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Differ;
 
-use FlamesPrefix202610\SebastianBergmann\Diff\Differ;
-use FlamesPrefix202610\SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder;
+use Flames\Code\Upgrade\ThirdParty\SebastianBergmann\Diff\Differ;
+use Flames\Code\Upgrade\ThirdParty\SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder;
 final readonly class DefaultDiffer
 {
     private Differ $differ;

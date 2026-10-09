@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace FlamesPrefix202610;
+namespace Flames\Code\Upgrade\Config\Set;
 
-use PhpParser\Node\Expr\Cast\Bool_;
-use PhpParser\Node\Expr\Cast\Double;
-use PhpParser\Node\Expr\Cast\Int_;
-use PhpParser\Node\Expr\Cast\String_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Bool_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Double;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Int_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\String_;
 use Flames\Code\Upgrade\Rules\Arguments\Rector\ClassMethod\ArgumentAdderRector;
 use Flames\Code\Upgrade\Rules\Arguments\Rector\FuncCall\FunctionArgumentDefaultValueReplacerRector;
 use Flames\Code\Upgrade\Rules\Arguments\ValueObject\ArgumentAdder;

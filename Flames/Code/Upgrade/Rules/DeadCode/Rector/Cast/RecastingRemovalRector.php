@@ -3,18 +3,18 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\DeadCode\Rector\Cast;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\Cast;
-use PhpParser\Node\Expr\Cast\Array_;
-use PhpParser\Node\Expr\Cast\Bool_;
-use PhpParser\Node\Expr\Cast\Double;
-use PhpParser\Node\Expr\Cast\Int_;
-use PhpParser\Node\Expr\Cast\Object_;
-use PhpParser\Node\Expr\Cast\String_;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrayDimFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Array_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Bool_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Double;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Int_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Object_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\String_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
@@ -30,8 +30,8 @@ use Flames\Code\Upgrade\NodeAnalyzer\ExprAnalyzer;
 use Flames\Code\Upgrade\NodeAnalyzer\PropertyFetchAnalyzer;
 use Flames\Code\Upgrade\Rector\AbstractRector;
 use Flames\Code\Upgrade\Reflection\ReflectionResolver;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\DeadCode\Rector\Cast\RecastingRemovalRectorTest
  */

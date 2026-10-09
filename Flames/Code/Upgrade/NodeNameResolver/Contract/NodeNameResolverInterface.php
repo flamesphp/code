@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeNameResolver\Contract;
 
-use PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
 use PHPStan\Analyser\Scope;
 /**
  * @template TNode as Node

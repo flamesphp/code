@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Application;
 
-use FlamesPrefix202610\Nette\Utils\FileSystem;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\NameResolver;
+use Flames\Code\Upgrade\ThirdParty\Nette\FileSystem;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeTraverser;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor\NameResolver;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Parser\ParserErrorsException;
 use Flames\Code\Upgrade\Caching\Detector\ChangedFilesDetector;
@@ -26,7 +26,7 @@ use Flames\Code\Upgrade\ValueObject\Application\File;
 use Flames\Code\Upgrade\ValueObject\Configuration;
 use Flames\Code\Upgrade\ValueObject\Error\SystemError;
 use Flames\Code\Upgrade\ValueObject\FileProcessResult;
-use FlamesPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 final readonly class FileProcessor
 {

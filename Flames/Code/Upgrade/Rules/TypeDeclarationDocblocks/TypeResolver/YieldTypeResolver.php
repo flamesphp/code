@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks\TypeResolver;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\Yield_;
-use PhpParser\Node\Expr\YieldFrom;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Yield_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\YieldFrom;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Flames\Code\Upgrade\NodeNameResolver\NodeNameResolver;
@@ -25,7 +25,7 @@ final readonly class YieldTypeResolver
     }
     /**
      * @param array<Yield_|YieldFrom> $yieldNodes
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_ $functionLike
      * @return \Flames\Code\Upgrade\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType|\Flames\Code\Upgrade\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType
      */
     public function resolveFromYieldNodes(array $yieldNodes, $functionLike)
@@ -39,7 +39,7 @@ final readonly class YieldTypeResolver
         return new FullyQualifiedGenericObjectType($className, [$yieldedTypes]);
     }
     /**
-     * @param \PhpParser\Node\Expr\Yield_|\PhpParser\Node\Expr\YieldFrom $yield
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Yield_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\YieldFrom $yield
      */
     private function resolveYieldValue($yield): ?Expr
     {
@@ -70,7 +70,7 @@ final readonly class YieldTypeResolver
         return $yieldedTypes;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure $functionLike
      */
     private function resolveClassName($functionLike): string
     {

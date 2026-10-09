@@ -3,17 +3,17 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php81\Rector\MethodCall;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PropertyFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\ObjectType;
 use Flames\Code\Upgrade\Rector\AbstractRector;
 use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
 use Flames\Code\Upgrade\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\Php81\Rector\MethodCall\MyCLabsMethodCallToEnumConstRectorTest
  */
@@ -100,7 +100,7 @@ CODE_SAMPLE
         $classConstFetch = $this->nodeFactory->createClassConstFetch($className, $upperCaseName);
         return new PropertyFetch($classConstFetch, $property);
     }
-    private function refactorMethodCall(MethodCall $methodCall, string $methodName): ?\PhpParser\Node\Expr\PropertyFetch
+    private function refactorMethodCall(MethodCall $methodCall, string $methodName): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PropertyFetch
     {
         if (!$this->isObjectType($methodCall->var, new ObjectType(self::SPATIE_FQN))) {
             return null;

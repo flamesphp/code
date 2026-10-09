@@ -6,7 +6,7 @@ namespace Flames\Code\Upgrade\Parallel\Reflection;
 use Flames\Code\Upgrade\Parallel\Exception\ParallelShouldNotHappenException;
 use ReflectionClass;
 use ReflectionMethod;
-use FlamesPrefix202610\Symfony\Component\Console\Command\Command;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Command\Command;
 final class CommandFromReflectionFactory
 {
     /**

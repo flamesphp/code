@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace FlamesPrefix202610;
+namespace Flames\Code\Upgrade\Config\Set;
 
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
@@ -9,7 +9,7 @@ use PHPStan\Type\VoidType;
 use Flames\Code\Upgrade\Config\UpgradeConfig;
 use Flames\Code\Upgrade\Bundle210\Rector\Class_\EventSubscriberInterfaceToAttributeRector;
 use Flames\Code\Upgrade\Bundle230\Rector\Class_\AddAnnotationToRepositoryRector;
-use Flames\Code\Upgrade\Doctrine\Collection22\Rector\CriteriaOrderingConstantsDeprecationRector;
+use Flames\Code\Upgrade\ThirdParty\Doctrine\Collection22\Rector\CriteriaOrderingConstantsDeprecationRector;
 use Flames\Code\Upgrade\Dbal211\Rector\MethodCall\ExtractArrayArgOnQueryBuilderSelectRector;
 use Flames\Code\Upgrade\Dbal211\Rector\MethodCall\ReplaceFetchAllMethodCallRector;
 use Flames\Code\Upgrade\Dbal31\Rector\MethodCall\QueryBuilderExecuteToExecuteQueryOrExecuteStatementRector;

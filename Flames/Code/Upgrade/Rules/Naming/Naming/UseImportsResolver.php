@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Naming\Naming;
 
-use PhpParser\Node\Stmt\GroupUse;
-use PhpParser\Node\Stmt\Use_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\GroupUse;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Use_;
 use Flames\Code\Upgrade\Application\Provider\CurrentFileProvider;
 use Flames\Code\Upgrade\PhpParser\Node\FileNode;
 use Flames\Code\Upgrade\ValueObject\Application\File;
@@ -45,7 +45,7 @@ final readonly class UseImportsResolver
         return $fileNode->getUses();
     }
     /**
-     * @param \PhpParser\Node\Stmt\Use_|\PhpParser\Node\Stmt\GroupUse $use
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Use_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\GroupUse $use
      */
     public function resolvePrefix($use): string
     {

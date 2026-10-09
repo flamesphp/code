@@ -3,26 +3,26 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\DeadCode\Rector\Plus;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\AssignOp;
-use PhpParser\Node\Expr\AssignOp\Div as AssignDiv;
-use PhpParser\Node\Expr\AssignOp\Minus as AssignMinus;
-use PhpParser\Node\Expr\AssignOp\Mul as AssignMul;
-use PhpParser\Node\Expr\AssignOp\Plus as AssignPlus;
-use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\Div;
-use PhpParser\Node\Expr\BinaryOp\Minus;
-use PhpParser\Node\Expr\BinaryOp\Mul;
-use PhpParser\Node\Expr\BinaryOp\Plus;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\UnaryMinus;
-use PhpParser\Node\Scalar\Int_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\AssignOp;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\AssignOp\Div as AssignDiv;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\AssignOp\Minus as AssignMinus;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\AssignOp\Mul as AssignMul;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\AssignOp\Plus as AssignPlus;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Div;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Minus;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Mul;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Plus;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ClassConstFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\UnaryMinus;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\Int_;
 use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
 use Flames\Code\Upgrade\Rector\AbstractRector;
 use Flames\Code\Upgrade\ValueObject\Application\File;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRectorTest
  */
@@ -118,7 +118,7 @@ CODE_SAMPLE
         return $this->nodeTypeResolver->isNumberType($binaryOp->right);
     }
     /**
-     * @param \PhpParser\Node\Expr\BinaryOp\Plus|\PhpParser\Node\Expr\BinaryOp\Minus $binaryOp
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Plus|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Minus $binaryOp
      */
     private function processBinaryPlusAndMinus($binaryOp): ?Expr
     {
@@ -171,7 +171,7 @@ CODE_SAMPLE
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Expr\BinaryOp\Mul|\PhpParser\Node\Expr\BinaryOp\Div $binaryOp
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Mul|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Div $binaryOp
      */
     private function processBinaryMulAndDiv($binaryOp): ?Expr
     {

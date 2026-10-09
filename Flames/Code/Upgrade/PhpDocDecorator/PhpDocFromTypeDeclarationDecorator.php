@@ -1,0 +1,234 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\PhpDocDecorator;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\ComplexType;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrowFunction;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Param;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
+use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\UnionType;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Flames\Code\Upgrade\NodeNameResolver\NodeNameResolver;
+use Flames\Code\Upgrade\Php\PhpVersionProvider;
+use Flames\Code\Upgrade\Rules\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
+use Flames\Code\Upgrade\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
+use Flames\Code\Upgrade\PhpParser\AstResolver;
+use Flames\Code\Upgrade\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Flames\Code\Upgrade\Reflection\ReflectionResolver;
+use Flames\Code\Upgrade\StaticTypeMapper\StaticTypeMapper;
+use Flames\Code\Upgrade\StaticTypeMapper\ValueObject\Type\SelfStaticType;
+use Flames\Code\Upgrade\ValueObject\ClassMethodWillChangeReturnType;
+use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
+/**
+ * @see https://wiki.php.net/rfc/internal_method_return_types#proposal
+ */
+final readonly class PhpDocFromTypeDeclarationDecorator
+{
+    /**
+     * @var ClassMethodWillChangeReturnType[]
+     */
+    private array $classMethodWillChangeReturnTypes;
+    public function __construct(private StaticTypeMapper $staticTypeMapper, private PhpDocInfoFactory $phpDocInfoFactory, private NodeNameResolver $nodeNameResolver, private PhpDocTypeChanger $phpDocTypeChanger, private PhpAttributeGroupFactory $phpAttributeGroupFactory, private ReflectionResolver $reflectionResolver, private PhpAttributeAnalyzer $phpAttributeAnalyzer, private PhpVersionProvider $phpVersionProvider, private AstResolver $astResolver)
+    {
+        $this->classMethodWillChangeReturnTypes = [
+            // @todo how to make list complete? is the method list needed or can we use just class names?
+            new ClassMethodWillChangeReturnType('ArrayAccess', 'offsetGet'),
+            new ClassMethodWillChangeReturnType('ArrayAccess', 'getIterator'),
+        ];
+    }
+    /**
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrowFunction $functionLike
+     */
+    public function decorateReturn($functionLike, ?Type $requireType = null): void
+    {
+        if (!$functionLike->returnType instanceof Node) {
+            return;
+        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
+        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
+        $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
+        $returnDocType = $returnTagValueNode instanceof ReturnTagValueNode ? $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($returnTagValueNode, $functionLike->returnType) : $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
+        // if nullable is supported, downgrade to that one
+        if ($this->isNullableSupportedAndPossible($returnType)) {
+            $functionLike->returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
+            return;
+        }
+        $this->phpDocTypeChanger->changeReturnType($functionLike, $phpDocInfo, $returnDocType);
+        $functionLike->returnType = null;
+        if (!$functionLike instanceof ClassMethod) {
+            return;
+        }
+        $classReflection = $this->reflectionResolver->resolveClassReflection($functionLike);
+        if (!$classReflection instanceof ClassReflection || !$classReflection->isInterface() && !$classReflection->isClass()) {
+            return;
+        }
+        $ancestors = array_filter($classReflection->getAncestors(), static fn(ClassReflection $ancestor): bool => $classReflection->getName() !== $ancestor->getName());
+        foreach ($ancestors as $ancestor) {
+            $classLike = $this->astResolver->resolveClassFromClassReflection($ancestor);
+            if (!$classLike instanceof ClassLike) {
+                continue;
+            }
+            $classMethod = $classLike->getMethod($functionLike->name->toString());
+            if (!$classMethod instanceof ClassMethod) {
+                continue;
+            }
+            $returnType = $classMethod->returnType;
+            if ($returnType instanceof Node && $returnType instanceof FullyQualified) {
+                $functionLike->returnType = new FullyQualified($returnType->toString());
+                break;
+            }
+            if ($requireType instanceof NeverType && $returnType instanceof Identifier && $this->nodeNameResolver->isName($returnType, 'void')) {
+                $functionLike->returnType = new Identifier('void');
+                break;
+            }
+        }
+        if (!$this->isRequireReturnTypeWillChange($classReflection, $functionLike)) {
+            return;
+        }
+        $functionLike->attrGroups[] = $this->phpAttributeGroupFactory->createFromClass('ReturnTypeWillChange');
+    }
+    /**
+     * @param array<class-string<Type>> $requiredTypes
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrowFunction $functionLike
+     */
+    public function decorateParam(Param $param, $functionLike, array $requiredTypes): void
+    {
+        if (!$param->type instanceof Node) {
+            return;
+        }
+        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+        if (!$this->isMatchingType($type, $requiredTypes)) {
+            return;
+        }
+        if ($this->isNullableSupportedAndPossible($type)) {
+            $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM);
+            return;
+        }
+        $this->moveParamTypeToParamDoc($functionLike, $param, $type);
+    }
+    /**
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrowFunction $functionLike
+     */
+    public function decorateParamWithSpecificType(Param $param, $functionLike, Type $requireType): bool
+    {
+        if (!$param->type instanceof Node) {
+            return \false;
+        }
+        if (!$this->isTypeMatch($param->type, $requireType)) {
+            return \false;
+        }
+        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+        if ($this->isNullableSupportedAndPossible($type)) {
+            $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM);
+            return \true;
+        }
+        $this->moveParamTypeToParamDoc($functionLike, $param, $type);
+        return \true;
+    }
+    /**
+     * @return bool True if node was changed
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrowFunction $functionLike
+     */
+    public function decorateReturnWithSpecificType($functionLike, Type $requireType): bool
+    {
+        if (!$functionLike->returnType instanceof Node) {
+            return \false;
+        }
+        if (!$this->isTypeMatch($functionLike->returnType, $requireType)) {
+            return \false;
+        }
+        $this->decorateReturn($functionLike, $requireType);
+        return \true;
+    }
+    private function isRequireReturnTypeWillChange(ClassReflection $classReflection, ClassMethod $classMethod): bool
+    {
+        if ($classReflection->isAnonymous()) {
+            return \false;
+        }
+        $methodName = $classMethod->name->toString();
+        // support for will return change type in case of removed return doc type
+        // @see https://php.watch/versions/8.1/ReturnTypeWillChange
+        foreach ($this->classMethodWillChangeReturnTypes as $classMethodWillChangeReturnType) {
+            if ($classMethodWillChangeReturnType->getMethodName() !== $methodName) {
+                continue;
+            }
+            if (!$classReflection->is($classMethodWillChangeReturnType->getClassName())) {
+                continue;
+            }
+            if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'ReturnTypeWillChange')) {
+                continue;
+            }
+            return \true;
+        }
+        return \false;
+    }
+    /**
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\ComplexType|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name $typeNode
+     */
+    private function isTypeMatch($typeNode, Type $requireType): bool
+    {
+        $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
+        if ($returnType instanceof SelfStaticType) {
+            $returnType = new ThisType($returnType->getClassReflection());
+        }
+        // cover nullable union types
+        if ($returnType instanceof UnionType) {
+            $returnType = TypeCombinator::removeNull($returnType);
+        }
+        if ($returnType instanceof ObjectType) {
+            return $returnType->equals($requireType);
+        }
+        return $returnType::class === $requireType::class;
+    }
+    /**
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrowFunction $functionLike
+     */
+    private function moveParamTypeToParamDoc($functionLike, Param $param, Type $type): void
+    {
+        $param->type = null;
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
+        $paramName = $this->nodeNameResolver->getName($param);
+        $phpDocParamType = $phpDocInfo->getParamType($paramName);
+        if (!$type instanceof MixedType && $type::class === $phpDocParamType::class) {
+            return;
+        }
+        $this->phpDocTypeChanger->changeParamType($functionLike, $phpDocInfo, $type, $param, $paramName);
+    }
+    /**
+     * @param array<class-string<Type>> $requiredTypes
+     */
+    private function isMatchingType(Type $type, array $requiredTypes): bool
+    {
+        return in_array($type::class, $requiredTypes, \true);
+    }
+    private function isNullableSupportedAndPossible(Type $type): bool
+    {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::NULLABLE_TYPE)) {
+            return \false;
+        }
+        if (!$type instanceof UnionType) {
+            return \false;
+        }
+        if (count($type->getTypes()) !== 2) {
+            return \false;
+        }
+        return TypeCombinator::containsNull($type);
+    }
+}

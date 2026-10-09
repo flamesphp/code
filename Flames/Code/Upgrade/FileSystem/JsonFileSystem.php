@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\FileSystem;
 
-use FlamesPrefix202610\Nette\Utils\FileSystem;
-use FlamesPrefix202610\Nette\Utils\Json;
+use Flames\Code\Upgrade\ThirdParty\Nette\FileSystem;
+use Flames\Code\Upgrade\ThirdParty\Nette\Json;
 final class JsonFileSystem
 {
     /**

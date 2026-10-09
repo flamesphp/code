@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PostRector\Rector;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt;
-use PhpParser\NodeVisitorAbstract;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitorAbstract;
 use Flames\Code\Upgrade\ChangesReporting\ValueObject\UpgradeWithLineChange;
 use Flames\Code\Upgrade\PostRector\Contract\Rector\PostRectorInterface;
 use Flames\Code\Upgrade\ValueObject\Application\File;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 abstract class AbstractPostRector extends NodeVisitorAbstract implements PostRectorInterface
 {
     /**

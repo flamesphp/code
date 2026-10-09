@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\CodeQuality\NodeFactory;
 
-use PhpParser\Modifiers;
-use PhpParser\Node;
-use PhpParser\Node\PropertyItem;
-use PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Modifiers;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\PropertyItem;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
 use Flames\Code\Upgrade\Rules\CodeQuality\ValueObject\DefinedPropertyWithType;
 use Flames\Code\Upgrade\Php\PhpVersionProvider;
 use Flames\Code\Upgrade\PHPStanStaticTypeMapper\Enum\TypeKind;

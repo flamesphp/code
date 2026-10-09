@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Parallel\Application;
 
-use FlamesPrefix202610\Clue\React\NDJson\Decoder;
-use FlamesPrefix202610\Clue\React\NDJson\Encoder;
-use FlamesPrefix202610\Nette\Utils\Random;
-use FlamesPrefix202610\React\EventLoop\StreamSelectLoop;
-use FlamesPrefix202610\React\Socket\ConnectionInterface;
-use FlamesPrefix202610\React\Socket\TcpServer;
+use Flames\Code\Upgrade\ThirdParty\Clue\React\Decoder;
+use Flames\Code\Upgrade\ThirdParty\Clue\React\Encoder;
+use Flames\Code\Upgrade\ThirdParty\Nette\Random;
+use Flames\Code\Upgrade\ThirdParty\React\EventLoop\StreamSelectLoop;
+use Flames\Code\Upgrade\ThirdParty\React\Socket\ConnectionInterface;
+use Flames\Code\Upgrade\ThirdParty\React\Socket\TcpServer;
 use Flames\Code\Upgrade\Configuration\Option;
 use Flames\Code\Upgrade\Configuration\Parameter\SimpleParameterProvider;
 use Flames\Code\Upgrade\Console\Command\ProcessCommand;
@@ -25,8 +25,8 @@ use Flames\Code\Upgrade\Parallel\ValueObject\Schedule;
 use Flames\Code\Upgrade\ValueObject\Error\SystemError;
 use Flames\Code\Upgrade\ValueObject\ProcessResult;
 use Flames\Code\Upgrade\ValueObject\Reporting\FileDiff;
-use FlamesPrefix202610\Symfony\Component\Console\Command\Command;
-use FlamesPrefix202610\Symfony\Component\Console\Input\InputInterface;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Command\Command;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\InputInterface;
 use Throwable;
 /**
  * Inspired from @see

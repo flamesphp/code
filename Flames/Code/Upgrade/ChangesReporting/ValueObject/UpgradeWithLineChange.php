@@ -6,7 +6,7 @@ namespace Flames\Code\Upgrade\ChangesReporting\ValueObject;
 use Flames\Code\Upgrade\Contract\Rector\RectorInterface;
 use Flames\Code\Upgrade\Parallel\Contract\SerializableInterface;
 use Flames\Code\Upgrade\PostRector\Rector\PostRectorInterface;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 final readonly class UpgradeWithLineChange implements SerializableInterface
 {
     private const string KEY_RECTOR_CLASS = 'rector_class';

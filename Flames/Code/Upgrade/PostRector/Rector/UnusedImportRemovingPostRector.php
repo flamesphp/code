@@ -3,19 +3,19 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PostRector\Rector;
 
-use FlamesPrefix202610\Nette\Utils\Strings;
-use PhpParser\Comment;
-use PhpParser\Comment\Doc;
-use PhpParser\Node;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\Declare_;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Nop;
-use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\UseItem;
-use PhpParser\NodeVisitor;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Comment;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Comment\Doc;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Declare_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Namespace_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Nop;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Use_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\UseItem;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
 use Flames\Code\Upgrade\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
@@ -76,7 +76,7 @@ final class UnusedImportRemovingPostRector extends AbstractPostRector
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Stmt\Namespace_|\Flames\Code\Upgrade\PhpParser\Node\FileNode $fileNode
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Namespace_|\Flames\Code\Upgrade\PhpParser\Node\FileNode $fileNode
      */
     private function findNonUseImportNames($fileNode): array
     {
@@ -103,7 +103,7 @@ final class UnusedImportRemovingPostRector extends AbstractPostRector
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Stmt\Namespace_|\Flames\Code\Upgrade\PhpParser\Node\FileNode $rootNode
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Namespace_|\Flames\Code\Upgrade\PhpParser\Node\FileNode $rootNode
      */
     private function findNamesInDocBlocks($rootNode): array
     {
@@ -139,7 +139,7 @@ final class UnusedImportRemovingPostRector extends AbstractPostRector
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Stmt\Namespace_|\Flames\Code\Upgrade\PhpParser\Node\FileNode $rootNode
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Namespace_|\Flames\Code\Upgrade\PhpParser\Node\FileNode $rootNode
      */
     private function resolveUsedPhpAndDocNames($rootNode): array
     {

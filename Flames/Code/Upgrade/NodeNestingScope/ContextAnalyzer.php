@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeNestingScope;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\NullsafePropertyFetch;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\NullsafePropertyFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PropertyFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticPropertyFetch;
 use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
 final class ContextAnalyzer
 {
@@ -25,7 +25,7 @@ final class ContextAnalyzer
         return $node->getAttribute(AttributeKey::IS_IN_IF) === \true;
     }
     /**
-     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch|\PhpParser\Node\Expr\NullsafePropertyFetch $propertyFetch
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PropertyFetch|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticPropertyFetch|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\NullsafePropertyFetch $propertyFetch
      */
     public function isChangeableContext($propertyFetch): bool
     {

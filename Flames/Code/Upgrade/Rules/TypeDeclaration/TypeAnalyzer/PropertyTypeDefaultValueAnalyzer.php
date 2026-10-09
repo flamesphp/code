@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\TypeDeclaration\TypeAnalyzer;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\PropertyItem;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\PropertyItem;
 use PHPStan\Type\Type;
 use Flames\Code\Upgrade\StaticTypeMapper\StaticTypeMapper;
 final readonly class PropertyTypeDefaultValueAnalyzer

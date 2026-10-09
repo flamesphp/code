@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Contract\Rector;
 
-use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
+use Flames\Code\Upgrade\ThirdParty\Symplify\Contract\ConfigurableRuleInterface;
 interface ConfigurableRectorInterface extends \Flames\Code\Upgrade\Contract\Rector\RectorInterface, ConfigurableRuleInterface
 {
     /**

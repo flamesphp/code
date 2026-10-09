@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser\PhpDocNodeVisitor;
 
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Node;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\ArrayTypeNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\Attributes\AttributeMirrorer;
 use Flames\Code\Upgrade\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Flames\Code\Upgrade\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;

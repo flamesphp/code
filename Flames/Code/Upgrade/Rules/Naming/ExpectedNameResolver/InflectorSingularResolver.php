@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Naming\ExpectedNameResolver;
 
-use FlamesPrefix202610\Doctrine\Inflector\Inflector;
-use FlamesPrefix202610\Nette\Utils\Strings;
+use Flames\Code\Upgrade\ThirdParty\Doctrine\Inflector;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
 use Flames\Code\Upgrade\Util\StringUtils;
 /**
  * @see \Flames\Code\Upgrade\Tests\Naming\ExpectedNameResolver\InflectorSingularResolverTest

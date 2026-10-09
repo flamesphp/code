@@ -3,19 +3,19 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Transform\ValueObject;
 
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Scalar\Float_;
-use PhpParser\Node\Scalar\Int_;
-use PhpParser\Node\Scalar\String_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ClassConstFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ConstFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\Float_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\Int_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\String_;
 /**
  * @api used in deprecated ScalarValueToConstFetchUpgrade configs
  */
 final class ScalarValueToConstFetch
 {
     /**
-     * @param \PhpParser\Node\Scalar\Float_|\PhpParser\Node\Scalar\String_|\PhpParser\Node\Scalar\Int_ $scalar
-     * @param \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\ClassConstFetch $constFetch
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\Float_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\String_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\Int_ $scalar
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ConstFetch|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ClassConstFetch $constFetch
      */
     public function __construct(
         /**
@@ -30,14 +30,14 @@ final class ScalarValueToConstFetch
     {
     }
     /**
-     * @return \PhpParser\Node\Scalar\Float_|\PhpParser\Node\Scalar\String_|\PhpParser\Node\Scalar\Int_
+     * @return \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\Float_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\String_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\Int_
      */
     public function getScalar()
     {
         return $this->scalar;
     }
     /**
-     * @return \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\ClassConstFetch
+     * @return \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ConstFetch|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ClassConstFetch
      */
     public function getConstFetch()
     {

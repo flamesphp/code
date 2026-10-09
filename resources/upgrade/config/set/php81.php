@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace FlamesPrefix202610;
+namespace Flames\Code\Upgrade\Config\Set;
 
 use Flames\Code\Upgrade\Rules\CodingStyle\Rector\ArrowFunction\ArrowFunctionDelegatingCallToFirstClassCallableRector;
 use Flames\Code\Upgrade\Rules\CodingStyle\Rector\Closure\ClosureDelegatingCallToFirstClassCallableRector;

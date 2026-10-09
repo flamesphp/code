@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php80\ValueObject;
 
-use PhpParser\Comment;
-use PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Comment;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
 use Flames\Code\Upgrade\Rules\Php80\Enum\MatchKind;
 final readonly class CondAndExpr
 {

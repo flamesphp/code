@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php70\ValueObject;
 
-use PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
 final readonly class ComparedExprs
 {
     public function __construct(private Expr $firstExpr, private Expr $secondExpr)

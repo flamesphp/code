@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo;
 
-use PhpParser\Comment\Doc;
-use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
-use PHPStan\PhpDocParser\Lexer\Lexer;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Comment\Doc;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PhpDocNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Lexer\Lexer;
 use Flames\Code\Upgrade\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocNodeMapper;

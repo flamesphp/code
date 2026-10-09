@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Php;
 
-use FlamesPrefix202610\Nette\Utils\FileSystem;
-use FlamesPrefix202610\Nette\Utils\Json;
+use Flames\Code\Upgrade\ThirdParty\Nette\FileSystem;
+use Flames\Code\Upgrade\ThirdParty\Nette\Json;
 use Flames\Code\Upgrade\Configuration\Option;
 use Flames\Code\Upgrade\Configuration\Parameter\SimpleParameterProvider;
 use Flames\Code\Upgrade\ValueObject\PolyfillPackage;

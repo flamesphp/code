@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\ValueObject\Application;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\InlineHTML;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\NodeFinder;
-use PhpParser\Token;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\InlineHTML;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Namespace_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeFinder;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Token;
 use Flames\Code\Upgrade\ChangesReporting\ValueObject\UpgradeWithLineChange;
 use Flames\Code\Upgrade\Exception\ShouldNotHappenException;
 use Flames\Code\Upgrade\PhpParser\Node\FileNode;
@@ -136,7 +136,7 @@ final class File
     /**
      * This node returns top most node,
      * that includes use imports
-     * @return \PhpParser\Node\Stmt\Namespace_|\Flames\Code\Upgrade\PhpParser\Node\FileNode|null
+     * @return \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Namespace_|\Flames\Code\Upgrade\PhpParser\Node\FileNode|null
      */
     public function getUseImportsRootNode()
     {

@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeManipulator;
 
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Arg;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
 use Flames\Code\Upgrade\PhpParser\Node\Value\ValueResolver;
 final readonly class FuncCallManipulator
 {

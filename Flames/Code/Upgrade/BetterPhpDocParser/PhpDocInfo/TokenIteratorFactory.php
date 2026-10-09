@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo;
 
-use PHPStan\PhpDocParser\Lexer\Lexer;
-use PHPStan\PhpDocParser\Parser\TokenIterator;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Lexer\Lexer;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Parser\TokenIterator;
 use Flames\Code\Upgrade\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 final readonly class TokenIteratorFactory
 {

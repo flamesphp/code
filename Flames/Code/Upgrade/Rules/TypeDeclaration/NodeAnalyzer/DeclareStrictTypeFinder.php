@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\TypeDeclaration\NodeAnalyzer;
 
-use PhpParser\Node\Stmt\Declare_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Declare_;
 use Flames\Code\Upgrade\PhpParser\Node\FileNode;
 final class DeclareStrictTypeFinder
 {

@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\DeadCode\Rector\If_;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Expr\Empty_;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\Node\Stmt\If_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrayDimFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Empty_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Foreach_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use Flames\Code\Upgrade\Rules\DeadCode\NodeManipulator\CountManipulator;
 use Flames\Code\Upgrade\Rules\DeadCode\UselessIfCondBeforeForeachDetector;
@@ -22,8 +22,8 @@ use Flames\Code\Upgrade\Php\ReservedKeywordAnalyzer;
 use Flames\Code\Upgrade\PhpParser\Enum\NodeGroup;
 use Flames\Code\Upgrade\PHPStan\ScopeFetcher;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRectorTest
  */
@@ -73,7 +73,7 @@ CODE_SAMPLE
      * @param StmtsAware $node
      * @return StmtsAware|null
      */
-    public function refactor(Node $node): ?\PhpParser\Node
+    public function refactor(Node $node): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node
     {
         if ($node instanceof If_) {
             $scope = ScopeFetcher::fetch($node);

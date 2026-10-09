@@ -1,0 +1,210 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\CodeQuality\Rector\ClassMethod;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Foreach_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor;
+use PHPStan\Type\ObjectType;
+use Flames\Code\Upgrade\PHPUnit\CodeQuality\NodeAnalyser\NullableObjectAssignCollector;
+use Flames\Code\Upgrade\PHPUnit\CodeQuality\NodeFactory\AssertMethodCallFactory;
+use Flames\Code\Upgrade\PHPUnit\CodeQuality\TypeAnalyzer\MethodCallParameterTypeResolver;
+use Flames\Code\Upgrade\PHPUnit\CodeQuality\TypeAnalyzer\SimpleTypeAnalyzer;
+use Flames\Code\Upgrade\PHPUnit\CodeQuality\ValueObject\VariableNameToType;
+use Flames\Code\Upgrade\PHPUnit\CodeQuality\ValueObject\VariableNameToTypeCollection;
+use Flames\Code\Upgrade\PHPUnit\NodeAnalyzer\AssertCallAnalyzer;
+use Flames\Code\Upgrade\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\Rules\CodeQuality\Rector\ClassMethod\AddInstanceofAssertForNullableArgumentRectorTest
+ */
+final class AddInstanceofAssertForNullableArgumentRector extends AbstractRector
+{
+    public function __construct(private readonly TestsNodeAnalyzer $testsNodeAnalyzer, private readonly NullableObjectAssignCollector $nullableObjectAssignCollector, private readonly AssertMethodCallFactory $assertMethodCallFactory, private readonly MethodCallParameterTypeResolver $methodCallParameterTypeResolver, private readonly AssertCallAnalyzer $assertCallAnalyzer)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Add explicit instance assert between above nullable object pass', [new CodeSample(<<<'CODE_SAMPLE'
+use PHPUnit\Framework\TestCase;
+
+final class SomeTest extends TestCase
+{
+    public function test()
+    {
+        $someObject = $this->getSomeObject();
+
+        $this->process($someObject);
+    }
+
+    private function getSomeObject(): ?SomeClass
+    {
+        if (mt_rand(0, 1)) {
+            return new SomeClass();
+        }
+
+        return null;
+    }
+
+    private function process(SomeClass $someObject): void
+    {
+        // non-nullable use here
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+use PHPUnit\Framework\TestCase;
+
+final class SomeTest extends TestCase
+{
+    public function test()
+    {
+        $someObject = $this->getSomeObject();
+        $this->assertInstanceOf(SomeClass::class, $someObject);
+
+        $this->process($someObject);
+    }
+
+    private function getSomeObject(): ?SomeClass
+    {
+        if (mt_rand(0, 1)) {
+            return new SomeClass();
+        }
+
+        return null;
+    }
+
+    private function process(SomeClass $someObject): void
+    {
+        // non-nullable use here
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [ClassMethod::class, Foreach_::class];
+    }
+    /**
+     * @param ClassMethod|Foreach_ $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
+            return null;
+        }
+        if ($node->stmts === null || count($node->stmts) < 2) {
+            return null;
+        }
+        $hasChanged = \false;
+        $variableNameToTypeCollection = $this->nullableObjectAssignCollector->collect($node);
+        $next = 0;
+        foreach ($node->stmts as $key => $stmt) {
+            // already asserted in a previous run? drop the variable to keep the rule idempotent
+            $assertedVariableName = $this->matchAssertInstanceOfVariableName($stmt);
+            if (is_string($assertedVariableName)) {
+                $alreadyAssertedVariableNameToType = $variableNameToTypeCollection->matchByVariableName($assertedVariableName);
+                if ($alreadyAssertedVariableNameToType instanceof VariableNameToType) {
+                    $variableNameToTypeCollection->remove($alreadyAssertedVariableNameToType);
+                }
+                continue;
+            }
+            // has callable on nullable variable of already collected name?
+            $matchedNullableVariableNameToType = $this->matchedNullableArgumentNameToType($stmt, $variableNameToTypeCollection);
+            if (!$matchedNullableVariableNameToType instanceof VariableNameToType) {
+                continue;
+            }
+            // adding type here + popping the variable name out
+            $assertInstanceOfExpression = $this->assertMethodCallFactory->createAssertInstanceOf($matchedNullableVariableNameToType);
+            array_splice($node->stmts, $key + $next, 0, [$assertInstanceOfExpression]);
+            // remove variable name from nullable ones
+            $hasChanged = \true;
+            // from now on, the variable is not nullable, remove to avoid double asserts
+            $variableNameToTypeCollection->remove($matchedNullableVariableNameToType);
+            ++$next;
+        }
+        if (!$hasChanged) {
+            return null;
+        }
+        return $node;
+    }
+    private function matchedNullableArgumentNameToType(Stmt $stmt, VariableNameToTypeCollection $variableNameToTypeCollection): ?VariableNameToType
+    {
+        $matchedNullableVariableNameToType = null;
+        $this->traverseNodesWithCallable($stmt, function (Node $node) use ($variableNameToTypeCollection, &$matchedNullableVariableNameToType): ?int {
+            if (!$node instanceof MethodCall) {
+                return null;
+            }
+            if ($node->isFirstClassCallable()) {
+                return null;
+            }
+            // avoid double null on assert
+            if ($this->assertCallAnalyzer->isAssertMethodCall($node)) {
+                return null;
+            }
+            $classMethodParameterTypes = $this->methodCallParameterTypeResolver->resolve($node);
+            foreach ($node->getArgs() as $position => $arg) {
+                if (!$arg->value instanceof Variable) {
+                    continue;
+                }
+                $variableType = $this->getType($arg->value);
+                if (!SimpleTypeAnalyzer::isNullableType($variableType)) {
+                    return null;
+                }
+                // should not happen
+                if (!isset($classMethodParameterTypes[$position])) {
+                    return null;
+                }
+                $variableName = $this->getName($arg->value);
+                if (!is_string($variableName)) {
+                    return null;
+                }
+                $matchedNullableVariableNameToType = $variableNameToTypeCollection->matchByVariableName($variableName);
+                // is object type required?
+                if (!$classMethodParameterTypes[$position] instanceof ObjectType) {
+                    return null;
+                }
+                return NodeVisitor::STOP_TRAVERSAL;
+            }
+            return null;
+        });
+        return $matchedNullableVariableNameToType;
+    }
+    private function matchAssertInstanceOfVariableName(Stmt $stmt): ?string
+    {
+        if (!$stmt instanceof Expression) {
+            return null;
+        }
+        if (!$stmt->expr instanceof MethodCall) {
+            return null;
+        }
+        $methodCall = $stmt->expr;
+        if (!$this->isName($methodCall->name, 'assertInstanceOf')) {
+            return null;
+        }
+        $args = $methodCall->getArgs();
+        if (!isset($args[1])) {
+            return null;
+        }
+        if (!$args[1]->value instanceof Variable) {
+            return null;
+        }
+        $variableName = $this->getName($args[1]->value);
+        if (!is_string($variableName)) {
+            return null;
+        }
+        return $variableName;
+    }
+}

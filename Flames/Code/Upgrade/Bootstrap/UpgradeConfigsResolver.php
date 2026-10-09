@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Flames\Code\Upgrade\Bootstrap;
 
 use Flames\Code\Upgrade\ValueObject\Bootstrap\BootstrapConfigs;
-use FlamesPrefix202610\Symfony\Component\Console\Input\ArgvInput;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\ArgvInput;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 final class UpgradeConfigsResolver
 {
     public const string DEFAULT_CONFIG_FILE = 'code-upgrade.php';

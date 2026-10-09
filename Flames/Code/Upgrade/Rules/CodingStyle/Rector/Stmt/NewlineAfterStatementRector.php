@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\CodingStyle\Rector\Stmt;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Nop;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Nop;
 use Flames\Code\Upgrade\Comments\CommentResolver;
 use Flames\Code\Upgrade\Contract\Rector\HTMLAverseRectorInterface;
 use Flames\Code\Upgrade\PhpParser\Enum\NodeGroup;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\CodingStyle\Rector\Stmt\NewlineAfterStatementRectorTest
  */
@@ -59,7 +59,7 @@ CODE_SAMPLE
      * @param StmtsAware $node
      * @return StmtsAware|null
      */
-    public function refactor(Node $node): ?\PhpParser\Node
+    public function refactor(Node $node): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node
     {
         return $this->processAddNewLine($node, \false);
     }
@@ -67,7 +67,7 @@ CODE_SAMPLE
      * @param StmtsAware $node
      * @return StmtsAware|null
      */
-    private function processAddNewLine(Node $node, bool $hasChanged, int $jumpToKey = 0): ?\PhpParser\Node
+    private function processAddNewLine(Node $node, bool $hasChanged, int $jumpToKey = 0): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node
     {
         if ($node->stmts === null) {
             return null;

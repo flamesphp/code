@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\ChangesReporting\Output;
 
-use FlamesPrefix202610\Nette\Utils\Strings;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
 use Flames\Code\Upgrade\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Flames\Code\Upgrade\Configuration\Option;
 use Flames\Code\Upgrade\Configuration\Parameter\SimpleParameterProvider;
@@ -11,8 +11,8 @@ use Flames\Code\Upgrade\ValueObject\Configuration;
 use Flames\Code\Upgrade\ValueObject\Error\SystemError;
 use Flames\Code\Upgrade\ValueObject\ProcessResult;
 use Flames\Code\Upgrade\ValueObject\Reporting\FileDiff;
-use FlamesPrefix202610\Symfony\Component\Console\Formatter\OutputFormatter;
-use FlamesPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Formatter\OutputFormatter;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Style\SymfonyStyle;
 final readonly class ConsoleOutputFormatter implements OutputFormatterInterface
 {
     public const string NAME = 'console';

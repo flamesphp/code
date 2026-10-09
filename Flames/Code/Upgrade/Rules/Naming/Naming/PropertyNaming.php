@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Naming\Naming;
 
-use FlamesPrefix202610\Nette\Utils\Strings;
-use PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
@@ -89,7 +89,7 @@ final readonly class PropertyNaming
         return new ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
     }
     /**
-     * @param \PHPStan\Type\ThisType|\PHPStan\Type\ObjectType|\PhpParser\Node\Name|string $objectType
+     * @param \PHPStan\Type\ThisType|\PHPStan\Type\ObjectType|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name|string $objectType
      */
     public function fqnToVariableName($objectType): string
     {

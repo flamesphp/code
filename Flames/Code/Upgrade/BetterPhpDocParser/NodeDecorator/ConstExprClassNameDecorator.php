@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser\NodeDecorator;
 
-use PhpParser\Node as PhpNode;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node as PhpNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\ConstExpr\ConstFetchNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Node;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PhpDocNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
 use Flames\Code\Upgrade\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Flames\Code\Upgrade\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
@@ -26,7 +26,7 @@ final readonly class ConstExprClassNameDecorator implements PhpDocNodeDecoratorI
         if (!str_contains($phpDocNode->__toString(), '::')) {
             return;
         }
-        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (Node $node) use ($phpNode): ?\PHPStan\PhpDocParser\Ast\Node {
+        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (Node $node) use ($phpNode): ?\Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Node {
             if (!$node instanceof ConstFetchNode) {
                 return null;
             }

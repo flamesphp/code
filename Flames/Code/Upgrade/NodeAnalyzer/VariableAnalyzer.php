@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeAnalyzer;
 
-use PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
 use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
 final class VariableAnalyzer
 {

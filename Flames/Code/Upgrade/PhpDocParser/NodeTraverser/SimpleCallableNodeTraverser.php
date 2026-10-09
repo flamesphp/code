@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpDocParser\NodeTraverser;
 
-use PhpParser\Node;
-use PhpParser\NodeTraverser;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeTraverser;
 use Flames\Code\Upgrade\PhpDocParser\NodeVisitor\CallableNodeVisitor;
 /**
  * @api

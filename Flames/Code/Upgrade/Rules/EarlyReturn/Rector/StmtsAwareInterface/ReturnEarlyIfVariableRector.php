@@ -3,22 +3,22 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\EarlyReturn\Rector\StmtsAwareInterface;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Else_;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Return_;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Else_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Return_;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\VarTagValueNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Flames\Code\Upgrade\NodeAnalyzer\VariableAnalyzer;
 use Flames\Code\Upgrade\PhpParser\Enum\NodeGroup;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\EarlyReturn\Rector\StmtsAwareInterface\ReturnEarlyIfVariableRectorTest
  */
@@ -93,7 +93,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function matchOnlyIfStmtReturnExpr(Stmt $onlyIfStmt, Variable $returnVariable): ?\PhpParser\Node\Expr
+    private function matchOnlyIfStmtReturnExpr(Stmt $onlyIfStmt, Variable $returnVariable): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr
     {
         if (!$onlyIfStmt instanceof Expression) {
             return null;
@@ -125,7 +125,7 @@ CODE_SAMPLE
     /**
      * @param StmtsAware $stmtsAware
      */
-    private function matchNextStmtReturnVariable(Node $stmtsAware, int $key): ?\PhpParser\Node\Expr\Variable
+    private function matchNextStmtReturnVariable(Node $stmtsAware, int $key): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable
     {
         $nextStmt = $stmtsAware->stmts[$key + 1] ?? null;
         // last item → stop

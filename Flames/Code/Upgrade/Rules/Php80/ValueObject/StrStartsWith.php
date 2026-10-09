@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php80\ValueObject;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
 final readonly class StrStartsWith
 {
     public function __construct(private FuncCall $funcCall, private Expr $haystackExpr, private Expr $needleExpr, private bool $isPositive)

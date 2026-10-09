@@ -3,18 +3,18 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\EarlyReturn\Rector\If_;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Exit_;
-use PhpParser\Node\Expr\Throw_;
-use PhpParser\Node\Stmt\Continue_;
-use PhpParser\Node\Stmt\Else_;
-use PhpParser\Node\Stmt\ElseIf_;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Return_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Exit_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Throw_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Continue_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Else_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ElseIf_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Return_;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\EarlyReturn\Rector\If_\RemoveAlwaysElseRectorTest
  */
@@ -135,7 +135,7 @@ CODE_SAMPLE
         return $statements;
     }
     /**
-     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\Else_ $node
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ElseIf_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Else_ $node
      */
     private function doesNotLastStatementBreakFlow($node): bool
     {
@@ -150,7 +150,7 @@ CODE_SAMPLE
         return !($lastStmt instanceof Return_ || $lastStmt instanceof Expression && $lastStmt->expr instanceof Throw_ || $lastStmt instanceof Continue_ || $lastStmt instanceof Expression && $lastStmt->expr instanceof Exit_);
     }
     /**
-     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_ $node
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ElseIf_ $node
      */
     private function createIfFromNode($node): If_
     {

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpDocParser\PhpDocParser\PhpDocNodeVisitor;
 
-use PHPStan\PhpDocParser\Ast\Node;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Node;
 final class CallablePhpDocNodeVisitor extends \Flames\Code\Upgrade\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
@@ -18,7 +18,7 @@ final class CallablePhpDocNodeVisitor extends \Flames\Code\Upgrade\PhpDocParser\
         $this->callable = $callable;
     }
     /**
-     * @return int|\PHPStan\PhpDocParser\Ast\Node|null
+     * @return int|\Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Node|null
      */
     public function enterNode(Node $node)
     {

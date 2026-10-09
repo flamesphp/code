@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php74\Guard;
 
-use PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
 use Flames\Code\Upgrade\NodeAnalyzer\PropertyAnalyzer;
 use Flames\Code\Upgrade\NodeManipulator\PropertyManipulator;

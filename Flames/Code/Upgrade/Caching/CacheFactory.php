@@ -6,7 +6,7 @@ namespace Flames\Code\Upgrade\Caching;
 use Flames\Code\Upgrade\Caching\ValueObject\Storage\FileCacheStorage;
 use Flames\Code\Upgrade\Configuration\Option;
 use Flames\Code\Upgrade\Configuration\Parameter\SimpleParameterProvider;
-use FlamesPrefix202610\Symfony\Component\Filesystem\Filesystem;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Filesystem\Filesystem;
 final readonly class CacheFactory
 {
     public function __construct(private Filesystem $fileSystem)

@@ -3,21 +3,21 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Console\Command;
 
-use FlamesPrefix202610\Composer\Semver\Semver;
-use FlamesPrefix202610\Nette\Utils\Strings;
-use Flames\Code\Upgrade\Composer\InstalledPackageResolver;
+use Flames\Code\Upgrade\ThirdParty\Composer\Semver;
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
+use Flames\Code\Upgrade\ThirdParty\Composer\InstalledPackageResolver;
 use Flames\Code\Upgrade\Configuration\Option;
 use Flames\Code\Upgrade\Configuration\Parameter\SimpleParameterProvider;
 use Flames\Code\Upgrade\Contract\Rector\RectorInterface;
 use Flames\Code\Upgrade\VersionBonding\Contract\ComposerPackageConstraintInterface;
 use Flames\Code\Upgrade\VersionBonding\ValueObject\ComposerBoundRuleConfiguration;
 use ReflectionObject;
-use FlamesPrefix202610\Symfony\Component\Console\Command\Command;
-use FlamesPrefix202610\Symfony\Component\Console\Helper\TableCell;
-use FlamesPrefix202610\Symfony\Component\Console\Helper\TableSeparator;
-use FlamesPrefix202610\Symfony\Component\Console\Input\InputInterface;
-use FlamesPrefix202610\Symfony\Component\Console\Output\OutputInterface;
-use FlamesPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Command\Command;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Helper\TableCell;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Helper\TableSeparator;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\InputInterface;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Output\OutputInterface;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * @see \Flames\Code\Upgrade\Tests\Console\Command\ComposerBasedCommandTest
  */

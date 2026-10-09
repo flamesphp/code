@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php80\Rector\Catch_;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Finally_;
-use PhpParser\Node\Stmt\TryCatch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Finally_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\TryCatch;
 use Flames\Code\Upgrade\Rules\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
 use Flames\Code\Upgrade\NodeManipulator\StmtsManipulator;
 use Flames\Code\Upgrade\PhpParser\Enum\NodeGroup;
@@ -14,8 +14,8 @@ use Flames\Code\Upgrade\PhpParser\Node\BetterNodeFinder;
 use Flames\Code\Upgrade\Rector\AbstractRector;
 use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
 use Flames\Code\Upgrade\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRectorTest
  */

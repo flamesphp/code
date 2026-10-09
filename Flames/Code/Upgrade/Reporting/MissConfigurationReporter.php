@@ -9,7 +9,7 @@ use Flames\Code\Upgrade\Configuration\VendorMissAnalyseGuard;
 use Flames\Code\Upgrade\Contract\Rector\RectorInterface;
 use Flames\Code\Upgrade\PostRector\Rector\PostRectorInterface;
 use Flames\Code\Upgrade\ValueObject\ProcessResult;
-use FlamesPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * @see \Flames\Code\Upgrade\Tests\Reporting\MissConfigurationReporterTest
  */

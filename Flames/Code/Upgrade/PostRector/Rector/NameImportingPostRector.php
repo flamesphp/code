@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PostRector\Rector;
 
-use PhpParser\Node;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\GroupUse;
-use PhpParser\Node\Stmt\Use_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\GroupUse;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Use_;
 use Flames\Code\Upgrade\Rules\CodingStyle\Node\NameImporter;
 use Flames\Code\Upgrade\Rules\Naming\Naming\UseImportsResolver;
 use Flames\Code\Upgrade\PostRector\Guard\AddUseStatementGuard;
@@ -29,7 +29,7 @@ final class NameImportingPostRector extends AbstractPostRector
         $this->currentUses = $this->useImportsResolver->resolve();
         return $nodes;
     }
-    public function enterNode(Node $node): ?\PhpParser\Node\Name
+    public function enterNode(Node $node): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name
     {
         if (!$node instanceof FullyQualified) {
             return null;

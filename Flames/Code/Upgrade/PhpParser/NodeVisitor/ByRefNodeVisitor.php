@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpParser\NodeVisitor;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\AssignRef;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Return_;
-use PhpParser\NodeVisitor;
-use PhpParser\NodeVisitorAbstract;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\AssignRef;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\FunctionLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Return_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitorAbstract;
 use Flames\Code\Upgrade\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
 use Flames\Code\Upgrade\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
@@ -71,7 +71,7 @@ final class ByRefNodeVisitor extends NodeVisitorAbstract implements DecoratingNo
     {
         $byRefVariableNames = $this->resolveClosureUseIsByRefAttribute($functionLike, []);
         $byRefVariableNames = $this->resolveParamIsByRefAttribute($functionLike, $byRefVariableNames);
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $subNode) use (&$byRefVariableNames): ?\PhpParser\Node\Expr\Variable {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $subNode) use (&$byRefVariableNames): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable {
             if ($subNode instanceof Closure) {
                 $byRefVariableNames = $this->resolveClosureUseIsByRefAttribute($subNode, $byRefVariableNames);
                 return null;

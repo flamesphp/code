@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\TypeDeclarationDocblocks\TypeResolver;
 
-use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
-use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\ArrayShapeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\GenericTypeNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
@@ -24,7 +24,7 @@ final class ConstantArrayTypeGeneralizer
     {
     }
     /**
-     * @return \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode
+     * @return \Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\GenericTypeNode|\Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\ArrayShapeNode
      */
     public function generalize(ConstantArrayType $constantArrayType, bool $isFresh = \true)
     {
@@ -54,7 +54,7 @@ final class ConstantArrayTypeGeneralizer
         return $this->createArrayGenericTypeNode($genericKeyType, $genericItemType);
     }
     /**
-     * @param \PHPStan\Type\Type|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode $itemType
+     * @param \PHPStan\Type\Type|\Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\GenericTypeNode|\Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Type\ArrayShapeNode $itemType
      */
     private function createArrayGenericTypeNode(Type $keyType, $itemType): GenericTypeNode
     {

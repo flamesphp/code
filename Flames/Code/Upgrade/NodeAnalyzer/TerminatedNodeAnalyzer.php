@@ -3,34 +3,34 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\Exit_;
-use PhpParser\Node\Expr\Throw_;
-use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Scalar\Int_;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Break_;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Continue_;
-use PhpParser\Node\Stmt\Do_;
-use PhpParser\Node\Stmt\Else_;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Finally_;
-use PhpParser\Node\Stmt\For_;
-use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Goto_;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\InlineHTML;
-use PhpParser\Node\Stmt\Label;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Nop;
-use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Switch_;
-use PhpParser\Node\Stmt\TryCatch;
-use PhpParser\Node\Stmt\While_;
-use PhpParser\NodeVisitor;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ConstFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Exit_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Throw_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\FunctionLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\Int_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Break_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Continue_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Do_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Else_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Finally_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\For_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Goto_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\InlineHTML;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Label;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Namespace_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Nop;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Return_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Switch_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\TryCatch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\While_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor;
 use Flames\Code\Upgrade\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Flames\Code\Upgrade\PhpParser\Node\FileNode;
 final readonly class TerminatedNodeAnalyzer
@@ -78,7 +78,7 @@ final readonly class TerminatedNodeAnalyzer
         return $this->isTerminatedInLastStmtsSwitch($node);
     }
     /**
-     * @param \PhpParser\Node\Stmt\While_|\PhpParser\Node\Stmt\Do_|\PhpParser\Node\Stmt\For_ $loop
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\While_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Do_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\For_ $loop
      */
     private function isTerminatedInfiniteLoop($loop): bool
     {
@@ -90,7 +90,7 @@ final readonly class TerminatedNodeAnalyzer
         return !$this->hasBreakOrGoto($loop->stmts);
     }
     /**
-     * @param \PhpParser\Node\Stmt\While_|\PhpParser\Node\Stmt\Do_|\PhpParser\Node\Stmt\For_ $loop
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\While_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Do_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\For_ $loop
      */
     private function isInfiniteLoopCondition($loop): bool
     {

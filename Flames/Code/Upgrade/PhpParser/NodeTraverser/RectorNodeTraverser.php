@@ -4,17 +4,17 @@ declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpParser\NodeTraverser;
 
 use LogicException;
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt;
-use PhpParser\NodeTraverserInterface;
-use PhpParser\NodeVisitor;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeTraverserInterface;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor;
 use Flames\Code\Upgrade\Configuration\ConfigurationRuleFilter;
 use Flames\Code\Upgrade\Contract\Rector\RectorInterface;
 use Flames\Code\Upgrade\Exception\ShouldNotHappenException;
 use Flames\Code\Upgrade\VersionBonding\ComposerPackageConstraintFilter;
 use Flames\Code\Upgrade\VersionBonding\PhpVersionedFilter;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 /**
  *  Based on native NodeTraverser class, but heavily customized for Upgrade needs.
  *
@@ -23,7 +23,7 @@ use FlamesPrefix202610\Webmozart\Assert\Assert;
  *  - cached visitors per node class for performance, e.g. when we find rules for Class_ node, they're cached for next time
  *  - immutability features, register Upgrade rules once, then use; no changes on the fly
  *
- * @see \Flames\Code\Upgrade\Tests\PhpParser\NodeTraverser\RectorNodeTraverserTest
+ * @see \Flames\Code\Upgrade\Tests\Flames\Code\Upgrade\PhpParser\NodeTraverser\RectorNodeTraverserTest
  * @internal No BC promise on this class, it might change any time.
  */
 final class RectorNodeTraverser implements NodeTraverserInterface

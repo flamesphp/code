@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Comments;
 
-use PhpParser\Comment;
-use PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Comment;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
 use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
 final class CommentResolver
 {

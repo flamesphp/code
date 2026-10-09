@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpParser\Comparing;
 
-use PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
 use Flames\Code\Upgrade\Comments\CommentRemover;
 use Flames\Code\Upgrade\PhpParser\Printer\BetterStandardPrinter;
 final readonly class NodeComparator

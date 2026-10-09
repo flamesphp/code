@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Parallel\ValueObject;
 
-use FlamesPrefix202610\Clue\React\NDJson\Decoder;
-use FlamesPrefix202610\Clue\React\NDJson\Encoder;
+use Flames\Code\Upgrade\ThirdParty\Clue\React\Decoder;
+use Flames\Code\Upgrade\ThirdParty\Clue\React\Encoder;
 use Exception;
-use FlamesPrefix202610\React\ChildProcess\Process;
-use FlamesPrefix202610\React\EventLoop\LoopInterface;
-use FlamesPrefix202610\React\EventLoop\TimerInterface;
+use Flames\Code\Upgrade\ThirdParty\React\ChildProcess\Process;
+use Flames\Code\Upgrade\ThirdParty\React\EventLoop\LoopInterface;
+use Flames\Code\Upgrade\ThirdParty\React\EventLoop\TimerInterface;
 use Flames\Code\Upgrade\Parallel\Enum\Action;
 use Flames\Code\Upgrade\Parallel\Enum\Content;
 use Flames\Code\Upgrade\Parallel\Enum\ReactCommand;

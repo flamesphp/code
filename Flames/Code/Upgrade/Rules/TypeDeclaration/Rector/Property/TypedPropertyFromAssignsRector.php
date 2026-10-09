@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\TypeDeclaration\Rector\Property;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\UnionType as NodeUnionType;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\NullableType;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\UnionType as NodeUnionType;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -18,9 +18,9 @@ use PHPStan\Type\UnionType;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Flames\Code\Upgrade\Contract\Rector\ConfigurableRectorInterface;
 use Flames\Code\Upgrade\Rules\DeadCode\PhpDoc\TagRemover\VarTagRemover;
-use Flames\Code\Upgrade\Doctrine\CodeQuality\Enum\CollectionMapping;
-use Flames\Code\Upgrade\Doctrine\Enum\MappingClass;
-use Flames\Code\Upgrade\Doctrine\NodeAnalyzer\AttrinationFinder;
+use Flames\Code\Upgrade\ThirdParty\Doctrine\CodeQuality\Enum\CollectionMapping;
+use Flames\Code\Upgrade\ThirdParty\Doctrine\Enum\MappingClass;
+use Flames\Code\Upgrade\ThirdParty\Doctrine\NodeAnalyzer\AttrinationFinder;
 use Flames\Code\Upgrade\Rules\Php74\Guard\MakePropertyTypedGuard;
 use Flames\Code\Upgrade\PhpParser\Node\Value\ValueResolver;
 use Flames\Code\Upgrade\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -31,8 +31,8 @@ use Flames\Code\Upgrade\Rules\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecor
 use Flames\Code\Upgrade\Rules\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer;
 use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
 use Flames\Code\Upgrade\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\ConfiguredCodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRectorTest
  */

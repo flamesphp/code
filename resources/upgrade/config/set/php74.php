@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace FlamesPrefix202610;
+namespace Flames\Code\Upgrade\Config\Set;
 
-use PhpParser\Node\Expr\Cast\Double;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Cast\Double;
 use Flames\Code\Upgrade\Config\UpgradeConfig;
 use Flames\Code\Upgrade\Rules\Php74\Rector\ArrayDimFetch\CurlyToSquareBracketArrayStringRector;
 use Flames\Code\Upgrade\Rules\Php74\Rector\Assign\NullCoalescingOperatorRector;

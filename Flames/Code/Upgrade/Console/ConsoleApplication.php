@@ -3,19 +3,19 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Console;
 
-use FlamesPrefix202610\Composer\XdebugHandler\XdebugHandler;
+use Flames\Code\Upgrade\ThirdParty\Composer\XdebugHandler;
 use Flames\Code\Upgrade\Application\VersionResolver;
 use Flames\Code\Upgrade\ChangesReporting\Output\ConsoleOutputFormatter;
 use Flames\Code\Upgrade\Configuration\Option;
 use Flames\Code\Upgrade\Util\Reflection\PrivatesAccessor;
-use FlamesPrefix202610\Symfony\Component\Console\Application;
-use FlamesPrefix202610\Symfony\Component\Console\Command\Command;
-use FlamesPrefix202610\Symfony\Component\Console\Input\InputDefinition;
-use FlamesPrefix202610\Symfony\Component\Console\Input\InputInterface;
-use FlamesPrefix202610\Symfony\Component\Console\Input\InputOption;
-use FlamesPrefix202610\Symfony\Component\Console\Output\OutputInterface;
-use FlamesPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Application;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Command\Command;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\InputDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\InputInterface;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\InputOption;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Output\OutputInterface;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Style\SymfonyStyle;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 final class ConsoleApplication extends Application
 {
     private const string NAME = 'Rector';

@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Naming\PropertyRenamer;
 
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\VarLikeIdentifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\VarLikeIdentifier;
 use Flames\Code\Upgrade\Rules\Naming\Guard\PropertyConflictingNameGuard\MatchPropertyTypeConflictingNameGuard;
 use Flames\Code\Upgrade\Rules\Naming\RenameGuard\PropertyRenameGuard;
 use Flames\Code\Upgrade\Rules\Naming\ValueObject\PropertyRename;

@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeAnalyzer;
 
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Param;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
 use Flames\Code\Upgrade\Rules\CodeQuality\ValueObject\DefinedPropertyWithType;
 use Flames\Code\Upgrade\NodeNameResolver\NodeNameResolver;
 use Flames\Code\Upgrade\Rules\Php80\NodeAnalyzer\PromotedPropertyResolver;
@@ -28,7 +28,7 @@ final readonly class PropertyPresenceChecker
     }
     /**
      * @param \Flames\Code\Upgrade\Rules\CodeQuality\ValueObject\DefinedPropertyWithType|\Flames\Code\Upgrade\PostRector\ValueObject\PropertyMetadata $definedPropertyWithType
-     * @return \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param|null
+     * @return \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Param|null
      */
     public function getClassContextProperty(Class_ $class, $definedPropertyWithType)
     {

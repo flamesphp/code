@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Comments;
 
-use PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
 use Flames\Code\Upgrade\Comments\NodeTraverser\CommentRemovingNodeTraverser;
 /**
  * @see \Flames\Code\Upgrade\Tests\Comments\CommentRemover\CommentRemoverTest

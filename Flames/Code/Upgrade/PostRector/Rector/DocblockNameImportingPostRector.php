@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PostRector\Rector;
 
-use PhpParser\Node;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Param;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Flames\Code\Upgrade\Comments\NodeDocBlock\DocBlockUpdater;
@@ -16,7 +16,7 @@ final class DocblockNameImportingPostRector extends AbstractPostRector
     public function __construct(private readonly DocBlockNameImporter $docBlockNameImporter, private readonly PhpDocInfoFactory $phpDocInfoFactory, private readonly DocBlockUpdater $docBlockUpdater, private readonly AddUseStatementGuard $addUseStatementGuard)
     {
     }
-    public function enterNode(Node $node): ?\PhpParser\Node
+    public function enterNode(Node $node): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node
     {
         if (!$node instanceof Stmt && !$node instanceof Param) {
             return null;

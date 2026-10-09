@@ -28,7 +28,7 @@ If you're on PHP 7.x, you can use withSets() instead, for `doctrineCodeQuality` 
 
 ```php
 use Flames\Code\Upgrade\Config\UpgradeConfig;
-use Flames\Code\Upgrade\Doctrine\Set\DoctrineSetList;
+use Flames\Code\Upgrade\ThirdParty\Doctrine\Set\DoctrineSetList;
 
 return UpgradeConfig::configure()
     ->withSets([

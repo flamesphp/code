@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\FileSystem;
 
-use FlamesPrefix202610\Nette\Utils\FileSystem;
+use Flames\Code\Upgrade\ThirdParty\Nette\FileSystem;
 use Flames\Code\Upgrade\Caching\Detector\ChangedFilesDetector;
 use Flames\Code\Upgrade\Caching\UnchangedFilesFilter;
 use Flames\Code\Upgrade\Configuration\Option;
 use Flames\Code\Upgrade\Configuration\Parameter\SimpleParameterProvider;
 use Flames\Code\Upgrade\Skipper\Skipper\PathSkipper;
 use Flames\Code\Upgrade\ValueObject\Configuration;
-use FlamesPrefix202610\Symfony\Component\Finder\Finder;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Finder\Finder;
 /**
  * @see \Flames\Code\Upgrade\Tests\FileSystem\FilesFinder\FilesFinderTest
  */

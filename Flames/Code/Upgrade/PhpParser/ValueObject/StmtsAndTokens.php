@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpParser\ValueObject;
 
-use PhpParser\Node\Stmt;
-use PhpParser\Token;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Token;
 final readonly class StmtsAndTokens
 {
     /**

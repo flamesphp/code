@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php80\NodeManipulator;
 
-use PhpParser\Node\AttributeGroup;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\AttributeGroup;
 use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
 use Flames\Code\Upgrade\Rules\Php80\Contract\ConverterAttributeDecoratorInterface;
 final readonly class AttributeGroupNamedArgumentManipulator

@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\VersionBonding;
 
-use FlamesPrefix202610\Composer\Semver\Semver;
-use Flames\Code\Upgrade\Composer\InstalledPackageResolver;
+use Flames\Code\Upgrade\ThirdParty\Composer\Semver;
+use Flames\Code\Upgrade\ThirdParty\Composer\InstalledPackageResolver;
 use Flames\Code\Upgrade\Contract\Rector\RectorInterface;
 use Flames\Code\Upgrade\VersionBonding\Contract\ComposerPackageConstraintInterface;
 /**

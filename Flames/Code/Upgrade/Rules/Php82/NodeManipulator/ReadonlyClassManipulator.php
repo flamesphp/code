@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php82\NodeManipulator;
 
-use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Param;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionProperty;
 use PHPStan\Reflection\ClassReflection;
@@ -24,7 +24,7 @@ final readonly class ReadonlyClassManipulator
     public function __construct(private VisibilityManipulator $visibilityManipulator, private PhpAttributeAnalyzer $phpAttributeAnalyzer, private ReflectionProvider $reflectionProvider)
     {
     }
-    public function process(Class_ $class): ?\PhpParser\Node\Stmt\Class_
+    public function process(Class_ $class): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_
     {
         $scope = ScopeFetcher::fetch($class);
         if ($this->shouldSkip($class, $scope)) {

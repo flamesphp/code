@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Php80\NodeFactory;
 
-use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Stmt\Use_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\AttributeGroup;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Use_;
 use Flames\Code\Upgrade\Rules\Php80\ValueObject\NestedDoctrineTagAndAnnotationToAttribute;
 use Flames\Code\Upgrade\PhpAttribute\NodeFactory\PhpNestedAttributeGroupFactory;
 final readonly class NestedAttrGroupsFactory

@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\DependencyInjection;
 
-use FlamesPrefix202610\Doctrine\Inflector\Inflector;
-use FlamesPrefix202610\Doctrine\Inflector\Rules\English\InflectorFactory;
-use PhpParser\Lexer;
+use Flames\Code\Upgrade\ThirdParty\Doctrine\Inflector;
+use Flames\Code\Upgrade\ThirdParty\Doctrine\Rules\English\InflectorFactory;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Lexer;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\Parser\Parser;
 use PHPStan\Php\PhpVersionFactory;
 use PHPStan\PhpDoc\TypeNodeResolver;
-use PHPStan\PhpDocParser\ParserConfig;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\ParserConfig;
 use PHPStan\Reflection\ReflectionProvider;
 use Flames\Code\Upgrade\Application\ChangedNodeScopeRefresher;
 use Flames\Code\Upgrade\Application\FileProcessor;
@@ -71,9 +71,9 @@ use Flames\Code\Upgrade\PostRector\Application\PostFileProcessor;
 use Flames\Code\Upgrade\Rector\AbstractRector;
 use Flames\Code\Upgrade\Skipper\Skipper\Skipper;
 use Flames\Code\Upgrade\Skipper\Skipper\UsedSkipCollector;
-use FlamesPrefix202610\Symfony\Component\Console\Application;
-use FlamesPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Application;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Style\SymfonyStyle;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 final class LazyContainerFactory
 {
     /**

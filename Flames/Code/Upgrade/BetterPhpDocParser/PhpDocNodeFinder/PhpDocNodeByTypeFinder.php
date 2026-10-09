@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\BetterPhpDocParser\PhpDocNodeFinder;
 
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Node;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PhpDocNode;
 use Flames\Code\Upgrade\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Flames\Code\Upgrade\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 final class PhpDocNodeByTypeFinder
 {
     /**
-     * @template TNode as \PHPStan\PhpDocParser\Ast\Node
+     * @template TNode as \Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\Node
      * @param class-string<TNode> $desiredType
      * @return array<TNode>
      */

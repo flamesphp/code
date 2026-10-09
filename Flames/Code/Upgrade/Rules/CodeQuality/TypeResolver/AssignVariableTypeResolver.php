@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\CodeQuality\TypeResolver;
 
-use PhpParser\Node\Expr\Assign;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Flames\Code\Upgrade\NodeTypeResolver\NodeTypeResolver;

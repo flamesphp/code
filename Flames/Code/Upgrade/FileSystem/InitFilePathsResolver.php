@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\FileSystem;
 
-use FlamesPrefix202610\Symfony\Component\Finder\Finder;
-use FlamesPrefix202610\Symfony\Component\Finder\SplFileInfo;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Finder\Finder;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Finder\SplFileInfo;
 /**
  * @see \Flames\Code\Upgrade\Tests\FileSystem\InitFilePathsResolver\InitFilePathsResolverTest
  */

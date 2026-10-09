@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\Naming\Rector\Class_;
 
-use PhpParser\Node;
-use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Flames\Code\Upgrade\Enum\ClassName;
 use Flames\Code\Upgrade\Rules\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver;
@@ -15,8 +15,8 @@ use Flames\Code\Upgrade\Rules\Naming\PropertyRenamer\PropertyPromotionRenamer;
 use Flames\Code\Upgrade\Rules\Naming\ValueObject\PropertyRename;
 use Flames\Code\Upgrade\Rules\Naming\ValueObjectFactory\PropertyRenameFactory;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\Naming\Rector\Class_\RenamePropertyToMatchTypeRectorTest
  */

@@ -7,7 +7,7 @@ use Flames\Code\Upgrade\ChangesReporting\Output\ConsoleOutputFormatter;
 use Flames\Code\Upgrade\Configuration\Option;
 use Flames\Code\Upgrade\Configuration\Parameter\SimpleParameterProvider;
 use Flames\Code\Upgrade\ValueObject\Configuration\LevelOverflow;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 final readonly class Configuration
 {
     /**

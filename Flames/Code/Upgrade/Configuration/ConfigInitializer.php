@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Configuration;
 
-use FlamesPrefix202610\Nette\Utils\FileSystem;
+use Flames\Code\Upgrade\ThirdParty\Nette\FileSystem;
 use Flames\Code\Upgrade\Agentic\TerminalDetector;
 use Flames\Code\Upgrade\Bootstrap\UpgradeConfigsResolver;
 use Flames\Code\Upgrade\Contract\Rector\RectorInterface;
 use Flames\Code\Upgrade\FileSystem\InitFilePathsResolver;
 use Flames\Code\Upgrade\PostRector\Rector\PostRectorInterface;
-use FlamesPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Style\SymfonyStyle;
 final readonly class ConfigInitializer
 {
     /**

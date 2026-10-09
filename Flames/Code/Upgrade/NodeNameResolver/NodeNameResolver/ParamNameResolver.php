@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\NodeNameResolver\NodeNameResolver;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Error;
-use PhpParser\Node\Param;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Error;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Param;
 use PHPStan\Analyser\Scope;
 use Flames\Code\Upgrade\NodeNameResolver\Contract\NodeNameResolverInterface;
 /**

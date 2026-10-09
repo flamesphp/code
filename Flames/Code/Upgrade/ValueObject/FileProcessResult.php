@@ -5,7 +5,7 @@ namespace Flames\Code\Upgrade\ValueObject;
 
 use Flames\Code\Upgrade\ValueObject\Error\SystemError;
 use Flames\Code\Upgrade\ValueObject\Reporting\FileDiff;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 final readonly class FileProcessResult
 {
     /**

@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\VendorLocker;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Interface_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Interface_;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Type;
@@ -31,7 +31,7 @@ final readonly class ParentClassMethodTypeOverrideGuard
      * final. Adding a return or param type to such a class is a breaking change for its child
      * classes, so type-declaration rules must leave it untouched. Final classes are never guarded,
      * as they cannot be extended.
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\ClassMethod $node
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Interface_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod $node
      */
     public function isTypeGuardedClass($node): bool
     {
@@ -62,7 +62,7 @@ final readonly class ParentClassMethodTypeOverrideGuard
         }
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PHPStan\Reflection\MethodReflection $classMethod
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod|\PHPStan\Reflection\MethodReflection $classMethod
      */
     public function getParentClassMethod($classMethod): ?MethodReflection
     {
@@ -84,7 +84,7 @@ final readonly class ParentClassMethodTypeOverrideGuard
         return $this->typeComparator->areTypesEqual($currentReturnType, $parentType);
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PHPStan\Reflection\MethodReflection $classMethod
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod|\PHPStan\Reflection\MethodReflection $classMethod
      */
     private function resolveParentClassMethod($classMethod): ?MethodReflection
     {

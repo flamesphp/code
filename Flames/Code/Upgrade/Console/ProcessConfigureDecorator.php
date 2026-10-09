@@ -5,9 +5,9 @@ namespace Flames\Code\Upgrade\Console;
 
 use Flames\Code\Upgrade\ChangesReporting\Output\ConsoleOutputFormatter;
 use Flames\Code\Upgrade\Configuration\Option;
-use FlamesPrefix202610\Symfony\Component\Console\Command\Command;
-use FlamesPrefix202610\Symfony\Component\Console\Input\InputArgument;
-use FlamesPrefix202610\Symfony\Component\Console\Input\InputOption;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Command\Command;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\InputArgument;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\InputOption;
 final class ProcessConfigureDecorator
 {
     public static function decorate(Command $command): void

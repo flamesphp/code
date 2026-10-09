@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Console\Command;
 
-use FlamesPrefix202610\Clue\React\NDJson\Decoder;
-use FlamesPrefix202610\Clue\React\NDJson\Encoder;
-use FlamesPrefix202610\React\EventLoop\StreamSelectLoop;
-use FlamesPrefix202610\React\Socket\ConnectionInterface;
-use FlamesPrefix202610\React\Socket\TcpConnector;
+use Flames\Code\Upgrade\ThirdParty\Clue\React\Decoder;
+use Flames\Code\Upgrade\ThirdParty\Clue\React\Encoder;
+use Flames\Code\Upgrade\ThirdParty\React\EventLoop\StreamSelectLoop;
+use Flames\Code\Upgrade\ThirdParty\React\Socket\ConnectionInterface;
+use Flames\Code\Upgrade\ThirdParty\React\Socket\TcpConnector;
 use Flames\Code\Upgrade\Application\ApplicationFileProcessor;
 use Flames\Code\Upgrade\Autoloading\AdditionalAutoloader;
 use Flames\Code\Upgrade\Configuration\ConfigurationFactory;
@@ -23,11 +23,11 @@ use Flames\Code\Upgrade\StaticReflection\DynamicSourceLocatorDecorator;
 use Flames\Code\Upgrade\Util\MemoryLimiter;
 use Flames\Code\Upgrade\ValueObject\Configuration;
 use Flames\Code\Upgrade\ValueObject\Error\SystemError;
-use FlamesPrefix202610\Symfony\Component\Console\Command\Command;
-use FlamesPrefix202610\Symfony\Component\Console\Input\InputInterface;
-use FlamesPrefix202610\Symfony\Component\Console\Output\OutputInterface;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Command\Command;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\InputInterface;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
-use FlamesPrefix202610\Webmozart\Assert\Assert;
+use Flames\Code\Upgrade\ThirdParty\Webmozart\Assert\Assert;
 /**
  * Inspired at: https://github.com/phpstan/phpstan-src/commit/9124c66dcc55a222e21b1717ba5f60771f7dda92
  * https://github.com/phpstan/phpstan-src/blob/c471c7b050e0929daf432288770de673b394a983/src/Command/WorkerCommand.php

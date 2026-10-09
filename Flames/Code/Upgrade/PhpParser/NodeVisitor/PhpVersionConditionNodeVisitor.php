@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\PhpParser\NodeVisitor;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\NodeVisitorAbstract;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Ternary;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitorAbstract;
 use Flames\Code\Upgrade\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Flames\Code\Upgrade\Rules\DeadCode\ConditionResolver;
 use Flames\Code\Upgrade\Rules\DeadCode\ValueObject\VersionCompareCondition;
@@ -34,7 +34,7 @@ final class PhpVersionConditionNodeVisitor extends NodeVisitorAbstract implement
         return null;
     }
     /**
-     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Expr\Ternary $ifOrTernary
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Ternary $ifOrTernary
      */
     private function hasVersionCompareCond($ifOrTernary): bool
     {

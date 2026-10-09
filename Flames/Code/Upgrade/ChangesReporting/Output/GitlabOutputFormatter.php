@@ -7,7 +7,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\ChangesReporting\Output;
 
-use FlamesPrefix202610\Nette\Utils\Json;
+use Flames\Code\Upgrade\ThirdParty\Nette\Json;
 use Flames\Code\Upgrade\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Flames\Code\Upgrade\Util\FileHasher;
 use Flames\Code\Upgrade\ValueObject\Configuration;

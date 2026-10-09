@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\CodingStyle\Rector\PostInc;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\PostDec;
-use PhpParser\Node\Expr\PostInc;
-use PhpParser\Node\Expr\PreDec;
-use PhpParser\Node\Expr\PreInc;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\For_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PostDec;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PostInc;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PreDec;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PreInc;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\For_;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRectorTest
  */
@@ -59,7 +59,7 @@ CODE_SAMPLE
         }
         return $this->refactorFor($node);
     }
-    private function refactorFor(For_ $for): ?\PhpParser\Node\Stmt\For_
+    private function refactorFor(For_ $for): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\For_
     {
         if (count($for->loop) !== 1) {
             return null;
@@ -72,8 +72,8 @@ CODE_SAMPLE
         return $for;
     }
     /**
-     * @param \PhpParser\Node\Expr\PostInc|\PhpParser\Node\Expr\PostDec $node
-     * @return \PhpParser\Node\Expr\PreInc|\PhpParser\Node\Expr\PreDec
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PostInc|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PostDec $node
+     * @return \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PreInc|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PreDec
      */
     private function processPrePost($node)
     {

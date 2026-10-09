@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Parallel\ValueObject;
 
-use FlamesPrefix202610\React\Socket\TcpServer;
+use Flames\Code\Upgrade\ThirdParty\React\Socket\TcpServer;
 use Flames\Code\Upgrade\Parallel\Exception\ParallelShouldNotHappenException;
 /**
  * Used from https://github.com/phpstan/phpstan-src/blob/master/src/Parallel/ProcessPool.php

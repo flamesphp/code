@@ -3,20 +3,20 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\CodeQuality\Rector\If_;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\Instanceof_;
-use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\ElseIf_;
-use PhpParser\Node\Stmt\If_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BooleanNot;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Instanceof_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Ternary;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ElseIf_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ObjectType;
 use Flames\Code\Upgrade\Rules\CodeQuality\NodeAnalyzer\ExplicitBoolConditionResolver;
 use Flames\Code\Upgrade\Rules\CodeQuality\ValueObject\ExplicitBoolCondition;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\CodeQuality\Rector\If_\ObjectExplicitBoolCompareRectorTest
  */
@@ -76,7 +76,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @return \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\Instanceof_
+     * @return \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BooleanNot|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Instanceof_
      */
     private function resolveNullable(bool $isNegated, Expr $expr, ObjectType $objectType)
     {

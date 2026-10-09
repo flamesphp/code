@@ -5,8 +5,8 @@ namespace Flames\Code\Upgrade\Rules\TypeDeclaration\Rector\ClassMethod;
 
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * Handles the scalar (string/int/float/bool) param type group.
  *

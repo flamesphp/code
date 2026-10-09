@@ -3,22 +3,22 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Rules\DeadCode\Rector\For_;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\CallLike;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Else_;
-use PhpParser\Node\Stmt\For_;
-use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\Node\Stmt\If_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\CallLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Else_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\For_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Foreach_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_;
 use Flames\Code\Upgrade\Rules\EarlyReturn\NodeTransformer\ConditionInverter;
 use Flames\Code\Upgrade\NodeManipulator\StmtsManipulator;
 use Flames\Code\Upgrade\PhpParser\Enum\NodeGroup;
 use Flames\Code\Upgrade\PhpParser\Node\BetterNodeFinder;
 use Flames\Code\Upgrade\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
 /**
  * @see \Flames\Code\Upgrade\Rules\DeadCode\Rector\For_\RemoveDeadIfForeachForRectorTest
  */
@@ -66,7 +66,7 @@ CODE_SAMPLE
     /**
      * @param StmtsAware $node
      */
-    public function refactor(Node $node): ?\PhpParser\Node
+    public function refactor(Node $node): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node
     {
         if ($node->stmts === null) {
             return null;
@@ -114,7 +114,7 @@ CODE_SAMPLE
     }
     /**
      * @param StmtsAware $stmtsAware
-     * @param \PhpParser\Node\Stmt\For_|\PhpParser\Node\Stmt\Foreach_ $for
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\For_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Foreach_ $for
      */
     private function processForForeach($for, int $key, Node $stmtsAware): void
     {

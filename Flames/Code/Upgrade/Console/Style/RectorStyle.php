@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Flames\Code\Upgrade\Console\Style;
 
-use FlamesPrefix202610\OndraM\CiDetector\CiDetector;
-use FlamesPrefix202610\Symfony\Component\Console\Exception\RuntimeException;
-use FlamesPrefix202610\Symfony\Component\Console\Helper\ProgressBar;
-use FlamesPrefix202610\Symfony\Component\Console\Input\InputInterface;
-use FlamesPrefix202610\Symfony\Component\Console\Output\OutputInterface;
-use FlamesPrefix202610\Symfony\Component\Console\Style\SymfonyStyle;
+use Flames\Code\Upgrade\ThirdParty\OndraM\CiDetector;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Exception\RuntimeException;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Helper\ProgressBar;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Input\InputInterface;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Output\OutputInterface;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Style\SymfonyStyle;
 final class RectorStyle extends SymfonyStyle
 {
     private ?ProgressBar $progressBar = null;

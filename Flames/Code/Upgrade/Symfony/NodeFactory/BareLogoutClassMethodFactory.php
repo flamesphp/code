@@ -1,0 +1,35 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Symfony\NodeFactory;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Param;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\Php\PhpVersionProvider;
+use Flames\Code\Upgrade\PhpParser\Node\NodeFactory;
+use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
+final readonly class BareLogoutClassMethodFactory
+{
+    public function __construct(private NodeFactory $nodeFactory, private PhpVersionProvider $phpVersionProvider)
+    {
+    }
+    public function create(): ClassMethod
+    {
+        $classMethod = $this->nodeFactory->createPublicMethod('onLogout');
+        $variable = new Variable('logoutEvent');
+        $classMethod->params[] = $this->createLogoutEventParam($variable);
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::VOID_TYPE)) {
+            $classMethod->returnType = new Identifier('void');
+        }
+        return $classMethod;
+    }
+    private function createLogoutEventParam(Variable $variable): Param
+    {
+        $param = new Param($variable);
+        $param->type = new FullyQualified('Symfony\Component\Security\Http\Event\LogoutEvent');
+        return $param;
+    }
+}
