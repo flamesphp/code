@@ -1,0 +1,53 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\NodeNestingScope;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\NullsafePropertyFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PropertyFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticPropertyFetch;
+use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
+final class ContextAnalyzer
+{
+    /**
+     * @api
+     */
+    public function isInLoop(Node $node): bool
+    {
+        return $node->getAttribute(AttributeKey::IS_IN_LOOP_OR_SWITCH) === \true;
+    }
+    /**
+     * @api
+     */
+    public function isInIf(Node $node): bool
+    {
+        return $node->getAttribute(AttributeKey::IS_IN_IF) === \true;
+    }
+    /**
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\PropertyFetch|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticPropertyFetch|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\NullsafePropertyFetch $propertyFetch
+     */
+    public function isChangeableContext($propertyFetch): bool
+    {
+        if ($propertyFetch->getAttribute(AttributeKey::IS_UNSET_VAR, \false)) {
+            return \true;
+        }
+        if ($propertyFetch->getAttribute(AttributeKey::INSIDE_ARRAY_DIM_FETCH, \false)) {
+            return \true;
+        }
+        if ($propertyFetch->getAttribute(AttributeKey::IS_USED_AS_ARG_BY_REF_VALUE, \false) === \true) {
+            return \true;
+        }
+        return $propertyFetch->getAttribute(AttributeKey::IS_INCREMENT_OR_DECREMENT, \false) === \true;
+    }
+    public function isLeftPartOfAssign(Node $node): bool
+    {
+        if ($node->getAttribute(AttributeKey::IS_BEING_ASSIGNED) === \true) {
+            return \true;
+        }
+        if ($node->getAttribute(AttributeKey::IS_ASSIGN_REF_EXPR) === \true) {
+            return \true;
+        }
+        return $node->getAttribute(AttributeKey::IS_ASSIGN_OP_VAR) === \true;
+    }
+}

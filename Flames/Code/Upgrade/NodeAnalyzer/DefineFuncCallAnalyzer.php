@@ -1,0 +1,36 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\NodeAnalyzer;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\String_;
+use Flames\Code\Upgrade\NodeNameResolver\NodeNameResolver;
+final readonly class DefineFuncCallAnalyzer
+{
+    public function __construct(private NodeNameResolver $nodeNameResolver)
+    {
+    }
+    /**
+     * @param string[] $constants
+     */
+    public function isDefinedWithConstants(Expr $expr, array $constants): bool
+    {
+        if (!$expr instanceof FuncCall) {
+            return \false;
+        }
+        if (!$this->nodeNameResolver->isName($expr, 'defined')) {
+            return \false;
+        }
+        if ($expr->isFirstClassCallable()) {
+            return \false;
+        }
+        $firstArg = $expr->getArgs()[0];
+        if (!$firstArg->value instanceof String_) {
+            return \false;
+        }
+        $string = $firstArg->value;
+        return in_array($string->value, $constants, \true);
+    }
+}

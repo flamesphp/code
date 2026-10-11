@@ -1,0 +1,36 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Node\Printer;
+
+use PhpParser\Node\Expr;
+use PHPStan\DependencyInjection\AutowiredService;
+use PHPStan\Turbo\ShadowedByTurboExtension;
+/**
+ * @api
+ */
+#[AutowiredService]
+#[ShadowedByTurboExtension(__DIR__ . '/../../turbo-ext/src/ExprPrinter.cpp')]
+final class ExprPrinter
+{
+    private \PHPStan\Node\Printer\Printer $printer;
+    public const ATTRIBUTE_CACHE_KEY = 'phpstan_cache_printer';
+    public function __construct(\PHPStan\Node\Printer\Printer $printer)
+    {
+        $this->printer = $printer;
+    }
+    public function printExpr(Expr $expr): string
+    {
+        // perf optimize for the most common path
+        if ($expr instanceof Expr\Variable && !$expr->name instanceof Expr) {
+            return '$' . $expr->name;
+        }
+        /** @var string|null $exprString */
+        $exprString = $expr->getAttribute(self::ATTRIBUTE_CACHE_KEY);
+        if ($exprString === null) {
+            $exprString = $this->printer->prettyPrintExpr($expr);
+            $expr->setAttribute(self::ATTRIBUTE_CACHE_KEY, $exprString);
+        }
+        return $exprString;
+    }
+}

@@ -1,0 +1,160 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\PHPUnit120\Rector\Class_;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\IntersectionType;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
+use Flames\Code\Upgrade\PHPUnit\CodeQuality\NodeAnalyser\MockObjectExprDetector;
+use Flames\Code\Upgrade\PHPUnit\CodeQuality\NodeAnalyser\MockObjectPropertyDetector;
+use Flames\Code\Upgrade\PHPUnit\Enum\PHPUnitClassName;
+use Flames\Code\Upgrade\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\ValueObject\MethodName;
+use Flames\Code\Upgrade\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Flames\Code\Upgrade\VersionBonding\ValueObject\ComposerPackageConstraint;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\PHPUnit120\Rector\Class_\PropertyCreateMockToCreateStubRectorTest
+ *
+ * @see https://github.com/sebastianbergmann/phpunit/commit/24c208d6a340c3071f28a9b5cce02b9377adfd43
+ */
+final class PropertyCreateMockToCreateStubRector extends AbstractRector implements ComposerPackageConstraintInterface
+{
+    public function __construct(private readonly TestsNodeAnalyzer $testsNodeAnalyzer, private readonly MockObjectExprDetector $mockObjectExprDetector, private readonly MockObjectPropertyDetector $mockObjectPropertyDetector)
+    {
+    }
+    public function getNodeTypes(): array
+    {
+        return [Class_::class];
+    }
+    /**
+     * @param Class_ $node
+     */
+    public function refactor(Node $node): ?Class_
+    {
+        if ($this->shouldSkipClass($node)) {
+            return null;
+        }
+        /** @var ClassMethod $setUpClassMethod */
+        $setUpClassMethod = $node->getMethod(MethodName::SET_UP);
+        $propertyNamesToCreateMockMethodCalls = $this->mockObjectPropertyDetector->collectFromClassMethod($setUpClassMethod);
+        if ($propertyNamesToCreateMockMethodCalls === []) {
+            return null;
+        }
+        $hasChanged = \false;
+        // find property fetch usage, is it exnted with method expectaitions?
+        foreach ($propertyNamesToCreateMockMethodCalls as $propertyName => $createMockMethodCall) {
+            if ($this->mockObjectExprDetector->isPropertyUsedForMocking($node, $propertyName)) {
+                continue;
+            }
+            $createMockMethodCall->name = new Identifier('createStub');
+            $hasChanged = \true;
+            // update property type
+            $property = $node->getProperty($propertyName);
+            /** @var Property $property */
+            $property->type = $this->updatePropertyType($property->type);
+        }
+        if (!$hasChanged) {
+            return null;
+        }
+        return $node;
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('phpunit/phpunit', '>=11.0');
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Change mock object property that is never mocked to createStub()', [new CodeSample(<<<'CODE_SAMPLE'
+use PHPUnit\Framework\TestCase;
+
+final class SomeTest extends TestCase
+{
+    private \PHPUnit\Framework\MockObject\MockObject $someServiceMock;
+
+    protected function setUp(): void
+    {
+        $this->someServiceMock = $this->createMock(SomeService::class);
+    }
+
+    public function testOne(): void
+    {
+        $someObject = new SomeClass($this->someServiceMock);
+    }
+
+    public function testTwo(): void
+    {
+        $someObject = new AnotherClass($this->someServiceMock);
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+use PHPUnit\Framework\TestCase;
+
+final class SomeTest extends TestCase
+{
+    private \PHPUnit\Framework\MockObject\Stub\Stub $someServiceMock;
+
+    protected function setUp(): void
+    {
+        $this->someServiceMock = $this->createStub(SomeService::class);
+    }
+
+    public function testOne(): void
+    {
+        $someObject = new SomeClass($this->someServiceMock);
+    }
+
+    public function testTwo(): void
+    {
+        $someObject = new AnotherClass($this->someServiceMock);
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    private function shouldSkipClass(Class_ $class): bool
+    {
+        if (!$this->testsNodeAnalyzer->isInTestClass($class)) {
+            return \true;
+        }
+        // skip abstract/base test classes, as property can be mocked in child classes
+        if ($class->isAbstract()) {
+            return \true;
+        }
+        if ($class->name instanceof Identifier) {
+            $shortClassName = $class->name->toString();
+            if (str_ends_with($shortClassName, 'TestCase') || str_starts_with($shortClassName, 'Abstract')) {
+                return \true;
+            }
+        }
+        $setUpClassMethod = $class->getMethod(MethodName::SET_UP);
+        // the setup class method must be here, so we have a place where the createMock() is used
+        return !$setUpClassMethod instanceof ClassMethod;
+    }
+    /**
+     * @return \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\IntersectionType|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified
+     */
+    private function updatePropertyType(?Node $node)
+    {
+        if ($node instanceof IntersectionType) {
+            $newTypes = [];
+            foreach ($node->types as $innerType) {
+                if ($innerType instanceof FullyQualified && $innerType->toString() === PHPUnitClassName::MOCK_OBJECT) {
+                    $newTypes[] = new FullyQualified(PHPUnitClassName::STUB);
+                } else {
+                    $newTypes[] = $innerType;
+                }
+            }
+            return new IntersectionType($newTypes);
+        }
+        return new FullyQualified(PHPUnitClassName::STUB);
+    }
+}

@@ -1,0 +1,64 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Analyser;
+
+use PhpParser\Node;
+use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Expr\New_;
+use PHPStan\Dependency\Dependencies;
+use PHPStan\DependencyInjection\AutowiredService;
+use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Turbo\ShadowedByTurboExtension;
+/**
+ * Processes attribute arguments for NodeScopeResolver - as constructor
+ * arguments when the attribute class has a constructor, as plain expressions
+ * otherwise.
+ */
+#[AutowiredService]
+#[ShadowedByTurboExtension(__DIR__ . '/../turbo-ext/src/AttributesHandler.cpp')]
+final class AttributesHandler
+{
+    private ReflectionProvider $reflectionProvider;
+    private \PHPStan\Analyser\ArgumentsHandler $argumentsHandler;
+    public function __construct(ReflectionProvider $reflectionProvider, \PHPStan\Analyser\ArgumentsHandler $argumentsHandler)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+        $this->argumentsHandler = $argumentsHandler;
+    }
+    /**
+     * Returns what the arguments of the attributes depend on.
+     *
+     * @param AttributeGroup[] $attrGroups
+     * @param callable(Node $node, Scope $scope): void $nodeCallback
+     */
+    public function processAttributeGroups(\PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, Node\Stmt $stmt, array $attrGroups, \PHPStan\Analyser\MutatingScope $scope, \PHPStan\Analyser\ExpressionResultStorage $storage, callable $nodeCallback): ?Dependencies
+    {
+        $dependencies = [];
+        foreach ($attrGroups as $attrGroup) {
+            foreach ($attrGroup->attrs as $attr) {
+                $className = $scope->resolveName($attr->name);
+                if ($this->reflectionProvider->hasClass($className)) {
+                    $classReflection = $this->reflectionProvider->getClass($className);
+                    if ($classReflection->hasConstructor()) {
+                        $constructorReflection = $classReflection->getConstructor();
+                        $parametersAcceptor = ParametersAcceptorSelector::combineVariantsForNormalization($attr->args, $constructorReflection->getVariants(), $constructorReflection->getNamedArgumentsVariants());
+                        $expr = new New_($attr->name, $attr->args);
+                        $expr = \PHPStan\Analyser\ArgumentsNormalizer::reorderNewArguments($parametersAcceptor, $expr) ?? $expr;
+                        $dependencies[] = $this->argumentsHandler->processArgs($nodeScopeResolver, $stmt, $constructorReflection, null, $constructorReflection->getVariants(), $constructorReflection->getNamedArgumentsVariants(), $expr, $scope, $storage, $nodeCallback, \PHPStan\Analyser\ExpressionContext::createDeep())->getDependencies();
+                        $nodeScopeResolver->callNodeCallback($nodeCallback, $attr, $scope, $storage);
+                        continue;
+                    }
+                }
+                foreach ($attr->args as $arg) {
+                    $dependencies[] = $nodeScopeResolver->processExprNode($stmt, $arg->value, $scope, $storage, $nodeCallback, \PHPStan\Analyser\ExpressionContext::createDeep())->getDependencies();
+                    $nodeScopeResolver->callNodeCallback($nodeCallback, $arg, $scope, $storage);
+                }
+                $nodeScopeResolver->callNodeCallback($nodeCallback, $attr, $scope, $storage);
+            }
+            $nodeScopeResolver->callNodeCallback($nodeCallback, $attrGroup, $scope, $storage);
+        }
+        return Dependencies::merge(...$dependencies);
+    }
+}

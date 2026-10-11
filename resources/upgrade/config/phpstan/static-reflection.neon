@@ -1,0 +1,10 @@
+services:
+    - Flames\Code\Upgrade\NodeTypeResolver\Reflection\BetterReflection\RectorBetterReflectionSourceLocatorFactory
+    - Flames\Code\Upgrade\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator
+    - Flames\Code\Upgrade\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider
+
+    # basically decorates native PHPStan source locator with a dynamic source locator that is also available in Upgrade DI
+    betterReflectionSourceLocator:
+        class: PHPStan\BetterReflection\SourceLocator\Type\SourceLocator
+        factory: ['@Flames\Code\Upgrade\NodeTypeResolver\Reflection\BetterReflection\RectorBetterReflectionSourceLocatorFactory', 'create']
+        autowired: false

@@ -1,0 +1,109 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\PHPUnit120\Rector\Class_;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Attribute;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\AttributeGroup;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
+use Flames\Code\Upgrade\ThirdParty\Doctrine\NodeAnalyzer\AttributeFinder;
+use Flames\Code\Upgrade\PHPStan\ScopeFetcher;
+use Flames\Code\Upgrade\PHPUnit\Enum\PHPUnitAttribute;
+use Flames\Code\Upgrade\PHPUnit\Enum\PHPUnitClassName;
+use Flames\Code\Upgrade\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
+use Flames\Code\Upgrade\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Flames\Code\Upgrade\VersionBonding\Contract\MinPhpVersionInterface;
+use Flames\Code\Upgrade\VersionBonding\ValueObject\ComposerPackageConstraint;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
+/**
+ * The AllowMockObjectsWithoutExpectations attribute was added in PHPUnit 12.5.2
+ *
+ * @see \Flames\Code\Upgrade\PHPUnit120\Rector\Class_\AllowMockObjectsWhereParentClassRectorTest
+ *
+ * @see https://github.com/sebastianbergmann/phpunit/commit/24c208d6a340c3071f28a9b5cce02b9377adfd43
+ */
+final class AllowMockObjectsWhereParentClassRector extends AbstractRector implements MinPhpVersionInterface, ComposerPackageConstraintInterface
+{
+    /**
+     * @var string[]
+     */
+    private const array PARENT_CLASSES = [PHPUnitClassName::SYMFONY_TYPE_TEST_CASE];
+    public function __construct(private readonly TestsNodeAnalyzer $testsNodeAnalyzer, private readonly AttributeFinder $attributeFinder, private readonly ReflectionProvider $reflectionProvider)
+    {
+    }
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('phpunit/phpunit', '>=12.5.2');
+    }
+    public function getNodeTypes(): array
+    {
+        return [Class_::class];
+    }
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::ATTRIBUTES;
+    }
+    /**
+     * @param Class_ $node
+     */
+    public function refactor(Node $node): ?Class_
+    {
+        if ($this->shouldSkipClass($node)) {
+            return null;
+        }
+        if (!$this->hasRelateParentClass($node)) {
+            return null;
+        }
+        // add attribute
+        $node->attrGroups[] = new AttributeGroup([new Attribute(new FullyQualified(PHPUnitAttribute::ALLOW_MOCK_OBJECTS_WITHOUT_EXPECTATIONS))]);
+        return $node;
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Add #[AllowMockObjectsWithoutExpectations] attribute to PHPUnit test classes with a 3rd party test case, that provides any mocks', [new CodeSample(<<<'CODE_SAMPLE'
+use Symfony\Component\Form\Test\TypeTestCase;
+
+final class SomeTest extends TypeTestCase
+{
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+use Symfony\Component\Form\Test\TypeTestCase;
+
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
+final class SomeTest extends TypeTestCase
+{
+}
+CODE_SAMPLE
+)]);
+    }
+    private function shouldSkipClass(Class_ $class): bool
+    {
+        if (!$this->testsNodeAnalyzer->isInTestClass($class)) {
+            return \true;
+        }
+        // attribute must exist for the rule to work
+        if (!$this->reflectionProvider->hasClass(PHPUnitAttribute::ALLOW_MOCK_OBJECTS_WITHOUT_EXPECTATIONS)) {
+            return \true;
+        }
+        // already filled
+        return $this->attributeFinder->hasAttributeByClasses($class, [PHPUnitAttribute::ALLOW_MOCK_OBJECTS_WITHOUT_EXPECTATIONS]);
+    }
+    private function hasRelateParentClass(Class_ $class): bool
+    {
+        $scope = ScopeFetcher::fetch($class);
+        $classReflection = $scope->getClassReflection();
+        if (!$classReflection instanceof ClassReflection) {
+            return \false;
+        }
+        $found = array_any(self::PARENT_CLASSES, fn($parentClass) => $classReflection->is($parentClass));
+        return $found;
+    }
+}

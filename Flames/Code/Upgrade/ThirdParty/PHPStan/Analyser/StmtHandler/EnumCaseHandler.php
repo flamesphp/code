@@ -1,0 +1,47 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Analyser\StmtHandler;
+
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\EnumCase;
+use PHPStan\Analyser\AttributesHandler;
+use PHPStan\Analyser\ExpressionContext;
+use PHPStan\Analyser\ExpressionResultStorage;
+use PHPStan\Analyser\InternalStatementResult;
+use PHPStan\Analyser\MutatingScope;
+use PHPStan\Analyser\NodeScopeResolver;
+use PHPStan\Analyser\StatementContext;
+use PHPStan\Analyser\StmtHandler;
+use PHPStan\Dependency\Dependencies;
+use PHPStan\DependencyInjection\AutowiredService;
+use PHPStan\Turbo\ShadowedByTurboExtension;
+/**
+ * @implements StmtHandler<EnumCase>
+ */
+#[AutowiredService]
+#[ShadowedByTurboExtension(__DIR__ . '/../../turbo-ext/src/EnumCaseHandler.cpp')]
+final class EnumCaseHandler implements StmtHandler
+{
+    private AttributesHandler $attributesHandler;
+    public function __construct(AttributesHandler $attributesHandler)
+    {
+        $this->attributesHandler = $attributesHandler;
+    }
+    public function supports(Stmt $stmt): bool
+    {
+        return $stmt instanceof EnumCase;
+    }
+    public function processStmt(NodeScopeResolver $nodeScopeResolver, Stmt $stmt, MutatingScope $scope, ExpressionResultStorage $storage, callable $nodeCallback, StatementContext $context): InternalStatementResult
+    {
+        $dependencies = [];
+        $dependencies[] = $this->attributesHandler->processAttributeGroups($nodeScopeResolver, $stmt, $stmt->attrGroups, $scope, $storage, $nodeCallback);
+        $impurePoints = [];
+        if ($stmt->expr !== null) {
+            $exprResult = $nodeScopeResolver->processExprNode($stmt, $stmt->expr, $scope, $storage, $nodeCallback, ExpressionContext::createDeep($context->shouldResolveTemplateArguments()));
+            $dependencies[] = $exprResult->getDependencies();
+            $impurePoints = $exprResult->getImpurePoints();
+        }
+        return new InternalStatementResult($scope, \false, \false, [], [], $impurePoints, [], \null, \null, Dependencies::merge(...$dependencies));
+    }
+}

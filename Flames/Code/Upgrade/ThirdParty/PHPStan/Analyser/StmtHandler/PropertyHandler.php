@@ -1,0 +1,86 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Analyser\StmtHandler;
+
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\Analyser\AttributesHandler;
+use PHPStan\Analyser\ExpressionContext;
+use PHPStan\Analyser\ExpressionResultStorage;
+use PHPStan\Analyser\InternalStatementResult;
+use PHPStan\Analyser\MutatingScope;
+use PHPStan\Analyser\NodeScopeResolver;
+use PHPStan\Analyser\PhpDocsResolver;
+use PHPStan\Analyser\PropertyHooksProcessor;
+use PHPStan\Analyser\StatementContext;
+use PHPStan\Analyser\StmtHandler;
+use PHPStan\Dependency\Dependencies;
+use PHPStan\DependencyInjection\AutowiredService;
+use PHPStan\Node\ClassPropertyNode;
+use PHPStan\ShouldNotHappenException;
+use PHPStan\Turbo\ShadowedByTurboExtension;
+use PHPStan\Type\ParserNodeTypeToPHPStanType;
+use function count;
+/**
+ * @implements StmtHandler<Property>
+ */
+#[AutowiredService]
+#[ShadowedByTurboExtension(__DIR__ . '/../../turbo-ext/src/PropertyHandler.cpp')]
+final class PropertyHandler implements StmtHandler
+{
+    private PhpDocsResolver $phpDocsResolver;
+    private PropertyHooksProcessor $propertyHooksProcessor;
+    private AttributesHandler $attributesHandler;
+    public function __construct(PhpDocsResolver $phpDocsResolver, PropertyHooksProcessor $propertyHooksProcessor, AttributesHandler $attributesHandler)
+    {
+        $this->phpDocsResolver = $phpDocsResolver;
+        $this->propertyHooksProcessor = $propertyHooksProcessor;
+        $this->attributesHandler = $attributesHandler;
+    }
+    public function supports(Stmt $stmt): bool
+    {
+        return $stmt instanceof Property;
+    }
+    public function processStmt(NodeScopeResolver $nodeScopeResolver, Stmt $stmt, MutatingScope $scope, ExpressionResultStorage $storage, callable $nodeCallback, StatementContext $context): InternalStatementResult
+    {
+        $dependencies = [];
+        $dependencies[] = $this->attributesHandler->processAttributeGroups($nodeScopeResolver, $stmt, $stmt->attrGroups, $scope, $storage, $nodeCallback);
+        $nativePropertyType = $stmt->type !== null ? ParserNodeTypeToPHPStanType::resolve($stmt->type, $scope->getClassReflection()) : null;
+        [, , , , , , , , , , , , $isReadOnly, $docComment, , , , $varTags, $isAllowedPrivateMutation] = $this->phpDocsResolver->getPhpDocs($scope, $stmt);
+        $phpDocType = null;
+        if (isset($varTags[0]) && count($varTags) === 1) {
+            $phpDocType = $varTags[0]->type;
+        }
+        foreach ($stmt->props as $prop) {
+            $nodeScopeResolver->callNodeCallback($nodeCallback, $prop, $scope, $storage);
+            if ($prop->default !== null) {
+                $dependencies[] = $nodeScopeResolver->processExprNode($stmt, $prop->default, $scope, $storage, $nodeCallback, ExpressionContext::createDeep($context->shouldResolveTemplateArguments()))->getDependencies();
+            }
+            if (!$scope->isInClass()) {
+                throw new ShouldNotHappenException();
+            }
+            $propertyName = $prop->name->name;
+            if ($phpDocType === null) {
+                if (isset($varTags[$propertyName])) {
+                    $phpDocType = $varTags[$propertyName]->type;
+                }
+            }
+            $propStmt = clone $stmt;
+            $propStmt->setAttributes($prop->getAttributes());
+            $propStmt->setAttribute('originalPropertyStmt', $stmt);
+            $nodeScopeResolver->callNodeCallback($nodeCallback, new ClassPropertyNode($propertyName, $stmt->flags, $nativePropertyType, $prop->default, $docComment, $phpDocType, \false, \false, $propStmt, $isReadOnly, $scope->isInTrait(), $scope->getClassReflection()->isReadOnly(), $isAllowedPrivateMutation, $scope->getClassReflection()), $scope, $storage);
+            $dependencies[] = Dependencies::create($scope->getFile(), [$nativePropertyType, $phpDocType]);
+        }
+        if (count($stmt->hooks) > 0) {
+            if (!isset($propertyName)) {
+                throw new ShouldNotHappenException('Property name should be known when analysing hooks.');
+            }
+            $dependencies[] = $this->propertyHooksProcessor->processPropertyHooks($nodeScopeResolver, $stmt, $stmt->type, $phpDocType, $propertyName, $stmt->hooks, $scope, $storage, $nodeCallback);
+        }
+        if ($stmt->type !== null) {
+            $nodeScopeResolver->callNodeCallback($nodeCallback, $stmt->type, $scope, $storage);
+        }
+        return new InternalStatementResult($scope, \false, \false, [], [], [], [], \null, \null, Dependencies::merge(...$dependencies));
+    }
+}

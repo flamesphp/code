@@ -1,0 +1,100 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\PHPUnit60\Rector\ClassMethod;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Flames\Code\Upgrade\Comments\NodeDocBlock\DocBlockUpdater;
+use Flames\Code\Upgrade\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Flames\Code\Upgrade\PHPUnit\NodeFactory\ExpectExceptionMethodCallFactory;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Flames\Code\Upgrade\VersionBonding\ValueObject\ComposerPackageConstraint;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
+/**
+ * @changelog https://thephp.cc/news/2016/02/questioning-phpunit-best-practices
+ * @changelog https://github.com/sebastianbergmann/phpunit/commit/17c09b33ac5d9cad1459ace0ae7b1f942d1e9afd
+ *
+ * @see \Flames\Code\Upgrade\PHPUnit60\Rector\ClassMethod\ExceptionAnnotationRectorTest
+ */
+final class ExceptionAnnotationRector extends AbstractRector implements ComposerPackageConstraintInterface
+{
+    /**
+     * expectException() was added in PHPUnit 5.2
+     */
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('phpunit/phpunit', '>=5.2');
+    }
+    /**
+     * In reversed order, which they should be called in code.
+     *
+     * @var array<string, string>
+     */
+    private const array ANNOTATION_TO_METHOD = ['expectedExceptionMessageRegExp' => 'expectExceptionMessageRegExp', 'expectedExceptionMessage' => 'expectExceptionMessage', 'expectedExceptionCode' => 'expectExceptionCode', 'expectedException' => 'expectException'];
+    public function __construct(private readonly ExpectExceptionMethodCallFactory $expectExceptionMethodCallFactory, private readonly PhpDocTagRemover $phpDocTagRemover, private readonly TestsNodeAnalyzer $testsNodeAnalyzer, private readonly DocBlockUpdater $docBlockUpdater, private readonly PhpDocInfoFactory $phpDocInfoFactory)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Changes `@expectedException annotations to `expectException*()` methods', [new CodeSample(<<<'CODE_SAMPLE'
+/**
+ * @expectedException Exception
+ * @expectedExceptionMessage Message
+ */
+public function test()
+{
+    // tested code
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+public function test()
+{
+    $this->expectException('Exception');
+    $this->expectExceptionMessage('Message');
+    // tested code
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [ClassMethod::class];
+    }
+    /**
+     * @param ClassMethod $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
+            return null;
+        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        if (!$phpDocInfo instanceof PhpDocInfo) {
+            return null;
+        }
+        $hasChanged = \false;
+        foreach (self::ANNOTATION_TO_METHOD as $annotationName => $methodName) {
+            if (!$phpDocInfo->hasByName($annotationName)) {
+                continue;
+            }
+            $methodCallExpressions = $this->expectExceptionMethodCallFactory->createFromTagValueNodes($phpDocInfo->getTagsByName($annotationName), $methodName);
+            $node->stmts = array_merge($methodCallExpressions, (array) $node->stmts);
+            $this->phpDocTagRemover->removeByName($phpDocInfo, $annotationName);
+            $hasChanged = \true;
+        }
+        if (!$hasChanged) {
+            return null;
+        }
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
+        return $node;
+    }
+}

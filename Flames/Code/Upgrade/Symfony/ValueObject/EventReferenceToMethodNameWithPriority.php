@@ -1,0 +1,25 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Symfony\ValueObject;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ClassConstFetch;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Contract\EventReferenceToMethodNameInterface;
+final readonly class EventReferenceToMethodNameWithPriority implements EventReferenceToMethodNameInterface
+{
+    public function __construct(private ClassConstFetch $classConstFetch, private string $methodName, private int $priority)
+    {
+    }
+    public function getClassConstFetch(): ClassConstFetch
+    {
+        return $this->classConstFetch;
+    }
+    public function getMethodName(): string
+    {
+        return $this->methodName;
+    }
+    public function getPriority(): int
+    {
+        return $this->priority;
+    }
+}

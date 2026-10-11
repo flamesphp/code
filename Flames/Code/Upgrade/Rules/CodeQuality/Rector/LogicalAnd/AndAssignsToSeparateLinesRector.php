@@ -1,0 +1,70 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\CodeQuality\Rector\LogicalAnd;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\LogicalAnd;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\Rules\CodeQuality\Rector\LogicalAnd\AndAssignsToSeparateLinesRectorTest
+ */
+final class AndAssignsToSeparateLinesRector extends AbstractRector
+{
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Split 2 assigns with "and" to separate lines', [new CodeSample(<<<'CODE_SAMPLE'
+class SomeClass
+{
+    public function run()
+    {
+        $tokens = [];
+        $token = 4 and $tokens[] = $token;
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+class SomeClass
+{
+    public function run()
+    {
+        $tokens = [];
+        $token = 4;
+        $tokens[] = $token;
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [Expression::class];
+    }
+    /**
+     * @param Expression $node
+     * @return Expression[]|null
+     */
+    public function refactor(Node $node): ?array
+    {
+        if (!$node->expr instanceof LogicalAnd) {
+            return null;
+        }
+        $logicalAnd = $node->expr;
+        if (!$logicalAnd->left instanceof Assign) {
+            return null;
+        }
+        if (!$logicalAnd->right instanceof Assign) {
+            return null;
+        }
+        $leftAssignExpression = new Expression($logicalAnd->left);
+        $rightAssignExpression = new Expression($logicalAnd->right);
+        return [$leftAssignExpression, $rightAssignExpression];
+    }
+}

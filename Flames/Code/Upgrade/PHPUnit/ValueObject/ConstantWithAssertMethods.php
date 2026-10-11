@@ -1,0 +1,23 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\PHPUnit\ValueObject;
+
+final readonly class ConstantWithAssertMethods
+{
+    public function __construct(private string $constant, private string $assetMethodName, private string $notAssertMethodName)
+    {
+    }
+    public function getConstant(): string
+    {
+        return $this->constant;
+    }
+    public function getAssetMethodName(): string
+    {
+        return $this->assetMethodName;
+    }
+    public function getNotAssertMethodName(): string
+    {
+        return $this->notAssertMethodName;
+    }
+}

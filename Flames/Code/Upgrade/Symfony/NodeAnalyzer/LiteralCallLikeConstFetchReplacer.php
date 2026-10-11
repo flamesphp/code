@@ -1,0 +1,43 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Symfony\NodeAnalyzer;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\CallLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\New_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\Int_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\String_;
+use Flames\Code\Upgrade\PhpParser\Node\NodeFactory;
+final readonly class LiteralCallLikeConstFetchReplacer
+{
+    public function __construct(private NodeFactory $nodeFactory)
+    {
+    }
+    /**
+     * @template TCallLike as MethodCall|New_|StaticCall
+     *
+     * @param TCallLike $callLike
+     * @param array<string|int, string> $constantMap
+     * @return TCallLike
+     */
+    public function replaceArgOnPosition(CallLike $callLike, int $argPosition, string $className, array $constantMap): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\CallLike
+    {
+        $args = $callLike->getArgs();
+        if (!isset($args[$argPosition])) {
+            return null;
+        }
+        $arg = $args[$argPosition];
+        if (!$arg->value instanceof String_ && !$arg->value instanceof Int_) {
+            return null;
+        }
+        $scalar = $arg->value;
+        $constantName = $constantMap[$scalar->value] ?? null;
+        if ($constantName === null) {
+            return null;
+        }
+        $arg->value = $this->nodeFactory->createClassConstFetch($className, $constantName);
+        return $callLike;
+    }
+}

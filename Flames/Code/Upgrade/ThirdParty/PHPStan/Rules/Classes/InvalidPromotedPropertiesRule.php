@@ -1,0 +1,69 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Rules\Classes;
+
+use PhpParser\Node;
+use PHPStan\Analyser\Scope;
+use PHPStan\DependencyInjection\RegisteredRule;
+use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
+use function is_string;
+use function sprintf;
+/**
+ * @implements Rule<Node\FunctionLike>
+ */
+#[RegisteredRule(0)]
+final class InvalidPromotedPropertiesRule implements Rule
+{
+    public function getNodeType(): string
+    {
+        return Node\FunctionLike::class;
+    }
+    public function processNode(Node $node, Scope $scope): array
+    {
+        $hasPromotedProperties = \false;
+        foreach ($node->getParams() as $param) {
+            if ($param->flags !== 0) {
+                $hasPromotedProperties = \true;
+                break;
+            }
+            if ($param->hooks === []) {
+                continue;
+            }
+            $hasPromotedProperties = \true;
+            break;
+        }
+        if (!$hasPromotedProperties) {
+            return [];
+        }
+        if (!$scope->getPhpVersion()->supportsPromotedProperties()->yes()) {
+            return [RuleErrorBuilder::message('Promoted properties are supported only on PHP 8.0 and later.')->identifier('property.promotedNotSupported')->nonIgnorable()->build()];
+        }
+        if (!$node instanceof Node\Stmt\ClassMethod || strtolower($node->name->name) !== '__construct' && $node->getAttribute('originalTraitMethodName') !== '__construct') {
+            return [RuleErrorBuilder::message('Promoted properties can be in constructor only.')->identifier('property.invalidPromoted')->nonIgnorable()->build()];
+        }
+        if ($node->stmts === null) {
+            return [RuleErrorBuilder::message('Promoted properties are not allowed in abstract constructors.')->identifier('property.invalidPromoted')->nonIgnorable()->build()];
+        }
+        $errors = [];
+        foreach ($node->params as $param) {
+            if ($param->flags === 0) {
+                continue;
+            }
+            if (!$param->var instanceof Node\Expr\Variable || !is_string($param->var->name)) {
+                throw new ShouldNotHappenException();
+            }
+            if ((bool) ($param->flags & \PhpParser\Modifiers::FINAL) && !$scope->getPhpVersion()->supportsFinalPromotedProperties()->yes()) {
+                $errors[] = RuleErrorBuilder::message('Final promoted properties are supported only on PHP 8.5 and later.')->identifier('property.invalidPromoted')->nonIgnorable()->line($param->getStartLine())->build();
+            }
+            if (!$param->variadic) {
+                continue;
+            }
+            $propertyName = $param->var->name;
+            $errors[] = RuleErrorBuilder::message(sprintf('Promoted property parameter $%s can not be variadic.', $propertyName))->identifier('property.invalidPromoted')->nonIgnorable()->line($param->getStartLine())->build();
+        }
+        return $errors;
+    }
+}

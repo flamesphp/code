@@ -1,0 +1,49 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Rules\Arrays;
+
+use PhpParser\Node;
+use PhpParser\Node\ArrayItem;
+use PHPStan\Analyser\Scope;
+use PHPStan\DependencyInjection\RegisteredRule;
+use PHPStan\Node\Expr\NativeTypeExpr;
+use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\Rules\RuleLevelHelper;
+use PHPStan\Type\ErrorType;
+use PHPStan\Type\Type;
+use PHPStan\Type\VerbosityLevel;
+use function sprintf;
+/**
+ * @implements Rule<ArrayItem>
+ */
+#[RegisteredRule(3)]
+final class ArrayUnpackingRule implements Rule
+{
+    private RuleLevelHelper $ruleLevelHelper;
+    public function __construct(RuleLevelHelper $ruleLevelHelper)
+    {
+        $this->ruleLevelHelper = $ruleLevelHelper;
+    }
+    public function getNodeType(): string
+    {
+        return ArrayItem::class;
+    }
+    public function processNode(Node $node, Scope $scope): array
+    {
+        if ($node->unpack === \false || $scope->getPhpVersion()->supportsArrayUnpackingWithStringKeys()->yes()) {
+            return [];
+        }
+        $typeResult = $this->ruleLevelHelper->findTypeToCheck($scope, new NativeTypeExpr($scope->getIterableKeyType($scope->getType($node->value)), $scope->getIterableKeyType($scope->getNativeType($node->value))), '', static fn(Type $type): bool => $type->isString()->no());
+        $keyType = $typeResult->type;
+        if ($keyType instanceof ErrorType) {
+            return $typeResult->unknownClassErrors;
+        }
+        $isString = $keyType->isString();
+        if ($isString->no()) {
+            return [];
+        }
+        return [RuleErrorBuilder::message(sprintf('Array unpacking cannot be used on an array with %sstring keys: %s', $isString->yes() ? '' : 'potential ', $scope->getType($node->value)->describe(VerbosityLevel::value())))->identifier('arrayUnpacking.stringOffset')->build()];
+    }
+}

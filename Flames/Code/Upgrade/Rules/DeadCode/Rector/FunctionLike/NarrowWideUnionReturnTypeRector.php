@@ -1,0 +1,278 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\DeadCode\Rector\FunctionLike;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrowFunction;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ClassConstFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ConstFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Ternary;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\FunctionLike;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\NullableType;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Return_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\UnionType;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\NeverType;
+use PHPStan\Type\NullType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\UnionType as PHPStanUnionType;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Flames\Code\Upgrade\Composer\ComposerJsonPackageVersionResolver;
+use Flames\Code\Upgrade\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Flames\Code\Upgrade\PhpParser\Node\BetterNodeFinder;
+use Flames\Code\Upgrade\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\Reflection\ReflectionResolver;
+use Flames\Code\Upgrade\StaticTypeMapper\StaticTypeMapper;
+use Flames\Code\Upgrade\Rules\TypeDeclaration\TypeInferer\SilentVoidResolver;
+use Flames\Code\Upgrade\ValueObject\PhpVersionFeature;
+use Flames\Code\Upgrade\VersionBonding\Contract\MinPhpVersionInterface;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\Rules\DeadCode\Rector\FunctionLike\NarrowWideUnionReturnTypeRectorTest
+ */
+final class NarrowWideUnionReturnTypeRector extends AbstractRector implements MinPhpVersionInterface
+{
+    public function __construct(private readonly BetterNodeFinder $betterNodeFinder, private readonly StaticTypeMapper $staticTypeMapper, private readonly ReflectionResolver $reflectionResolver, private readonly SilentVoidResolver $silentVoidResolver, private readonly PhpDocTypeChanger $phpDocTypeChanger, private readonly PhpDocInfoFactory $phpDocInfoFactory, private readonly TypeFactory $typeFactory, private readonly ComposerJsonPackageVersionResolver $composerJsonPackageVersionResolver)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Narrow overly wide union return type declaration if possible', [new CodeSample(<<<'CODE_SAMPLE'
+final class SomeClass
+{
+    public function foo(): string|int|\DateTime
+    {
+        if (rand(0, 1)) {
+            return 'text';
+        }
+
+        return 1000;
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+final class SomeClass
+{
+    public function foo(): string|int
+    {
+        if (rand(0, 1)) {
+            return 'text';
+        }
+
+        return 1000;
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::NULLABLE_TYPE;
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [ClassMethod::class, Function_::class, Closure::class, ArrowFunction::class];
+    }
+    /**
+     * @param ClassMethod|Function_|Closure|ArrowFunction $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if ($this->shouldSkipNode($node)) {
+            return null;
+        }
+        if ($this->shouldSkipByDocblock($node)) {
+            return null;
+        }
+        $returnStatements = $this->betterNodeFinder->findReturnsScoped($node);
+        if ($returnStatements === []) {
+            return null;
+        }
+        $hasImplicitNullReturn = $this->silentVoidResolver->hasSilentVoid($node) || $this->hasImplicitNullReturn($returnStatements);
+        /** @var UnionType|NullableType $returnType */
+        $returnType = $node->returnType;
+        $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnType);
+        $actualReturnTypes = $this->collectActualReturnTypes($returnStatements);
+        if ($hasImplicitNullReturn) {
+            $actualReturnTypes[] = new NullType();
+        }
+        $unusedTypes = $this->getUnusedType($returnType, $actualReturnTypes);
+        if ($unusedTypes === []) {
+            return null;
+        }
+        $newReturnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(TypeCombinator::remove($returnType, TypeCombinator::union(...$unusedTypes)), TypeKind::RETURN);
+        if (!$newReturnType instanceof Node) {
+            return null;
+        }
+        // mostly placeholder
+        if ($this->isName($newReturnType, 'null')) {
+            return null;
+        }
+        $node->returnType = $newReturnType;
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        if ((($nullsafeVariable1 = $phpDocInfo) ? $nullsafeVariable1->hasByName('@return') : null) === \true) {
+            $this->changePhpDocReturnType($node, $phpDocInfo, $unusedTypes);
+        }
+        return $node;
+    }
+    /**
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrowFunction $node
+     */
+    private function shouldSkipByDocblock($node): bool
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        if (!$phpDocInfo instanceof PhpDocInfo) {
+            return \false;
+        }
+        $returnTag = $phpDocInfo->getReturnTagValue();
+        if (!$returnTag instanceof ReturnTagValueNode) {
+            return \false;
+        }
+        $returnType = $phpDocInfo->getReturnType();
+        if (!$returnType instanceof \PHPStan\Type\UnionType) {
+            return \false;
+        }
+        $type = $this->typeFactory->createMixedPassedOrUnionType($returnType->getTypes());
+        return !$type->equals($returnType);
+    }
+    /**
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrowFunction $node
+     */
+    private function shouldSkipNode($node): bool
+    {
+        $returnType = $node->returnType;
+        if (!$returnType instanceof UnionType && !$returnType instanceof NullableType) {
+            return \true;
+        }
+        $types = $returnType instanceof UnionType ? $returnType->types : [new ConstFetch(new Name('null')), $returnType->type];
+        foreach ($types as $type) {
+            if ($this->isNames($type, ['true', 'false'])) {
+                return \true;
+            }
+        }
+        if (!$node instanceof ClassMethod) {
+            return \false;
+        }
+        if ($node->isPrivate() || $node->isFinal()) {
+            return \false;
+        }
+        if ($node->isAbstract()) {
+            return \true;
+        }
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+        if (!$classReflection instanceof ClassReflection) {
+            return \true;
+        }
+        if (!$classReflection->isClass()) {
+            return \true;
+        }
+        return !$classReflection->isFinalByKeyword();
+    }
+    /**
+     * @param Return_[] $returnStatements
+     */
+    private function hasImplicitNullReturn(array $returnStatements): bool
+    {
+        $found = array_any($returnStatements, fn($return) => !$return->expr instanceof Expr);
+        return $found;
+    }
+    /**
+     * @param Return_[] $returnStatements
+     * @return Type[]
+     */
+    private function collectActualReturnTypes(array $returnStatements): array
+    {
+        $returnTypes = [];
+        foreach ($returnStatements as $returnStatement) {
+            if ($returnStatement->expr === null) {
+                continue;
+            }
+            $returnTypes = array_merge($returnTypes, $this->resolveNativeReturnTypes($returnStatement->expr));
+        }
+        return $returnTypes;
+    }
+    /**
+     * @return Type[]
+     */
+    private function resolveNativeReturnTypes(Expr $expr): array
+    {
+        if (!$expr instanceof Ternary || !$this->hasVendorClassConstFetch($expr->cond)) {
+            $type = $this->nodeTypeResolver->getType($expr);
+            // native type may be narrowed by assertions even when the resolved scope is unreachable
+            if ($type instanceof NeverType) {
+                return [$type];
+            }
+            return [$this->nodeTypeResolver->getNativeType($expr)];
+        }
+        $ifExpr = $expr->if instanceof Expr ? $expr->if : $expr->cond;
+        return array_merge($this->resolveNativeReturnTypes($ifExpr), $this->resolveNativeReturnTypes($expr->else));
+    }
+    private function hasVendorClassConstFetch(Expr $expr): bool
+    {
+        $classConstFetches = $this->betterNodeFinder->findInstanceOf($expr, ClassConstFetch::class);
+        foreach ($classConstFetches as $classConstFetch) {
+            $classType = $this->nodeTypeResolver->getType($classConstFetch->class);
+            if (!$classType instanceof ObjectType) {
+                continue;
+            }
+            $classReflection = $classType->getClassReflection();
+            if (!$classReflection instanceof ClassReflection) {
+                continue;
+            }
+            $fileName = $classReflection->getFileName();
+            if ($fileName === null) {
+                continue;
+            }
+            if ($this->composerJsonPackageVersionResolver->hasPackageMultiMajorVersions($fileName)) {
+                return \true;
+            }
+        }
+        return \false;
+    }
+    /**
+     * @param Type[] $actualReturnTypes
+     * @return Type[]
+     */
+    private function getUnusedType(Type $returnType, array $actualReturnTypes): array
+    {
+        $types = $returnType instanceof PHPStanUnionType ? $returnType->getTypes() : [$returnType];
+        $unusedTypes = [];
+        foreach ($types as $type) {
+            foreach ($actualReturnTypes as $actualReturnType) {
+                if (!$type->isSuperTypeOf($actualReturnType)->no()) {
+                    continue 2;
+                }
+            }
+            $unusedTypes[] = $type;
+        }
+        return $unusedTypes;
+    }
+    /**
+     * @param Type[] $unusedTypes
+     */
+    private function changePhpDocReturnType(FunctionLike $functionLike, PhpDocInfo $phpDocInfo, array $unusedTypes): void
+    {
+        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
+        if (!$returnTagValueNode instanceof ReturnTagValueNode) {
+            return;
+        }
+        $newReturnType = TypeCombinator::remove($phpDocInfo->getReturnType(), TypeCombinator::union(...$unusedTypes));
+        $this->phpDocTypeChanger->changeReturnType($functionLike, $phpDocInfo, $newReturnType);
+    }
+}

@@ -1,0 +1,123 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\NodeAnalyzer;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Closure;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Do_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Echo_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\For_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Foreach_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Return_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Switch_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\While_;
+use PHPStan\Analyser\Scope;
+use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
+use Flames\Code\Upgrade\PhpParser\Node\BetterNodeFinder;
+/**
+ * To resolve Expr in top Stmt from early Expr attribute
+ * so the usage can append code before the Stmt
+ */
+final readonly class ExprInTopStmtMatcher
+{
+    public function __construct(private BetterNodeFinder $betterNodeFinder)
+    {
+    }
+    /**
+     * @param callable(Node $node): bool $filter
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Switch_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Return_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Echo_ $stmt
+     */
+    public function match($stmt, callable $filter): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr
+    {
+        if ($stmt instanceof Closure) {
+            return null;
+        }
+        $nodes = [];
+        if ($stmt instanceof Foreach_) {
+            // keyVar can be null, so need to be filtered only Expr
+            $nodes = array_filter([$stmt->expr, $stmt->keyVar, $stmt->valueVar]);
+        }
+        if ($stmt instanceof For_) {
+            $nodes = $stmt->init;
+            $nodes = array_merge($nodes, $stmt->cond);
+            $nodes = array_merge($nodes, $stmt->loop);
+        }
+        if ($stmt instanceof If_ || $stmt instanceof While_ || $stmt instanceof Do_ || $stmt instanceof Switch_) {
+            $nodes = [$stmt->cond];
+        }
+        if ($stmt instanceof Echo_) {
+            $nodes = $stmt->exprs;
+        }
+        foreach ($nodes as $node) {
+            $expr = $this->resolveExpr($stmt, $node, $filter);
+            if ($expr instanceof Expr) {
+                return $expr;
+            }
+        }
+        $expr = $this->resolveFromChildCond($stmt, $filter);
+        if ($expr instanceof Expr) {
+            return $expr;
+        }
+        return $this->resolveOnReturnOrExpression($stmt, $filter);
+    }
+    /**
+     * @param callable(Node $node): bool $filter
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Switch_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Return_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Echo_ $stmt
+     */
+    private function resolveOnReturnOrExpression($stmt, callable $filter): ?Expr
+    {
+        if (!$stmt instanceof Return_ && !$stmt instanceof Expression) {
+            return null;
+        }
+        if (!$stmt->expr instanceof Expr) {
+            return null;
+        }
+        return $this->resolveExpr($stmt, $stmt->expr, $filter);
+    }
+    /**
+     * @param Expr[]|Expr $exprs
+     * @param callable(Node $node): bool $filter
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Switch_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Return_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Echo_ $stmt
+     */
+    private function resolveExpr($stmt, $exprs, callable $filter): ?Expr
+    {
+        $node = $this->betterNodeFinder->findFirst($exprs, $filter);
+        if (!$node instanceof Expr) {
+            return null;
+        }
+        $stmtScope = $stmt->getAttribute(AttributeKey::SCOPE);
+        $exprScope = $node->getAttribute(AttributeKey::SCOPE);
+        if (!$stmtScope instanceof Scope || !$exprScope instanceof Scope) {
+            return null;
+        }
+        if ($stmtScope->getParentScope() === $exprScope->getParentScope()) {
+            return $node;
+        }
+        return null;
+    }
+    /**
+     * @param callable(Node $node): bool $filter
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Switch_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Return_|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Echo_ $stmt
+     */
+    private function resolveFromChildCond($stmt, callable $filter): ?\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr
+    {
+        if (!$stmt instanceof If_ && !$stmt instanceof Switch_) {
+            return null;
+        }
+        $stmts = $stmt instanceof If_ ? $stmt->elseifs : $stmt->cases;
+        foreach ($stmts as $stmt) {
+            if (!$stmt->cond instanceof Expr) {
+                continue;
+            }
+            $expr = $this->resolveExpr($stmt, $stmt->cond, $filter);
+            if ($expr instanceof Expr) {
+                return $expr;
+            }
+        }
+        return null;
+    }
+}

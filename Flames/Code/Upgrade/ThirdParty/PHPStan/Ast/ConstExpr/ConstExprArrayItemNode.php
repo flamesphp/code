@@ -1,0 +1,34 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\ConstExpr;
+
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\NodeAttributes;
+use function sprintf;
+class ConstExprArrayItemNode implements \Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\ConstExpr\ConstExprNode
+{
+    use NodeAttributes;
+    public function __construct(public ?\Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\ConstExpr\ConstExprNode $key, public \Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\ConstExpr\ConstExprNode $value)
+    {
+    }
+    public function __toString(): string
+    {
+        if ($this->key !== null) {
+            return sprintf('%s => %s', $this->key, $this->value);
+        }
+        return (string) $this->value;
+    }
+    /**
+     * @param array<string, mixed> $properties
+     */
+    public static function __set_state(array $properties): self
+    {
+        $instance = new self($properties['key'], $properties['value']);
+        if (isset($properties['attributes'])) {
+            foreach ($properties['attributes'] as $key => $value) {
+                $instance->setAttribute($key, $value);
+            }
+        }
+        return $instance;
+    }
+}

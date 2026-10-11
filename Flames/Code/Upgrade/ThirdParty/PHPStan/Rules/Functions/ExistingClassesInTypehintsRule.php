@@ -1,0 +1,36 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Rules\Functions;
+
+use PhpParser\Node;
+use PHPStan\Analyser\Scope;
+use PHPStan\DependencyInjection\RegisteredRule;
+use PHPStan\DependencyInjection\ValidatesStubFiles;
+use PHPStan\Internal\SprintfHelper;
+use PHPStan\Node\InFunctionNode;
+use PHPStan\Rules\FunctionDefinitionCheck;
+use PHPStan\Rules\Rule;
+use function sprintf;
+/**
+ * @implements Rule<InFunctionNode>
+ */
+#[RegisteredRule(0)]
+#[ValidatesStubFiles]
+final class ExistingClassesInTypehintsRule implements Rule
+{
+    private FunctionDefinitionCheck $check;
+    public function __construct(FunctionDefinitionCheck $check)
+    {
+        $this->check = $check;
+    }
+    public function getNodeType(): string
+    {
+        return InFunctionNode::class;
+    }
+    public function processNode(Node $node, Scope $scope): array
+    {
+        $functionName = SprintfHelper::escapeFormatString($node->functionReflection->getName());
+        return $this->check->checkFunction($scope, $node->originalNode, $node->functionReflection, sprintf('Parameter $%%s of function %s() has invalid type %%s.', $functionName), sprintf('Function %s() has invalid return type %%s.', $functionName), sprintf('Function %s() uses native union types but they\'re supported only on PHP 8.0 and later.', $functionName), sprintf('Template type %%s of function %s() is not referenced in a parameter.', $functionName), sprintf('Parameter $%%s of function %s() has unresolvable native type.', $functionName), sprintf('Function %s() has unresolvable native return type.', $functionName), sprintf('Attribute NoDiscard cannot be used on %%s function %s().', $functionName));
+    }
+}

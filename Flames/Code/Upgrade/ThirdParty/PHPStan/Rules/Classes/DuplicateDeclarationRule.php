@@ -1,0 +1,34 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Rules\Classes;
+
+use PhpParser\Node;
+use PHPStan\Analyser\Scope;
+use PHPStan\DependencyInjection\RegisteredRule;
+use PHPStan\DependencyInjection\ValidatesStubFiles;
+use PHPStan\Node\InClassNode;
+use PHPStan\Rules\Rule;
+use function strtolower;
+/**
+ * @implements Rule<InClassNode>
+ */
+#[RegisteredRule(0)]
+#[ValidatesStubFiles]
+final class DuplicateDeclarationRule implements Rule
+{
+    private \PHPStan\Rules\Classes\DuplicateDeclarationHelper $helper;
+    public function __construct(\PHPStan\Rules\Classes\DuplicateDeclarationHelper $helper)
+    {
+        $this->helper = $helper;
+    }
+    public function getNodeType(): string
+    {
+        return InClassNode::class;
+    }
+    public function processNode(Node $node, Scope $scope): array
+    {
+        $classReflection = $node->classReflection;
+        return $this->helper->checkClassLike($node->originalNode, $classReflection->getDisplayName(), strtolower($classReflection->getClassTypeDescription()));
+    }
+}

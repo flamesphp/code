@@ -1,0 +1,3460 @@
+{
+    "PHPStan\\Analyser\\ArgsResult": {
+        "php": "src/Analyser/ArgsResult.php",
+        "cpp": "turbo-ext/src/ArgsResult.cpp",
+        "turboClass": "PHPStanTurbo\\ArgsResult",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ArgumentsHandler": {
+        "php": "src/Analyser/ArgumentsHandler.php",
+        "cpp": "turbo-ext/src/ArgumentsHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ArgumentsHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ArgumentsNormalizer": {
+        "php": "src/Analyser/ArgumentsNormalizer.php",
+        "cpp": "turbo-ext/src/ArgumentsNormalizer.cpp",
+        "turboClass": "PHPStanTurbo\\ArgumentsNormalizer",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\AssignTargetWalkMode": {
+        "php": "src/Analyser/AssignTargetWalkMode.php",
+        "cpp": "turbo-ext/src/AssignTargetWalkMode.cpp",
+        "turboClass": "PHPStanTurbo\\AssignTargetWalkMode",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\AttributesHandler": {
+        "php": "src/Analyser/AttributesHandler.php",
+        "cpp": "turbo-ext/src/AttributesHandler.cpp",
+        "turboClass": "PHPStanTurbo\\AttributesHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\CalledMethodProcessor": {
+        "php": "src/Analyser/CalledMethodProcessor.php",
+        "cpp": "turbo-ext/src/CalledMethodProcessor.cpp",
+        "turboClass": "PHPStanTurbo\\CalledMethodProcessor",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ClosureProcessor": {
+        "php": "src/Analyser/ClosureProcessor.php",
+        "cpp": "turbo-ext/src/ClosureProcessor.cpp",
+        "turboClass": "PHPStanTurbo\\ClosureProcessor",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ConditionalExpressionHolder": {
+        "php": "src/Analyser/ConditionalExpressionHolder.php",
+        "cpp": "turbo-ext/src/ConditionalExpressionHolder.cpp",
+        "turboClass": "PHPStanTurbo\\ConditionalExpressionHolder",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ConditionalExpressionHolderRecipe": {
+        "php": "src/Analyser/ConditionalExpressionHolderRecipe.php",
+        "cpp": "turbo-ext/src/ConditionalExpressionHolderRecipe.cpp",
+        "turboClass": "PHPStanTurbo\\ConditionalExpressionHolderRecipe",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\DeprecatedAttributeResolver": {
+        "php": "src/Analyser/DeprecatedAttributeResolver.php",
+        "cpp": "turbo-ext/src/DeprecatedAttributeResolver.cpp",
+        "turboClass": "PHPStanTurbo\\DeprecatedAttributeResolver",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\DisjunctionBranchUnionAugment": {
+        "php": "src/Analyser/DisjunctionBranchUnionAugment.php",
+        "cpp": "turbo-ext/src/DisjunctionBranchUnionAugment.cpp",
+        "turboClass": "PHPStanTurbo\\DisjunctionBranchUnionAugment",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\DeferredSpecifiedTypesAugment"
+        ]
+    },
+    "PHPStan\\Analyser\\DisjunctionHolderProjectionAugment": {
+        "php": "src/Analyser/DisjunctionHolderProjectionAugment.php",
+        "cpp": "turbo-ext/src/DisjunctionHolderProjectionAugment.cpp",
+        "turboClass": "PHPStanTurbo\\DisjunctionHolderProjectionAugment",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\DeferredSpecifiedTypesAugment"
+        ]
+    },
+    "PHPStan\\Analyser\\EndStatementResult": {
+        "php": "src/Analyser/EndStatementResult.php",
+        "cpp": "turbo-ext/src/EndStatementResult.cpp",
+        "turboClass": "PHPStanTurbo\\EndStatementResult",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\EnsuredNonNullabilityResult": {
+        "php": "src/Analyser/EnsuredNonNullabilityResult.php",
+        "cpp": "turbo-ext/src/EnsuredNonNullabilityResult.cpp",
+        "turboClass": "PHPStanTurbo\\EnsuredNonNullabilityResult",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\EnsuredNonNullabilityResultExpression": {
+        "php": "src/Analyser/EnsuredNonNullabilityResultExpression.php",
+        "cpp": "turbo-ext/src/EnsuredNonNullabilityResultExpression.cpp",
+        "turboClass": "PHPStanTurbo\\EnsuredNonNullabilityResultExpression",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandlerRegistry": {
+        "php": "src/Analyser/ExprHandlerRegistry.php",
+        "cpp": "turbo-ext/src/ExprHandlerRegistry.cpp",
+        "turboClass": "PHPStanTurbo\\ExprHandlerRegistry",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandler\\ArrayDimFetchHandler": {
+        "php": "src/Analyser/ExprHandler/ArrayDimFetchHandler.php",
+        "cpp": "turbo-ext/src/ArrayDimFetchHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ArrayDimFetchHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\ArrayHandler": {
+        "php": "src/Analyser/ExprHandler/ArrayHandler.php",
+        "cpp": "turbo-ext/src/ArrayHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ArrayHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\ArrowFunctionHandler": {
+        "php": "src/Analyser/ExprHandler/ArrowFunctionHandler.php",
+        "cpp": "turbo-ext/src/ArrowFunctionHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ArrowFunctionHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\AssignHandler": {
+        "php": "src/Analyser/ExprHandler/AssignHandler.php",
+        "cpp": "turbo-ext/src/AssignHandler.cpp",
+        "turboClass": "PHPStanTurbo\\AssignHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\AssignOpHandler": {
+        "php": "src/Analyser/ExprHandler/AssignOpHandler.php",
+        "cpp": "turbo-ext/src/AssignOpHandler.cpp",
+        "turboClass": "PHPStanTurbo\\AssignOpHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\BinaryOpHandler": {
+        "php": "src/Analyser/ExprHandler/BinaryOpHandler.php",
+        "cpp": "turbo-ext/src/BinaryOpHandler.cpp",
+        "turboClass": "PHPStanTurbo\\BinaryOpHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\BitwiseNotHandler": {
+        "php": "src/Analyser/ExprHandler/BitwiseNotHandler.php",
+        "cpp": "turbo-ext/src/BitwiseNotHandler.cpp",
+        "turboClass": "PHPStanTurbo\\BitwiseNotHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\BooleanAndHandler": {
+        "php": "src/Analyser/ExprHandler/BooleanAndHandler.php",
+        "cpp": "turbo-ext/src/BooleanAndHandler.cpp",
+        "turboClass": "PHPStanTurbo\\BooleanAndHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\BooleanNotHandler": {
+        "php": "src/Analyser/ExprHandler/BooleanNotHandler.php",
+        "cpp": "turbo-ext/src/BooleanNotHandler.cpp",
+        "turboClass": "PHPStanTurbo\\BooleanNotHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\BooleanOrHandler": {
+        "php": "src/Analyser/ExprHandler/BooleanOrHandler.php",
+        "cpp": "turbo-ext/src/BooleanOrHandler.cpp",
+        "turboClass": "PHPStanTurbo\\BooleanOrHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\CastHandler": {
+        "php": "src/Analyser/ExprHandler/CastHandler.php",
+        "cpp": "turbo-ext/src/CastHandler.cpp",
+        "turboClass": "PHPStanTurbo\\CastHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\CastStringHandler": {
+        "php": "src/Analyser/ExprHandler/CastStringHandler.php",
+        "cpp": "turbo-ext/src/CastStringHandler.cpp",
+        "turboClass": "PHPStanTurbo\\CastStringHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\ClassConstFetchHandler": {
+        "php": "src/Analyser/ExprHandler/ClassConstFetchHandler.php",
+        "cpp": "turbo-ext/src/ClassConstFetchHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ClassConstFetchHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\CloneHandler": {
+        "php": "src/Analyser/ExprHandler/CloneHandler.php",
+        "cpp": "turbo-ext/src/CloneHandler.cpp",
+        "turboClass": "PHPStanTurbo\\CloneHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\ClosureHandler": {
+        "php": "src/Analyser/ExprHandler/ClosureHandler.php",
+        "cpp": "turbo-ext/src/ClosureHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ClosureHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\CoalesceHandler": {
+        "php": "src/Analyser/ExprHandler/CoalesceHandler.php",
+        "cpp": "turbo-ext/src/CoalesceHandler.cpp",
+        "turboClass": "PHPStanTurbo\\CoalesceHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\ConstFetchHandler": {
+        "php": "src/Analyser/ExprHandler/ConstFetchHandler.php",
+        "cpp": "turbo-ext/src/ConstFetchHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ConstFetchHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\EmptyHandler": {
+        "php": "src/Analyser/ExprHandler/EmptyHandler.php",
+        "cpp": "turbo-ext/src/EmptyHandler.cpp",
+        "turboClass": "PHPStanTurbo\\EmptyHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\ErrorSuppressHandler": {
+        "php": "src/Analyser/ExprHandler/ErrorSuppressHandler.php",
+        "cpp": "turbo-ext/src/ErrorSuppressHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ErrorSuppressHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\EvalHandler": {
+        "php": "src/Analyser/ExprHandler/EvalHandler.php",
+        "cpp": "turbo-ext/src/EvalHandler.cpp",
+        "turboClass": "PHPStanTurbo\\EvalHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\ExitHandler": {
+        "php": "src/Analyser/ExprHandler/ExitHandler.php",
+        "cpp": "turbo-ext/src/ExitHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ExitHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\FuncCallHandler": {
+        "php": "src/Analyser/ExprHandler/FuncCallHandler.php",
+        "cpp": "turbo-ext/src/FuncCallHandler.cpp",
+        "turboClass": "PHPStanTurbo\\FuncCallHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\BooleanNarrowingHelper": {
+        "php": "src/Analyser/ExprHandler/Helper/BooleanNarrowingHelper.php",
+        "cpp": "turbo-ext/src/BooleanNarrowingHelper.cpp",
+        "turboClass": "PHPStanTurbo\\BooleanNarrowingHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\ClosureParameterResolver": {
+        "php": "src/Analyser/ExprHandler/Helper/ClosureParameterResolver.php",
+        "cpp": "turbo-ext/src/ClosureParameterResolver.cpp",
+        "turboClass": "PHPStanTurbo\\ClosureParameterResolver",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\ClosureTypeResolver": {
+        "php": "src/Analyser/ExprHandler/Helper/ClosureTypeResolver.php",
+        "cpp": "turbo-ext/src/ClosureTypeResolver.cpp",
+        "turboClass": "PHPStanTurbo\\ClosureTypeResolver",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\PerFileAnalysisResettable"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\CoalesceCompositionHelper": {
+        "php": "src/Analyser/ExprHandler/Helper/CoalesceCompositionHelper.php",
+        "cpp": "turbo-ext/src/CoalesceCompositionHelper.cpp",
+        "turboClass": "PHPStanTurbo\\CoalesceCompositionHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\ConditionalExpressionHolderHelper": {
+        "php": "src/Analyser/ExprHandler/Helper/ConditionalExpressionHolderHelper.php",
+        "cpp": "turbo-ext/src/ConditionalExpressionHolderHelper.cpp",
+        "turboClass": "PHPStanTurbo\\ConditionalExpressionHolderHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\ContextualClosureParameterResolver": {
+        "php": "src/Analyser/ExprHandler/Helper/ContextualClosureParameterResolver.php",
+        "cpp": "turbo-ext/src/ContextualClosureParameterResolver.cpp",
+        "turboClass": "PHPStanTurbo\\ContextualClosureParameterResolver",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\CountNarrowingHelper": {
+        "php": "src/Analyser/ExprHandler/Helper/CountNarrowingHelper.php",
+        "cpp": "turbo-ext/src/CountNarrowingHelper.cpp",
+        "turboClass": "PHPStanTurbo\\CountNarrowingHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\DefaultNarrowingHelper": {
+        "php": "src/Analyser/ExprHandler/Helper/DefaultNarrowingHelper.php",
+        "cpp": "turbo-ext/src/DefaultNarrowingHelper.cpp",
+        "turboClass": "PHPStanTurbo\\DefaultNarrowingHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\DynamicReturnTypeStoragePrimer": {
+        "php": "src/Analyser/ExprHandler/Helper/DynamicReturnTypeStoragePrimer.php",
+        "cpp": "turbo-ext/src/DynamicReturnTypeStoragePrimer.cpp",
+        "turboClass": "PHPStanTurbo\\DynamicReturnTypeStoragePrimer",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\EarlyTerminatingCallHelper": {
+        "php": "src/Analyser/ExprHandler/Helper/EarlyTerminatingCallHelper.php",
+        "cpp": "turbo-ext/src/EarlyTerminatingCallHelper.cpp",
+        "turboClass": "PHPStanTurbo\\EarlyTerminatingCallHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\FuncCallScopeEffectsHelper": {
+        "php": "src/Analyser/ExprHandler/Helper/FuncCallScopeEffectsHelper.php",
+        "cpp": "turbo-ext/src/FuncCallScopeEffectsHelper.cpp",
+        "turboClass": "PHPStanTurbo\\FuncCallScopeEffectsHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\IdenticalNarrowingHelper": {
+        "php": "src/Analyser/ExprHandler/Helper/IdenticalNarrowingHelper.php",
+        "cpp": "turbo-ext/src/IdenticalNarrowingHelper.cpp",
+        "turboClass": "PHPStanTurbo\\IdenticalNarrowingHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\ImplicitToStringCallHelper": {
+        "php": "src/Analyser/ExprHandler/Helper/ImplicitToStringCallHelper.php",
+        "cpp": "turbo-ext/src/ImplicitToStringCallHelper.cpp",
+        "turboClass": "PHPStanTurbo\\ImplicitToStringCallHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\IncDecTypeHelper": {
+        "php": "src/Analyser/ExprHandler/Helper/IncDecTypeHelper.php",
+        "cpp": "turbo-ext/src/IncDecTypeHelper.cpp",
+        "turboClass": "PHPStanTurbo\\IncDecTypeHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\MethodCallReturnTypeHelper": {
+        "php": "src/Analyser/ExprHandler/Helper/MethodCallReturnTypeHelper.php",
+        "cpp": "turbo-ext/src/MethodCallReturnTypeHelper.cpp",
+        "turboClass": "PHPStanTurbo\\MethodCallReturnTypeHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\MethodThrowPointHelper": {
+        "php": "src/Analyser/ExprHandler/Helper/MethodThrowPointHelper.php",
+        "cpp": "turbo-ext/src/MethodThrowPointHelper.cpp",
+        "turboClass": "PHPStanTurbo\\MethodThrowPointHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\NonNullabilityHelper": {
+        "php": "src/Analyser/ExprHandler/Helper/NonNullabilityHelper.php",
+        "cpp": "turbo-ext/src/NonNullabilityHelper.cpp",
+        "turboClass": "PHPStanTurbo\\NonNullabilityHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\PerFileAnalysisResettable"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\OutputBufferHelper": {
+        "php": "src/Analyser/ExprHandler/Helper/OutputBufferHelper.php",
+        "cpp": "turbo-ext/src/OutputBufferHelper.cpp",
+        "turboClass": "PHPStanTurbo\\OutputBufferHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Helper\\VirtualExprResultHelper": {
+        "php": "src/Analyser/ExprHandler/Helper/VirtualExprResultHelper.php",
+        "cpp": "turbo-ext/src/VirtualExprResultHelper.cpp",
+        "turboClass": "PHPStanTurbo\\VirtualExprResultHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExprHandler\\IncludeHandler": {
+        "php": "src/Analyser/ExprHandler/IncludeHandler.php",
+        "cpp": "turbo-ext/src/IncludeHandler.cpp",
+        "turboClass": "PHPStanTurbo\\IncludeHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\InstanceofHandler": {
+        "php": "src/Analyser/ExprHandler/InstanceofHandler.php",
+        "cpp": "turbo-ext/src/InstanceofHandler.cpp",
+        "turboClass": "PHPStanTurbo\\InstanceofHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\InterpolatedStringHandler": {
+        "php": "src/Analyser/ExprHandler/InterpolatedStringHandler.php",
+        "cpp": "turbo-ext/src/InterpolatedStringHandler.cpp",
+        "turboClass": "PHPStanTurbo\\InterpolatedStringHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\IssetHandler": {
+        "php": "src/Analyser/ExprHandler/IssetHandler.php",
+        "cpp": "turbo-ext/src/IssetHandler.cpp",
+        "turboClass": "PHPStanTurbo\\IssetHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\MatchHandler": {
+        "php": "src/Analyser/ExprHandler/MatchHandler.php",
+        "cpp": "turbo-ext/src/MatchHandler.cpp",
+        "turboClass": "PHPStanTurbo\\MatchHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler",
+            "PHPStan\\Analyser\\PerFileAnalysisResettable"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\MethodCallHandler": {
+        "php": "src/Analyser/ExprHandler/MethodCallHandler.php",
+        "cpp": "turbo-ext/src/MethodCallHandler.cpp",
+        "turboClass": "PHPStanTurbo\\MethodCallHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\NewHandler": {
+        "php": "src/Analyser/ExprHandler/NewHandler.php",
+        "cpp": "turbo-ext/src/NewHandler.cpp",
+        "turboClass": "PHPStanTurbo\\NewHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\NullsafeMethodCallHandler": {
+        "php": "src/Analyser/ExprHandler/NullsafeMethodCallHandler.php",
+        "cpp": "turbo-ext/src/NullsafeMethodCallHandler.cpp",
+        "turboClass": "PHPStanTurbo\\NullsafeMethodCallHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\NullsafePropertyFetchHandler": {
+        "php": "src/Analyser/ExprHandler/NullsafePropertyFetchHandler.php",
+        "cpp": "turbo-ext/src/NullsafePropertyFetchHandler.cpp",
+        "turboClass": "PHPStanTurbo\\NullsafePropertyFetchHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\PipeHandler": {
+        "php": "src/Analyser/ExprHandler/PipeHandler.php",
+        "cpp": "turbo-ext/src/PipeHandler.cpp",
+        "turboClass": "PHPStanTurbo\\PipeHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\PostDecHandler": {
+        "php": "src/Analyser/ExprHandler/PostDecHandler.php",
+        "cpp": "turbo-ext/src/PostDecHandler.cpp",
+        "turboClass": "PHPStanTurbo\\PostDecHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\PostIncHandler": {
+        "php": "src/Analyser/ExprHandler/PostIncHandler.php",
+        "cpp": "turbo-ext/src/PostIncHandler.cpp",
+        "turboClass": "PHPStanTurbo\\PostIncHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\PreDecHandler": {
+        "php": "src/Analyser/ExprHandler/PreDecHandler.php",
+        "cpp": "turbo-ext/src/PreDecHandler.cpp",
+        "turboClass": "PHPStanTurbo\\PreDecHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\PreIncHandler": {
+        "php": "src/Analyser/ExprHandler/PreIncHandler.php",
+        "cpp": "turbo-ext/src/PreIncHandler.cpp",
+        "turboClass": "PHPStanTurbo\\PreIncHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\PrintHandler": {
+        "php": "src/Analyser/ExprHandler/PrintHandler.php",
+        "cpp": "turbo-ext/src/PrintHandler.cpp",
+        "turboClass": "PHPStanTurbo\\PrintHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\PropertyFetchHandler": {
+        "php": "src/Analyser/ExprHandler/PropertyFetchHandler.php",
+        "cpp": "turbo-ext/src/PropertyFetchHandler.cpp",
+        "turboClass": "PHPStanTurbo\\PropertyFetchHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\ScalarHandler": {
+        "php": "src/Analyser/ExprHandler/ScalarHandler.php",
+        "cpp": "turbo-ext/src/ScalarHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ScalarHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\ShellExecHandler": {
+        "php": "src/Analyser/ExprHandler/ShellExecHandler.php",
+        "cpp": "turbo-ext/src/ShellExecHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ShellExecHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\StaticCallHandler": {
+        "php": "src/Analyser/ExprHandler/StaticCallHandler.php",
+        "cpp": "turbo-ext/src/StaticCallHandler.cpp",
+        "turboClass": "PHPStanTurbo\\StaticCallHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\StaticPropertyFetchHandler": {
+        "php": "src/Analyser/ExprHandler/StaticPropertyFetchHandler.php",
+        "cpp": "turbo-ext/src/StaticPropertyFetchHandler.cpp",
+        "turboClass": "PHPStanTurbo\\StaticPropertyFetchHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\TernaryHandler": {
+        "php": "src/Analyser/ExprHandler/TernaryHandler.php",
+        "cpp": "turbo-ext/src/TernaryHandler.cpp",
+        "turboClass": "PHPStanTurbo\\TernaryHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler",
+            "PHPStan\\Analyser\\PerFileAnalysisResettable"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\ThrowHandler": {
+        "php": "src/Analyser/ExprHandler/ThrowHandler.php",
+        "cpp": "turbo-ext/src/ThrowHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ThrowHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\UnaryMinusHandler": {
+        "php": "src/Analyser/ExprHandler/UnaryMinusHandler.php",
+        "cpp": "turbo-ext/src/UnaryMinusHandler.cpp",
+        "turboClass": "PHPStanTurbo\\UnaryMinusHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\UnaryPlusHandler": {
+        "php": "src/Analyser/ExprHandler/UnaryPlusHandler.php",
+        "cpp": "turbo-ext/src/UnaryPlusHandler.cpp",
+        "turboClass": "PHPStanTurbo\\UnaryPlusHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\VariableHandler": {
+        "php": "src/Analyser/ExprHandler/VariableHandler.php",
+        "cpp": "turbo-ext/src/VariableHandler.cpp",
+        "turboClass": "PHPStanTurbo\\VariableHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Virtual\\AlwaysRememberedExprHandler": {
+        "php": "src/Analyser/ExprHandler/Virtual/AlwaysRememberedExprHandler.php",
+        "cpp": "turbo-ext/src/AlwaysRememberedExprHandler.cpp",
+        "turboClass": "PHPStanTurbo\\AlwaysRememberedExprHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Virtual\\ExistingArrayDimFetchHandler": {
+        "php": "src/Analyser/ExprHandler/Virtual/ExistingArrayDimFetchHandler.php",
+        "cpp": "turbo-ext/src/ExistingArrayDimFetchHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ExistingArrayDimFetchHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Virtual\\FunctionCallableNodeHandler": {
+        "php": "src/Analyser/ExprHandler/Virtual/FunctionCallableNodeHandler.php",
+        "cpp": "turbo-ext/src/FunctionCallableNodeHandler.cpp",
+        "turboClass": "PHPStanTurbo\\FunctionCallableNodeHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Virtual\\InstantiationCallableNodeHandler": {
+        "php": "src/Analyser/ExprHandler/Virtual/InstantiationCallableNodeHandler.php",
+        "cpp": "turbo-ext/src/InstantiationCallableNodeHandler.cpp",
+        "turboClass": "PHPStanTurbo\\InstantiationCallableNodeHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Virtual\\IssetExprHandler": {
+        "php": "src/Analyser/ExprHandler/Virtual/IssetExprHandler.php",
+        "cpp": "turbo-ext/src/IssetExprHandler.cpp",
+        "turboClass": "PHPStanTurbo\\IssetExprHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Virtual\\MethodCallableNodeHandler": {
+        "php": "src/Analyser/ExprHandler/Virtual/MethodCallableNodeHandler.php",
+        "cpp": "turbo-ext/src/MethodCallableNodeHandler.cpp",
+        "turboClass": "PHPStanTurbo\\MethodCallableNodeHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Virtual\\NativeTypeExprHandler": {
+        "php": "src/Analyser/ExprHandler/Virtual/NativeTypeExprHandler.php",
+        "cpp": "turbo-ext/src/NativeTypeExprHandler.cpp",
+        "turboClass": "PHPStanTurbo\\NativeTypeExprHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Virtual\\PossiblyImpureCallExprHandler": {
+        "php": "src/Analyser/ExprHandler/Virtual/PossiblyImpureCallExprHandler.php",
+        "cpp": "turbo-ext/src/PossiblyImpureCallExprHandler.cpp",
+        "turboClass": "PHPStanTurbo\\PossiblyImpureCallExprHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Virtual\\SetExistingOffsetValueTypeExprHandler": {
+        "php": "src/Analyser/ExprHandler/Virtual/SetExistingOffsetValueTypeExprHandler.php",
+        "cpp": "turbo-ext/src/SetExistingOffsetValueTypeExprHandler.cpp",
+        "turboClass": "PHPStanTurbo\\SetExistingOffsetValueTypeExprHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Virtual\\SetOffsetValueTypeExprHandler": {
+        "php": "src/Analyser/ExprHandler/Virtual/SetOffsetValueTypeExprHandler.php",
+        "cpp": "turbo-ext/src/SetOffsetValueTypeExprHandler.cpp",
+        "turboClass": "PHPStanTurbo\\SetOffsetValueTypeExprHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Virtual\\StaticMethodCallableNodeHandler": {
+        "php": "src/Analyser/ExprHandler/Virtual/StaticMethodCallableNodeHandler.php",
+        "cpp": "turbo-ext/src/StaticMethodCallableNodeHandler.cpp",
+        "turboClass": "PHPStanTurbo\\StaticMethodCallableNodeHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Virtual\\TypeExprHandler": {
+        "php": "src/Analyser/ExprHandler/Virtual/TypeExprHandler.php",
+        "cpp": "turbo-ext/src/TypeExprHandler.cpp",
+        "turboClass": "PHPStanTurbo\\TypeExprHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\Virtual\\UnsetOffsetExprHandler": {
+        "php": "src/Analyser/ExprHandler/Virtual/UnsetOffsetExprHandler.php",
+        "cpp": "turbo-ext/src/UnsetOffsetExprHandler.cpp",
+        "turboClass": "PHPStanTurbo\\UnsetOffsetExprHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\YieldFromHandler": {
+        "php": "src/Analyser/ExprHandler/YieldFromHandler.php",
+        "cpp": "turbo-ext/src/YieldFromHandler.cpp",
+        "turboClass": "PHPStanTurbo\\YieldFromHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExprHandler\\YieldHandler": {
+        "php": "src/Analyser/ExprHandler/YieldHandler.php",
+        "cpp": "turbo-ext/src/YieldHandler.cpp",
+        "turboClass": "PHPStanTurbo\\YieldHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\ExprHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ExpressionContext": {
+        "php": "src/Analyser/ExpressionContext.php",
+        "cpp": "turbo-ext/src/ExpressionContext.cpp",
+        "turboClass": "PHPStanTurbo\\ExpressionContext",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExpressionResult": {
+        "php": "src/Analyser/ExpressionResult.php",
+        "cpp": "turbo-ext/src/ExpressionResult.cpp",
+        "turboClass": "PHPStanTurbo\\ExpressionResult",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExpressionResultStorage": {
+        "php": "src/Analyser/ExpressionResultStorage.php",
+        "cpp": "turbo-ext/src/ExpressionResultStorage.cpp",
+        "turboClass": "PHPStanTurbo\\ExpressionResultStorage",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExpressionResultStorageStack": {
+        "php": "src/Analyser/ExpressionResultStorageStack.php",
+        "cpp": "turbo-ext/src/ExpressionResultStorageStack.cpp",
+        "turboClass": "PHPStanTurbo\\ExpressionResultStorageStack",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ExpressionTypeHolder": {
+        "php": "src/Analyser/ExpressionTypeHolder.php",
+        "cpp": "turbo-ext/src/ExpressionTypeHolder.cpp",
+        "turboClass": "PHPStanTurbo\\ExpressionTypeHolder",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\Generics\\ClosureSignatureInference": {
+        "php": "src/Analyser/Generics/ClosureSignatureInference.php",
+        "cpp": "turbo-ext/src/ClosureSignatureInference.cpp",
+        "turboClass": "PHPStanTurbo\\ClosureSignatureInference",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\Generics\\StaticVariableInference": {
+        "php": "src/Analyser/Generics/StaticVariableInference.php",
+        "cpp": "turbo-ext/src/StaticVariableInference.cpp",
+        "turboClass": "PHPStanTurbo\\StaticVariableInference",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\Generics\\TemplateArgumentConstraints": {
+        "php": "src/Analyser/Generics/TemplateArgumentConstraints.php",
+        "cpp": "turbo-ext/src/TemplateArgumentConstraints.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateArgumentConstraints",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\Generics\\TemplateArgumentFrame": {
+        "php": "src/Analyser/Generics/TemplateArgumentFrame.php",
+        "cpp": "turbo-ext/src/TemplateArgumentFrame.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateArgumentFrame",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\Generics\\TemplateArgumentObserver": {
+        "php": "src/Analyser/Generics/TemplateArgumentObserver.php",
+        "cpp": "turbo-ext/src/TemplateArgumentObserver.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateArgumentObserver",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\Generics\\TemplateArgumentResolver": {
+        "php": "src/Analyser/Generics/TemplateArgumentResolver.php",
+        "cpp": "turbo-ext/src/TemplateArgumentResolver.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateArgumentResolver",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ImpurePoint": {
+        "php": "src/Analyser/ImpurePoint.php",
+        "cpp": "turbo-ext/src/ImpurePoint.cpp",
+        "turboClass": "PHPStanTurbo\\ImpurePoint",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\InternalEndStatementResult": {
+        "php": "src/Analyser/InternalEndStatementResult.php",
+        "cpp": "turbo-ext/src/InternalEndStatementResult.cpp",
+        "turboClass": "PHPStanTurbo\\InternalEndStatementResult",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\InternalStatementExitPoint": {
+        "php": "src/Analyser/InternalStatementExitPoint.php",
+        "cpp": "turbo-ext/src/InternalStatementExitPoint.cpp",
+        "turboClass": "PHPStanTurbo\\InternalStatementExitPoint",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\InternalStatementResult": {
+        "php": "src/Analyser/InternalStatementResult.php",
+        "cpp": "turbo-ext/src/InternalStatementResult.cpp",
+        "turboClass": "PHPStanTurbo\\InternalStatementResult",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\InternalThrowPoint": {
+        "php": "src/Analyser/InternalThrowPoint.php",
+        "cpp": "turbo-ext/src/InternalThrowPoint.cpp",
+        "turboClass": "PHPStanTurbo\\InternalThrowPoint",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\IssetabilityDescriptor": {
+        "php": "src/Analyser/IssetabilityDescriptor.php",
+        "cpp": "turbo-ext/src/IssetabilityDescriptor.cpp",
+        "turboClass": "PHPStanTurbo\\IssetabilityDescriptor",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\IssetabilityLinkInfo": {
+        "php": "src/Analyser/IssetabilityLinkInfo.php",
+        "cpp": "turbo-ext/src/IssetabilityLinkInfo.cpp",
+        "turboClass": "PHPStanTurbo\\IssetabilityLinkInfo",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\IssetabilityResolution": {
+        "php": "src/Analyser/IssetabilityResolution.php",
+        "cpp": "turbo-ext/src/IssetabilityResolution.cpp",
+        "turboClass": "PHPStanTurbo\\IssetabilityResolution",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\LoopWrittenVariableNames": {
+        "php": "src/Analyser/LoopWrittenVariableNames.php",
+        "cpp": "turbo-ext/src/LoopWrittenVariableNames.cpp",
+        "turboClass": "PHPStanTurbo\\LoopWrittenVariableNames",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\MutatingScope": {
+        "php": "src/Analyser/MutatingScope.php",
+        "cpp": "turbo-ext/src/MutatingScope.cpp",
+        "turboClass": "PHPStanTurbo\\MutatingScope",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\Scope",
+            "PHPStan\\Analyser\\NodeCallbackInvoker",
+            "PHPStan\\Analyser\\CollectedDataEmitter",
+            "PHPStan\\Analyser\\DependencyTracker",
+            "PHPStan\\Reflection\\NamespaceAnswerer",
+            "PHPStan\\Reflection\\ClassMemberAccessAnswerer"
+        ]
+    },
+    "PHPStan\\Analyser\\NodeCallbackScope": {
+        "php": "src/Analyser/NodeCallbackScope.php",
+        "cpp": "turbo-ext/src/NodeCallbackScope.cpp",
+        "turboClass": "PHPStanTurbo\\NodeCallbackScope",
+        "final": true,
+        "parent": "PHPStan\\Analyser\\MutatingScope",
+        "interfaces": [
+            "PHPStan\\Reflection\\ClassMemberAccessAnswerer",
+            "PHPStan\\Reflection\\NamespaceAnswerer",
+            "PHPStan\\Analyser\\DependencyTracker",
+            "PHPStan\\Analyser\\CollectedDataEmitter",
+            "PHPStan\\Analyser\\NodeCallbackInvoker",
+            "PHPStan\\Analyser\\Scope"
+        ]
+    },
+    "PHPStan\\Analyser\\NodeScopeResolver": {
+        "php": "src/Analyser/NodeScopeResolver.php",
+        "cpp": "turbo-ext/src/NodeScopeResolver.cpp",
+        "turboClass": "PHPStanTurbo\\NodeScopeResolver",
+        "final": false,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\NullsafeOperatorHelper": {
+        "php": "src/Analyser/NullsafeOperatorHelper.php",
+        "cpp": "turbo-ext/src/NullsafeOperatorHelper.cpp",
+        "turboClass": "PHPStanTurbo\\NullsafeOperatorHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ParametersProcessor": {
+        "php": "src/Analyser/ParametersProcessor.php",
+        "cpp": "turbo-ext/src/ParametersProcessor.cpp",
+        "turboClass": "PHPStanTurbo\\ParametersProcessor",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\PhpDocsResolver": {
+        "php": "src/Analyser/PhpDocsResolver.php",
+        "cpp": "turbo-ext/src/PhpDocsResolver.cpp",
+        "turboClass": "PHPStanTurbo\\PhpDocsResolver",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\PreparedAssignTarget": {
+        "php": "src/Analyser/PreparedAssignTarget.php",
+        "cpp": "turbo-ext/src/PreparedAssignTarget.cpp",
+        "turboClass": "PHPStanTurbo\\PreparedAssignTarget",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ProcessArrowFunctionResult": {
+        "php": "src/Analyser/ProcessArrowFunctionResult.php",
+        "cpp": "turbo-ext/src/ProcessArrowFunctionResult.cpp",
+        "turboClass": "PHPStanTurbo\\ProcessArrowFunctionResult",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ProcessClosureResult": {
+        "php": "src/Analyser/ProcessClosureResult.php",
+        "cpp": "turbo-ext/src/ProcessClosureResult.cpp",
+        "turboClass": "PHPStanTurbo\\ProcessClosureResult",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\PropertyHookThrowPointsResolver": {
+        "php": "src/Analyser/PropertyHookThrowPointsResolver.php",
+        "cpp": "turbo-ext/src/PropertyHookThrowPointsResolver.cpp",
+        "turboClass": "PHPStanTurbo\\PropertyHookThrowPointsResolver",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\PropertyHooksProcessor": {
+        "php": "src/Analyser/PropertyHooksProcessor.php",
+        "cpp": "turbo-ext/src/PropertyHooksProcessor.cpp",
+        "turboClass": "PHPStanTurbo\\PropertyHooksProcessor",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\RecordingNodeCallback": {
+        "php": "src/Analyser/RecordingNodeCallback.php",
+        "cpp": "turbo-ext/src/RecordingNodeCallback.cpp",
+        "turboClass": "PHPStanTurbo\\RecordingNodeCallback",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\RicherScopeGetTypeHelper": {
+        "php": "src/Analyser/RicherScopeGetTypeHelper.php",
+        "cpp": "turbo-ext/src/RicherScopeGetTypeHelper.cpp",
+        "turboClass": "PHPStanTurbo\\RicherScopeGetTypeHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ScopeContext": {
+        "php": "src/Analyser/ScopeContext.php",
+        "cpp": "turbo-ext/src/ScopeContext.cpp",
+        "turboClass": "PHPStanTurbo\\ScopeContext",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\ScopeOps": {
+        "php": "src/Analyser/ScopeOps.php",
+        "cpp": "turbo-ext/src/ScopeOps.cpp",
+        "turboClass": "PHPStanTurbo\\ScopeOps",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\SpecifiedTypes": {
+        "php": "src/Analyser/SpecifiedTypes.php",
+        "cpp": "turbo-ext/src/SpecifiedTypes.cpp",
+        "turboClass": "PHPStanTurbo\\SpecifiedTypes",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\StatementContext": {
+        "php": "src/Analyser/StatementContext.php",
+        "cpp": "turbo-ext/src/StatementContext.cpp",
+        "turboClass": "PHPStanTurbo\\StatementContext",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\StatementExitPoint": {
+        "php": "src/Analyser/StatementExitPoint.php",
+        "cpp": "turbo-ext/src/StatementExitPoint.cpp",
+        "turboClass": "PHPStanTurbo\\StatementExitPoint",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\StatementListWalkState": {
+        "php": "src/Analyser/StatementListWalkState.php",
+        "cpp": "turbo-ext/src/StatementListWalkState.cpp",
+        "turboClass": "PHPStanTurbo\\StatementListWalkState",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\StatementResult": {
+        "php": "src/Analyser/StatementResult.php",
+        "cpp": "turbo-ext/src/StatementResult.cpp",
+        "turboClass": "PHPStanTurbo\\StatementResult",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\StatementsHandler": {
+        "php": "src/Analyser/StatementsHandler.php",
+        "cpp": "turbo-ext/src/StatementsHandler.cpp",
+        "turboClass": "PHPStanTurbo\\StatementsHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\StmtHandlerRegistry": {
+        "php": "src/Analyser/StmtHandlerRegistry.php",
+        "cpp": "turbo-ext/src/StmtHandlerRegistry.cpp",
+        "turboClass": "PHPStanTurbo\\StmtHandlerRegistry",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\StmtHandler\\BlockHandler": {
+        "php": "src/Analyser/StmtHandler/BlockHandler.php",
+        "cpp": "turbo-ext/src/BlockHandler.cpp",
+        "turboClass": "PHPStanTurbo\\BlockHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\BreakContinueHandler": {
+        "php": "src/Analyser/StmtHandler/BreakContinueHandler.php",
+        "cpp": "turbo-ext/src/BreakContinueHandler.cpp",
+        "turboClass": "PHPStanTurbo\\BreakContinueHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\ClassConstHandler": {
+        "php": "src/Analyser/StmtHandler/ClassConstHandler.php",
+        "cpp": "turbo-ext/src/ClassConstHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ClassConstHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\ClassLikeHandler": {
+        "php": "src/Analyser/StmtHandler/ClassLikeHandler.php",
+        "cpp": "turbo-ext/src/ClassLikeHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ClassLikeHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\ClassMethodHandler": {
+        "php": "src/Analyser/StmtHandler/ClassMethodHandler.php",
+        "cpp": "turbo-ext/src/ClassMethodHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ClassMethodHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\ConstHandler": {
+        "php": "src/Analyser/StmtHandler/ConstHandler.php",
+        "cpp": "turbo-ext/src/ConstHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ConstHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\DeclareHandler": {
+        "php": "src/Analyser/StmtHandler/DeclareHandler.php",
+        "cpp": "turbo-ext/src/DeclareHandler.cpp",
+        "turboClass": "PHPStanTurbo\\DeclareHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\DoWhileHandler": {
+        "php": "src/Analyser/StmtHandler/DoWhileHandler.php",
+        "cpp": "turbo-ext/src/DoWhileHandler.cpp",
+        "turboClass": "PHPStanTurbo\\DoWhileHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\EchoHandler": {
+        "php": "src/Analyser/StmtHandler/EchoHandler.php",
+        "cpp": "turbo-ext/src/EchoHandler.cpp",
+        "turboClass": "PHPStanTurbo\\EchoHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\EnumCaseHandler": {
+        "php": "src/Analyser/StmtHandler/EnumCaseHandler.php",
+        "cpp": "turbo-ext/src/EnumCaseHandler.cpp",
+        "turboClass": "PHPStanTurbo\\EnumCaseHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\ExpressionHandler": {
+        "php": "src/Analyser/StmtHandler/ExpressionHandler.php",
+        "cpp": "turbo-ext/src/ExpressionHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ExpressionHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\ForHandler": {
+        "php": "src/Analyser/StmtHandler/ForHandler.php",
+        "cpp": "turbo-ext/src/ForHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ForHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\ForeachHandler": {
+        "php": "src/Analyser/StmtHandler/ForeachHandler.php",
+        "cpp": "turbo-ext/src/ForeachHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ForeachHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\FunctionHandler": {
+        "php": "src/Analyser/StmtHandler/FunctionHandler.php",
+        "cpp": "turbo-ext/src/FunctionHandler.cpp",
+        "turboClass": "PHPStanTurbo\\FunctionHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\GlobalHandler": {
+        "php": "src/Analyser/StmtHandler/GlobalHandler.php",
+        "cpp": "turbo-ext/src/GlobalHandler.cpp",
+        "turboClass": "PHPStanTurbo\\GlobalHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\GotoHandler": {
+        "php": "src/Analyser/StmtHandler/GotoHandler.php",
+        "cpp": "turbo-ext/src/GotoHandler.cpp",
+        "turboClass": "PHPStanTurbo\\GotoHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\GroupUseHandler": {
+        "php": "src/Analyser/StmtHandler/GroupUseHandler.php",
+        "cpp": "turbo-ext/src/GroupUseHandler.cpp",
+        "turboClass": "PHPStanTurbo\\GroupUseHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\IfHandler": {
+        "php": "src/Analyser/StmtHandler/IfHandler.php",
+        "cpp": "turbo-ext/src/IfHandler.cpp",
+        "turboClass": "PHPStanTurbo\\IfHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\InlineHtmlHandler": {
+        "php": "src/Analyser/StmtHandler/InlineHtmlHandler.php",
+        "cpp": "turbo-ext/src/InlineHtmlHandler.cpp",
+        "turboClass": "PHPStanTurbo\\InlineHtmlHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\LabelHandler": {
+        "php": "src/Analyser/StmtHandler/LabelHandler.php",
+        "cpp": "turbo-ext/src/LabelHandler.cpp",
+        "turboClass": "PHPStanTurbo\\LabelHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\NamespaceHandler": {
+        "php": "src/Analyser/StmtHandler/NamespaceHandler.php",
+        "cpp": "turbo-ext/src/NamespaceHandler.cpp",
+        "turboClass": "PHPStanTurbo\\NamespaceHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\NopHandler": {
+        "php": "src/Analyser/StmtHandler/NopHandler.php",
+        "cpp": "turbo-ext/src/NopHandler.cpp",
+        "turboClass": "PHPStanTurbo\\NopHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\PropertyHandler": {
+        "php": "src/Analyser/StmtHandler/PropertyHandler.php",
+        "cpp": "turbo-ext/src/PropertyHandler.cpp",
+        "turboClass": "PHPStanTurbo\\PropertyHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\ReturnHandler": {
+        "php": "src/Analyser/StmtHandler/ReturnHandler.php",
+        "cpp": "turbo-ext/src/ReturnHandler.cpp",
+        "turboClass": "PHPStanTurbo\\ReturnHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\StaticVariableHandler": {
+        "php": "src/Analyser/StmtHandler/StaticVariableHandler.php",
+        "cpp": "turbo-ext/src/StaticVariableHandler.cpp",
+        "turboClass": "PHPStanTurbo\\StaticVariableHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\SwitchHandler": {
+        "php": "src/Analyser/StmtHandler/SwitchHandler.php",
+        "cpp": "turbo-ext/src/SwitchHandler.cpp",
+        "turboClass": "PHPStanTurbo\\SwitchHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\TraitHandler": {
+        "php": "src/Analyser/StmtHandler/TraitHandler.php",
+        "cpp": "turbo-ext/src/TraitHandler.cpp",
+        "turboClass": "PHPStanTurbo\\TraitHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\TraitUseHandler": {
+        "php": "src/Analyser/StmtHandler/TraitUseHandler.php",
+        "cpp": "turbo-ext/src/TraitUseHandler.cpp",
+        "turboClass": "PHPStanTurbo\\TraitUseHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\TryCatchHandler": {
+        "php": "src/Analyser/StmtHandler/TryCatchHandler.php",
+        "cpp": "turbo-ext/src/TryCatchHandler.cpp",
+        "turboClass": "PHPStanTurbo\\TryCatchHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\UnsetHandler": {
+        "php": "src/Analyser/StmtHandler/UnsetHandler.php",
+        "cpp": "turbo-ext/src/UnsetHandler.cpp",
+        "turboClass": "PHPStanTurbo\\UnsetHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\UseHandler": {
+        "php": "src/Analyser/StmtHandler/UseHandler.php",
+        "cpp": "turbo-ext/src/UseHandler.cpp",
+        "turboClass": "PHPStanTurbo\\UseHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\StmtHandler\\WhileHandler": {
+        "php": "src/Analyser/StmtHandler/WhileHandler.php",
+        "cpp": "turbo-ext/src/WhileHandler.cpp",
+        "turboClass": "PHPStanTurbo\\WhileHandler",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Analyser\\StmtHandler"
+        ]
+    },
+    "PHPStan\\Analyser\\ThrowPoint": {
+        "php": "src/Analyser/ThrowPoint.php",
+        "cpp": "turbo-ext/src/ThrowPoint.cpp",
+        "turboClass": "PHPStanTurbo\\ThrowPoint",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\TypeSpecifier": {
+        "php": "src/Analyser/TypeSpecifier.php",
+        "cpp": "turbo-ext/src/TypeSpecifier.cpp",
+        "turboClass": "PHPStanTurbo\\TypeSpecifier",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\TypeSpecifierContext": {
+        "php": "src/Analyser/TypeSpecifierContext.php",
+        "cpp": "turbo-ext/src/TypeSpecifierContext.cpp",
+        "turboClass": "PHPStanTurbo\\TypeSpecifierContext",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\VarAnnotationProcessor": {
+        "php": "src/Analyser/VarAnnotationProcessor.php",
+        "cpp": "turbo-ext/src/VarAnnotationProcessor.cpp",
+        "turboClass": "PHPStanTurbo\\VarAnnotationProcessor",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\VariableAccessFlow": {
+        "php": "src/Analyser/VariableAccessFlow.php",
+        "cpp": "turbo-ext/src/VariableAccessFlow.cpp",
+        "turboClass": "PHPStanTurbo\\VariableAccessFlow",
+        "final": true,
+        "parent": "PHPStan\\Analyser\\VariableFlow",
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\VariableControlFlow": {
+        "php": "src/Analyser/VariableControlFlow.php",
+        "cpp": "turbo-ext/src/VariableControlFlow.cpp",
+        "turboClass": "PHPStanTurbo\\VariableControlFlow",
+        "final": true,
+        "parent": "PHPStan\\Analyser\\VariableFlow",
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\VariableFlow": {
+        "php": "src/Analyser/VariableFlow.php",
+        "cpp": "turbo-ext/src/VariableFlow.cpp",
+        "turboClass": "PHPStanTurbo\\VariableFlow",
+        "final": false,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\VariableFlowBuilder": {
+        "php": "src/Analyser/VariableFlowBuilder.php",
+        "cpp": "turbo-ext/src/VariableFlowBuilder.cpp",
+        "turboClass": "PHPStanTurbo\\VariableFlowBuilder",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\VariableInputFlow": {
+        "php": "src/Analyser/VariableInputFlow.php",
+        "cpp": "turbo-ext/src/VariableInputFlow.cpp",
+        "turboClass": "PHPStanTurbo\\VariableInputFlow",
+        "final": true,
+        "parent": "PHPStan\\Analyser\\VariableFlow",
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\VariableLivenessResolver": {
+        "php": "src/Analyser/VariableLivenessResolver.php",
+        "cpp": "turbo-ext/src/VariableLivenessResolver.cpp",
+        "turboClass": "PHPStanTurbo\\VariableLivenessResolver",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\VariableSequenceFlow": {
+        "php": "src/Analyser/VariableSequenceFlow.php",
+        "cpp": "turbo-ext/src/VariableSequenceFlow.cpp",
+        "turboClass": "PHPStanTurbo\\VariableSequenceFlow",
+        "final": true,
+        "parent": "PHPStan\\Analyser\\VariableFlow",
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\VariableWriteOffset": {
+        "php": "src/Analyser/VariableWriteOffset.php",
+        "cpp": "turbo-ext/src/VariableWriteOffset.cpp",
+        "turboClass": "PHPStanTurbo\\VariableWriteOffset",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Analyser\\VolatileExpressionHelper": {
+        "php": "src/Analyser/VolatileExpressionHelper.php",
+        "cpp": "turbo-ext/src/VolatileExpressionHelper.cpp",
+        "turboClass": "PHPStanTurbo\\VolatileExpressionHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Cache\\ArenaCache": {
+        "php": "src/Cache/ArenaCache.php",
+        "cpp": "turbo-ext/src/ArenaCache.cpp",
+        "turboClass": "PHPStanTurbo\\ArenaCache",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Dependency\\Dependencies": {
+        "php": "src/Dependency/Dependencies.php",
+        "cpp": "turbo-ext/src/Dependencies.cpp",
+        "turboClass": "PHPStanTurbo\\Dependencies",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Internal\\CombinationsHelper": {
+        "php": "src/Internal/CombinationsHelper.php",
+        "cpp": "turbo-ext/src/CombinationsHelper.cpp",
+        "turboClass": "PHPStanTurbo\\CombinationsHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Internal\\LruCache": {
+        "php": "src/Internal/LruCache.php",
+        "cpp": "turbo-ext/src/LruCache.cpp",
+        "turboClass": "PHPStanTurbo\\LruCache",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Node\\ClassStatementsGatherer": {
+        "php": "src/Node/ClassStatementsGatherer.php",
+        "cpp": "turbo-ext/src/ClassStatementsGatherer.cpp",
+        "turboClass": "PHPStanTurbo\\ClassStatementsGatherer",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Node\\NodeScanner": {
+        "php": "src/Node/NodeScanner.php",
+        "cpp": "turbo-ext/src/NodeScanner.cpp",
+        "turboClass": "PHPStanTurbo\\NodeScanner",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Node\\Printer\\ExprPrinter": {
+        "php": "src/Node/Printer/ExprPrinter.php",
+        "cpp": "turbo-ext/src/ExprPrinter.cpp",
+        "turboClass": "PHPStanTurbo\\ExprPrinter",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Parser\\ArrayFilterArgVisitor": {
+        "php": "src/Parser/ArrayFilterArgVisitor.php",
+        "cpp": "turbo-ext/src/ArrayFilterArgVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\ArrayFilterArgVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\ArrayFindArgVisitor": {
+        "php": "src/Parser/ArrayFindArgVisitor.php",
+        "cpp": "turbo-ext/src/ArrayFindArgVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\ArrayFindArgVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\ArrayMapArgVisitor": {
+        "php": "src/Parser/ArrayMapArgVisitor.php",
+        "cpp": "turbo-ext/src/ArrayMapArgVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\ArrayMapArgVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\ArrayOffsetNormalizingVisitor": {
+        "php": "src/Parser/ArrayOffsetNormalizingVisitor.php",
+        "cpp": "turbo-ext/src/ArrayOffsetNormalizingVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\ArrayOffsetNormalizingVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\ArrayWalkArgVisitor": {
+        "php": "src/Parser/ArrayWalkArgVisitor.php",
+        "cpp": "turbo-ext/src/ArrayWalkArgVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\ArrayWalkArgVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\ArrowFunctionArgVisitor": {
+        "php": "src/Parser/ArrowFunctionArgVisitor.php",
+        "cpp": "turbo-ext/src/ArrowFunctionArgVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\ArrowFunctionArgVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\ClosureArgVisitor": {
+        "php": "src/Parser/ClosureArgVisitor.php",
+        "cpp": "turbo-ext/src/ClosureArgVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\ClosureArgVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\ClosureBindArgVisitor": {
+        "php": "src/Parser/ClosureBindArgVisitor.php",
+        "cpp": "turbo-ext/src/ClosureBindArgVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\ClosureBindArgVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\ClosureBindToVarVisitor": {
+        "php": "src/Parser/ClosureBindToVarVisitor.php",
+        "cpp": "turbo-ext/src/ClosureBindToVarVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\ClosureBindToVarVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\CurlSetOptArgVisitor": {
+        "php": "src/Parser/CurlSetOptArgVisitor.php",
+        "cpp": "turbo-ext/src/CurlSetOptArgVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\CurlSetOptArgVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\CurlSetOptArrayArgVisitor": {
+        "php": "src/Parser/CurlSetOptArrayArgVisitor.php",
+        "cpp": "turbo-ext/src/CurlSetOptArrayArgVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\CurlSetOptArrayArgVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\DeclarePositionVisitor": {
+        "php": "src/Parser/DeclarePositionVisitor.php",
+        "cpp": "turbo-ext/src/DeclarePositionVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\DeclarePositionVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\ImmediatelyInvokedClosureVisitor": {
+        "php": "src/Parser/ImmediatelyInvokedClosureVisitor.php",
+        "cpp": "turbo-ext/src/ImmediatelyInvokedClosureVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\ImmediatelyInvokedClosureVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\ImplodeArgVisitor": {
+        "php": "src/Parser/ImplodeArgVisitor.php",
+        "cpp": "turbo-ext/src/ImplodeArgVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\ImplodeArgVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\MagicConstantParamDefaultVisitor": {
+        "php": "src/Parser/MagicConstantParamDefaultVisitor.php",
+        "cpp": "turbo-ext/src/MagicConstantParamDefaultVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\MagicConstantParamDefaultVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\NewAssignedToPropertyVisitor": {
+        "php": "src/Parser/NewAssignedToPropertyVisitor.php",
+        "cpp": "turbo-ext/src/NewAssignedToPropertyVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\NewAssignedToPropertyVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\ParentStmtTypesVisitor": {
+        "php": "src/Parser/ParentStmtTypesVisitor.php",
+        "cpp": "turbo-ext/src/ParentStmtTypesVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\ParentStmtTypesVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\ParserRunner": {
+        "php": "src/Parser/ParserRunner.php",
+        "cpp": "turbo-ext/src/parser/ParserRunner.cpp",
+        "turboClass": "PHPStanTurbo\\ParserRunner",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Parser\\TraitCollectingVisitor": {
+        "php": "src/Parser/TraitCollectingVisitor.php",
+        "cpp": "turbo-ext/src/TraitCollectingVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\TraitCollectingVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\TryCatchTypeVisitor": {
+        "php": "src/Parser/TryCatchTypeVisitor.php",
+        "cpp": "turbo-ext/src/TryCatchTypeVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\TryCatchTypeVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Parser\\TypeTraverserInstanceofVisitor": {
+        "php": "src/Parser/TypeTraverserInstanceofVisitor.php",
+        "cpp": "turbo-ext/src/TypeTraverserInstanceofVisitor.cpp",
+        "turboClass": "PHPStanTurbo\\TypeTraverserInstanceofVisitor",
+        "final": true,
+        "parent": "PhpParser\\NodeVisitorAbstract",
+        "interfaces": [
+            "PhpParser\\NodeVisitor"
+        ]
+    },
+    "PHPStan\\Reflection\\Assertions": {
+        "php": "src/Reflection/Assertions.php",
+        "cpp": "turbo-ext/src/Assertions.cpp",
+        "turboClass": "PHPStanTurbo\\Assertions",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Reflection\\BetterReflection\\SourceLocator\\PhpFileCleaner": {
+        "php": "src/Reflection/BetterReflection/SourceLocator/PhpFileCleaner.php",
+        "cpp": "turbo-ext/src/PhpFileCleaner.cpp",
+        "turboClass": "PHPStanTurbo\\PhpFileCleaner",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Reflection\\BetterReflection\\SourceLocator\\SymbolFinderInFiles": {
+        "php": "src/Reflection/BetterReflection/SourceLocator/SymbolFinderInFiles.php",
+        "cpp": "turbo-ext/src/SymbolFinderInFiles.cpp",
+        "turboClass": "PHPStanTurbo\\SymbolFinderInFiles",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Reflection\\Callables\\SimpleImpurePoint": {
+        "php": "src/Reflection/Callables/SimpleImpurePoint.php",
+        "cpp": "turbo-ext/src/SimpleImpurePoint.cpp",
+        "turboClass": "PHPStanTurbo\\SimpleImpurePoint",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Reflection\\ClassReflection": {
+        "php": "src/Reflection/ClassReflection.php",
+        "cpp": "turbo-ext/src/ClassReflection.cpp",
+        "turboClass": "PHPStanTurbo\\ClassReflection",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Reflection\\Dummy\\ChangedTypeMethodReflection": {
+        "php": "src/Reflection/Dummy/ChangedTypeMethodReflection.php",
+        "cpp": "turbo-ext/src/ChangedTypeMethodReflection.cpp",
+        "turboClass": "PHPStanTurbo\\ChangedTypeMethodReflection",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Reflection\\ExtendedMethodReflection",
+            "PHPStan\\Reflection\\ClassMemberReflection",
+            "PHPStan\\Reflection\\MethodReflection"
+        ]
+    },
+    "PHPStan\\Reflection\\Dummy\\ChangedTypePropertyReflection": {
+        "php": "src/Reflection/Dummy/ChangedTypePropertyReflection.php",
+        "cpp": "turbo-ext/src/ChangedTypePropertyReflection.cpp",
+        "turboClass": "PHPStanTurbo\\ChangedTypePropertyReflection",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Reflection\\WrapperPropertyReflection",
+            "PHPStan\\Reflection\\PropertyReflection",
+            "PHPStan\\Reflection\\ClassMemberReflection",
+            "PHPStan\\Reflection\\ExtendedPropertyReflection"
+        ]
+    },
+    "PHPStan\\Reflection\\ExtendedCallableFunctionVariant": {
+        "php": "src/Reflection/ExtendedCallableFunctionVariant.php",
+        "cpp": "turbo-ext/src/ExtendedCallableFunctionVariant.cpp",
+        "turboClass": "PHPStanTurbo\\ExtendedCallableFunctionVariant",
+        "final": true,
+        "parent": "PHPStan\\Reflection\\ExtendedFunctionVariant",
+        "interfaces": [
+            "PHPStan\\Reflection\\ParametersAcceptor",
+            "PHPStan\\Reflection\\ExtendedParametersAcceptor",
+            "PHPStan\\Reflection\\Callables\\CallableParametersAcceptor"
+        ]
+    },
+    "PHPStan\\Reflection\\ExtendedFunctionVariant": {
+        "php": "src/Reflection/ExtendedFunctionVariant.php",
+        "cpp": "turbo-ext/src/ExtendedFunctionVariant.cpp",
+        "turboClass": "PHPStanTurbo\\ExtendedFunctionVariant",
+        "final": false,
+        "parent": "PHPStan\\Reflection\\FunctionVariant",
+        "interfaces": [
+            "PHPStan\\Reflection\\ParametersAcceptor",
+            "PHPStan\\Reflection\\ExtendedParametersAcceptor"
+        ]
+    },
+    "PHPStan\\Reflection\\FunctionVariant": {
+        "php": "src/Reflection/FunctionVariant.php",
+        "cpp": "turbo-ext/src/FunctionVariant.cpp",
+        "turboClass": "PHPStanTurbo\\FunctionVariant",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Reflection\\ParametersAcceptor"
+        ]
+    },
+    "PHPStan\\Reflection\\InitializerExprContext": {
+        "php": "src/Reflection/InitializerExprContext.php",
+        "cpp": "turbo-ext/src/InitializerExprContext.cpp",
+        "turboClass": "PHPStanTurbo\\InitializerExprContext",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Reflection\\NamespaceAnswerer"
+        ]
+    },
+    "PHPStan\\Reflection\\InitializerExprTypeResolver": {
+        "php": "src/Reflection/InitializerExprTypeResolver.php",
+        "cpp": "turbo-ext/src/InitializerExprTypeResolver.cpp",
+        "turboClass": "PHPStanTurbo\\InitializerExprTypeResolver",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Reflection\\Native\\ExtendedNativeParameterReflection": {
+        "php": "src/Reflection/Native/ExtendedNativeParameterReflection.php",
+        "cpp": "turbo-ext/src/ExtendedNativeParameterReflection.cpp",
+        "turboClass": "PHPStanTurbo\\ExtendedNativeParameterReflection",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Reflection\\ExtendedParameterReflection",
+            "PHPStan\\Reflection\\ParameterReflection"
+        ]
+    },
+    "PHPStan\\Reflection\\Native\\NativeParameterReflection": {
+        "php": "src/Reflection/Native/NativeParameterReflection.php",
+        "cpp": "turbo-ext/src/NativeParameterReflection.cpp",
+        "turboClass": "PHPStanTurbo\\NativeParameterReflection",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Reflection\\ParameterReflection"
+        ]
+    },
+    "PHPStan\\Reflection\\ParametersAcceptorSelector": {
+        "php": "src/Reflection/ParametersAcceptorSelector.php",
+        "cpp": "turbo-ext/src/ParametersAcceptorSelector.cpp",
+        "turboClass": "PHPStanTurbo\\ParametersAcceptorSelector",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Reflection\\PassedByReference": {
+        "php": "src/Reflection/PassedByReference.php",
+        "cpp": "turbo-ext/src/PassedByReference.cpp",
+        "turboClass": "PHPStanTurbo\\PassedByReference",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Reflection\\Php\\DummyParameter": {
+        "php": "src/Reflection/Php/DummyParameter.php",
+        "cpp": "turbo-ext/src/DummyParameter.cpp",
+        "turboClass": "PHPStanTurbo\\DummyParameter",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Reflection\\ParameterReflection"
+        ]
+    },
+    "PHPStan\\Reflection\\Php\\ExtendedDummyParameter": {
+        "php": "src/Reflection/Php/ExtendedDummyParameter.php",
+        "cpp": "turbo-ext/src/ExtendedDummyParameter.cpp",
+        "turboClass": "PHPStanTurbo\\ExtendedDummyParameter",
+        "final": true,
+        "parent": "PHPStan\\Reflection\\Php\\DummyParameter",
+        "interfaces": [
+            "PHPStan\\Reflection\\ParameterReflection",
+            "PHPStan\\Reflection\\ExtendedParameterReflection"
+        ]
+    },
+    "PHPStan\\Reflection\\Php\\PhpClassReflectionExtension": {
+        "php": "src/Reflection/Php/PhpClassReflectionExtension.php",
+        "cpp": "turbo-ext/src/PhpClassReflectionExtension.cpp",
+        "turboClass": "PHPStanTurbo\\PhpClassReflectionExtension",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Reflection\\Php\\PhpParameterReflection": {
+        "php": "src/Reflection/Php/PhpParameterReflection.php",
+        "cpp": "turbo-ext/src/PhpParameterReflection.cpp",
+        "turboClass": "PHPStanTurbo\\PhpParameterReflection",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Reflection\\ExtendedParameterReflection",
+            "PHPStan\\Reflection\\ParameterReflection"
+        ]
+    },
+    "PHPStan\\Reflection\\Php\\PhpPropertyReflection": {
+        "php": "src/Reflection/Php/PhpPropertyReflection.php",
+        "cpp": "turbo-ext/src/PhpPropertyReflection.cpp",
+        "turboClass": "PHPStanTurbo\\PhpPropertyReflection",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Reflection\\ExtendedPropertyReflection",
+            "PHPStan\\Reflection\\ClassMemberReflection",
+            "PHPStan\\Reflection\\PropertyReflection"
+        ]
+    },
+    "PHPStan\\Reflection\\ResolvedFunctionVariantWithOriginal": {
+        "php": "src/Reflection/ResolvedFunctionVariantWithOriginal.php",
+        "cpp": "turbo-ext/src/ResolvedFunctionVariantWithOriginal.cpp",
+        "turboClass": "PHPStanTurbo\\ResolvedFunctionVariantWithOriginal",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Reflection\\ResolvedFunctionVariant",
+            "PHPStan\\Reflection\\ParametersAcceptor",
+            "PHPStan\\Reflection\\ExtendedParametersAcceptor"
+        ]
+    },
+    "PHPStan\\Reflection\\ResolvedMethodReflection": {
+        "php": "src/Reflection/ResolvedMethodReflection.php",
+        "cpp": "turbo-ext/src/ResolvedMethodReflection.cpp",
+        "turboClass": "PHPStanTurbo\\ResolvedMethodReflection",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Reflection\\ExtendedMethodReflection",
+            "PHPStan\\Reflection\\ClassMemberReflection",
+            "PHPStan\\Reflection\\MethodReflection"
+        ]
+    },
+    "PHPStan\\Reflection\\ResolvedPropertyReflection": {
+        "php": "src/Reflection/ResolvedPropertyReflection.php",
+        "cpp": "turbo-ext/src/ResolvedPropertyReflection.cpp",
+        "turboClass": "PHPStanTurbo\\ResolvedPropertyReflection",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Reflection\\WrapperPropertyReflection",
+            "PHPStan\\Reflection\\PropertyReflection",
+            "PHPStan\\Reflection\\ClassMemberReflection",
+            "PHPStan\\Reflection\\ExtendedPropertyReflection"
+        ]
+    },
+    "PHPStan\\Reflection\\TrivialParametersAcceptor": {
+        "php": "src/Reflection/TrivialParametersAcceptor.php",
+        "cpp": "turbo-ext/src/TrivialParametersAcceptor.cpp",
+        "turboClass": "PHPStanTurbo\\TrivialParametersAcceptor",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Reflection\\ExtendedParametersAcceptor",
+            "PHPStan\\Reflection\\Callables\\CallableParametersAcceptor",
+            "PHPStan\\Reflection\\ParametersAcceptor"
+        ]
+    },
+    "PHPStan\\Reflection\\Type\\CallbackUnresolvedMethodPrototypeReflection": {
+        "php": "src/Reflection/Type/CallbackUnresolvedMethodPrototypeReflection.php",
+        "cpp": "turbo-ext/src/CallbackUnresolvedMethodPrototypeReflection.cpp",
+        "turboClass": "PHPStanTurbo\\CallbackUnresolvedMethodPrototypeReflection",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Reflection\\Type\\UnresolvedMethodPrototypeReflection"
+        ]
+    },
+    "PHPStan\\Reflection\\Type\\CallbackUnresolvedPropertyPrototypeReflection": {
+        "php": "src/Reflection/Type/CallbackUnresolvedPropertyPrototypeReflection.php",
+        "cpp": "turbo-ext/src/CallbackUnresolvedPropertyPrototypeReflection.cpp",
+        "turboClass": "PHPStanTurbo\\CallbackUnresolvedPropertyPrototypeReflection",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Reflection\\Type\\UnresolvedPropertyPrototypeReflection"
+        ]
+    },
+    "PHPStan\\Reflection\\Type\\CalledOnTypeUnresolvedMethodPrototypeReflection": {
+        "php": "src/Reflection/Type/CalledOnTypeUnresolvedMethodPrototypeReflection.php",
+        "cpp": "turbo-ext/src/CalledOnTypeUnresolvedMethodPrototypeReflection.cpp",
+        "turboClass": "PHPStanTurbo\\CalledOnTypeUnresolvedMethodPrototypeReflection",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Reflection\\Type\\UnresolvedMethodPrototypeReflection"
+        ]
+    },
+    "PHPStan\\Reflection\\Type\\CalledOnTypeUnresolvedPropertyPrototypeReflection": {
+        "php": "src/Reflection/Type/CalledOnTypeUnresolvedPropertyPrototypeReflection.php",
+        "cpp": "turbo-ext/src/CalledOnTypeUnresolvedPropertyPrototypeReflection.cpp",
+        "turboClass": "PHPStanTurbo\\CalledOnTypeUnresolvedPropertyPrototypeReflection",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Reflection\\Type\\UnresolvedPropertyPrototypeReflection"
+        ]
+    },
+    "PHPStan\\Rules\\PhpDoc\\UnresolvableTypeHelper": {
+        "php": "src/Rules/PhpDoc/UnresolvableTypeHelper.php",
+        "cpp": "turbo-ext/src/UnresolvableTypeHelper.cpp",
+        "turboClass": "PHPStanTurbo\\UnresolvableTypeHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\TrinaryLogic": {
+        "php": "src/TrinaryLogic.php",
+        "cpp": "turbo-ext/src/TrinaryLogic.cpp",
+        "turboClass": "PHPStanTurbo\\TrinaryLogic",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\AcceptsResult": {
+        "php": "src/Type/AcceptsResult.php",
+        "cpp": "turbo-ext/src/AcceptsResult.cpp",
+        "turboClass": "PHPStanTurbo\\AcceptsResult",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\Accessory\\AccessoryArrayListType": {
+        "php": "src/Type/Accessory/AccessoryArrayListType.php",
+        "cpp": "turbo-ext/src/AccessoryArrayListType.cpp",
+        "turboClass": "PHPStanTurbo\\AccessoryArrayListType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Accessory\\AccessoryType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\Accessory\\AccessoryDecimalIntegerStringType": {
+        "php": "src/Type/Accessory/AccessoryDecimalIntegerStringType.php",
+        "cpp": "turbo-ext/src/AccessoryDecimalIntegerStringType.cpp",
+        "turboClass": "PHPStanTurbo\\AccessoryDecimalIntegerStringType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Accessory\\AccessoryType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\Accessory\\AccessoryLiteralStringType": {
+        "php": "src/Type/Accessory/AccessoryLiteralStringType.php",
+        "cpp": "turbo-ext/src/AccessoryLiteralStringType.cpp",
+        "turboClass": "PHPStanTurbo\\AccessoryLiteralStringType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Accessory\\AccessoryType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\Accessory\\AccessoryLowercaseStringType": {
+        "php": "src/Type/Accessory/AccessoryLowercaseStringType.php",
+        "cpp": "turbo-ext/src/AccessoryLowercaseStringType.cpp",
+        "turboClass": "PHPStanTurbo\\AccessoryLowercaseStringType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Accessory\\AccessoryType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\Accessory\\AccessoryNonEmptyStringType": {
+        "php": "src/Type/Accessory/AccessoryNonEmptyStringType.php",
+        "cpp": "turbo-ext/src/AccessoryNonEmptyStringType.cpp",
+        "turboClass": "PHPStanTurbo\\AccessoryNonEmptyStringType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Accessory\\AccessoryType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\Accessory\\AccessoryNonFalsyStringType": {
+        "php": "src/Type/Accessory/AccessoryNonFalsyStringType.php",
+        "cpp": "turbo-ext/src/AccessoryNonFalsyStringType.cpp",
+        "turboClass": "PHPStanTurbo\\AccessoryNonFalsyStringType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Accessory\\AccessoryType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\Accessory\\AccessoryNumericStringType": {
+        "php": "src/Type/Accessory/AccessoryNumericStringType.php",
+        "cpp": "turbo-ext/src/AccessoryNumericStringType.cpp",
+        "turboClass": "PHPStanTurbo\\AccessoryNumericStringType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Accessory\\AccessoryType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\Accessory\\AccessoryUppercaseStringType": {
+        "php": "src/Type/Accessory/AccessoryUppercaseStringType.php",
+        "cpp": "turbo-ext/src/AccessoryUppercaseStringType.cpp",
+        "turboClass": "PHPStanTurbo\\AccessoryUppercaseStringType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Accessory\\AccessoryType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\Accessory\\HasMethodType": {
+        "php": "src/Type/Accessory/HasMethodType.php",
+        "cpp": "turbo-ext/src/HasMethodType.cpp",
+        "turboClass": "PHPStanTurbo\\HasMethodType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\Accessory\\AccessoryType",
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\Accessory\\HasOffsetType": {
+        "php": "src/Type/Accessory/HasOffsetType.php",
+        "cpp": "turbo-ext/src/HasOffsetType.cpp",
+        "turboClass": "PHPStanTurbo\\HasOffsetType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Accessory\\AccessoryType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\Accessory\\HasOffsetValueType": {
+        "php": "src/Type/Accessory/HasOffsetValueType.php",
+        "cpp": "turbo-ext/src/HasOffsetValueType.cpp",
+        "turboClass": "PHPStanTurbo\\HasOffsetValueType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Accessory\\AccessoryType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\Accessory\\HasPropertyType": {
+        "php": "src/Type/Accessory/HasPropertyType.php",
+        "cpp": "turbo-ext/src/HasPropertyType.cpp",
+        "turboClass": "PHPStanTurbo\\HasPropertyType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\Accessory\\AccessoryType",
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\Accessory\\NonEmptyArrayType": {
+        "php": "src/Type/Accessory/NonEmptyArrayType.php",
+        "cpp": "turbo-ext/src/NonEmptyArrayType.cpp",
+        "turboClass": "PHPStanTurbo\\NonEmptyArrayType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Accessory\\AccessoryType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\Accessory\\OversizedArrayType": {
+        "php": "src/Type/Accessory/OversizedArrayType.php",
+        "cpp": "turbo-ext/src/OversizedArrayType.cpp",
+        "turboClass": "PHPStanTurbo\\OversizedArrayType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Accessory\\AccessoryType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\ArrayType": {
+        "php": "src/Type/ArrayType.php",
+        "cpp": "turbo-ext/src/ArrayType.cpp",
+        "turboClass": "PHPStanTurbo\\ArrayType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\BenevolentUnionType": {
+        "php": "src/Type/BenevolentUnionType.php",
+        "cpp": "turbo-ext/src/BenevolentUnionType.cpp",
+        "turboClass": "PHPStanTurbo\\BenevolentUnionType",
+        "final": false,
+        "parent": "PHPStan\\Type\\UnionType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\CompoundType"
+        ]
+    },
+    "PHPStan\\Type\\BooleanType": {
+        "php": "src/Type/BooleanType.php",
+        "cpp": "turbo-ext/src/BooleanType.cpp",
+        "turboClass": "PHPStanTurbo\\BooleanType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\CallableType": {
+        "php": "src/Type/CallableType.php",
+        "cpp": "turbo-ext/src/CallableType.cpp",
+        "turboClass": "PHPStanTurbo\\CallableType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Reflection\\Callables\\CallableParametersAcceptor",
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Reflection\\ParametersAcceptor"
+        ]
+    },
+    "PHPStan\\Type\\CallableTypeHelper": {
+        "php": "src/Type/CallableTypeHelper.php",
+        "cpp": "turbo-ext/src/CallableTypeHelper.cpp",
+        "turboClass": "PHPStanTurbo\\CallableTypeHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\CircularTypeAliasErrorType": {
+        "php": "src/Type/CircularTypeAliasErrorType.php",
+        "cpp": "turbo-ext/src/CircularTypeAliasErrorType.cpp",
+        "turboClass": "PHPStanTurbo\\CircularTypeAliasErrorType",
+        "final": false,
+        "parent": "PHPStan\\Type\\ErrorType",
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\SubtractableType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\ClassConstantAccessType": {
+        "php": "src/Type/ClassConstantAccessType.php",
+        "cpp": "turbo-ext/src/ClassConstantAccessType.cpp",
+        "turboClass": "PHPStanTurbo\\ClassConstantAccessType",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\LateResolvableType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\ClassStringType": {
+        "php": "src/Type/ClassStringType.php",
+        "cpp": "turbo-ext/src/ClassStringType.cpp",
+        "turboClass": "PHPStanTurbo\\ClassStringType",
+        "final": false,
+        "parent": "PHPStan\\Type\\StringType",
+        "interfaces": [
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\ClosureType": {
+        "php": "src/Type/ClosureType.php",
+        "cpp": "turbo-ext/src/ClosureType.cpp",
+        "turboClass": "PHPStanTurbo\\ClosureType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\TypeWithClassName",
+            "PHPStan\\Reflection\\Callables\\CallableParametersAcceptor",
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Reflection\\ParametersAcceptor"
+        ]
+    },
+    "PHPStan\\Type\\ConditionalType": {
+        "php": "src/Type/ConditionalType.php",
+        "cpp": "turbo-ext/src/ConditionalType.cpp",
+        "turboClass": "PHPStanTurbo\\ConditionalType",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\LateResolvableType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\ConditionalTypeForParameter": {
+        "php": "src/Type/ConditionalTypeForParameter.php",
+        "cpp": "turbo-ext/src/ConditionalTypeForParameter.cpp",
+        "turboClass": "PHPStanTurbo\\ConditionalTypeForParameter",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\LateResolvableType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\ConstantTypeHelper": {
+        "php": "src/Type/ConstantTypeHelper.php",
+        "cpp": "turbo-ext/src/ConstantTypeHelper.cpp",
+        "turboClass": "PHPStanTurbo\\ConstantTypeHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\Constant\\ConstantArrayType": {
+        "php": "src/Type/Constant/ConstantArrayType.php",
+        "cpp": "turbo-ext/src/ConstantArrayType.cpp",
+        "turboClass": "PHPStanTurbo\\ConstantArrayType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\Constant\\ConstantArrayTypeBuilder": {
+        "php": "src/Type/Constant/ConstantArrayTypeBuilder.php",
+        "cpp": "turbo-ext/src/ConstantArrayTypeBuilder.cpp",
+        "turboClass": "PHPStanTurbo\\ConstantArrayTypeBuilder",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\Constant\\ConstantBooleanType": {
+        "php": "src/Type/Constant/ConstantBooleanType.php",
+        "cpp": "turbo-ext/src/ConstantBooleanType.cpp",
+        "turboClass": "PHPStanTurbo\\ConstantBooleanType",
+        "final": false,
+        "parent": "PHPStan\\Type\\BooleanType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\ConstantScalarType"
+        ]
+    },
+    "PHPStan\\Type\\Constant\\ConstantFloatType": {
+        "php": "src/Type/Constant/ConstantFloatType.php",
+        "cpp": "turbo-ext/src/ConstantFloatType.cpp",
+        "turboClass": "PHPStanTurbo\\ConstantFloatType",
+        "final": false,
+        "parent": "PHPStan\\Type\\FloatType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\ConstantScalarType"
+        ]
+    },
+    "PHPStan\\Type\\Constant\\ConstantIntegerType": {
+        "php": "src/Type/Constant/ConstantIntegerType.php",
+        "cpp": "turbo-ext/src/ConstantIntegerType.cpp",
+        "turboClass": "PHPStanTurbo\\ConstantIntegerType",
+        "final": false,
+        "parent": "PHPStan\\Type\\IntegerType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\ConstantScalarType"
+        ]
+    },
+    "PHPStan\\Type\\Constant\\ConstantStringType": {
+        "php": "src/Type/Constant/ConstantStringType.php",
+        "cpp": "turbo-ext/src/ConstantStringType.cpp",
+        "turboClass": "PHPStanTurbo\\ConstantStringType",
+        "final": false,
+        "parent": "PHPStan\\Type\\StringType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\ConstantScalarType"
+        ]
+    },
+    "PHPStan\\Type\\Enum\\EnumCaseObjectType": {
+        "php": "src/Type/Enum/EnumCaseObjectType.php",
+        "cpp": "turbo-ext/src/EnumCaseObjectType.cpp",
+        "turboClass": "PHPStanTurbo\\EnumCaseObjectType",
+        "final": false,
+        "parent": "PHPStan\\Type\\ObjectType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\SubtractableType",
+            "PHPStan\\Type\\TypeWithClassName"
+        ]
+    },
+    "PHPStan\\Type\\ErrorType": {
+        "php": "src/Type/ErrorType.php",
+        "cpp": "turbo-ext/src/ErrorType.cpp",
+        "turboClass": "PHPStanTurbo\\ErrorType",
+        "final": false,
+        "parent": "PHPStan\\Type\\MixedType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\SubtractableType",
+            "PHPStan\\Type\\CompoundType"
+        ]
+    },
+    "PHPStan\\Type\\FiniteTypeSet": {
+        "php": "src/Type/FiniteTypeSet.php",
+        "cpp": "turbo-ext/src/FiniteTypeSet.cpp",
+        "turboClass": "PHPStanTurbo\\FiniteTypeSet",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\FloatType": {
+        "php": "src/Type/FloatType.php",
+        "cpp": "turbo-ext/src/FloatType.cpp",
+        "turboClass": "PHPStanTurbo\\FloatType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\AbsorbedTemplateArgumentType": {
+        "php": "src/Type/Generic/AbsorbedTemplateArgumentType.php",
+        "cpp": "turbo-ext/src/AbsorbedTemplateArgumentType.cpp",
+        "turboClass": "PHPStanTurbo\\AbsorbedTemplateArgumentType",
+        "final": true,
+        "parent": "PHPStan\\Type\\ErrorType",
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\SubtractableType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\GenericClassStringType": {
+        "php": "src/Type/Generic/GenericClassStringType.php",
+        "cpp": "turbo-ext/src/GenericClassStringType.cpp",
+        "turboClass": "PHPStanTurbo\\GenericClassStringType",
+        "final": false,
+        "parent": "PHPStan\\Type\\ClassStringType",
+        "interfaces": [
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\GenericObjectType": {
+        "php": "src/Type/Generic/GenericObjectType.php",
+        "cpp": "turbo-ext/src/GenericObjectType.cpp",
+        "turboClass": "PHPStanTurbo\\GenericObjectType",
+        "final": false,
+        "parent": "PHPStan\\Type\\ObjectType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\SubtractableType",
+            "PHPStan\\Type\\TypeWithClassName"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\GenericStaticType": {
+        "php": "src/Type/Generic/GenericStaticType.php",
+        "cpp": "turbo-ext/src/GenericStaticType.cpp",
+        "turboClass": "PHPStanTurbo\\GenericStaticType",
+        "final": false,
+        "parent": "PHPStan\\Type\\StaticType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\SubtractableType",
+            "PHPStan\\Type\\TypeWithClassName"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateArrayType": {
+        "php": "src/Type/Generic/TemplateArrayType.php",
+        "cpp": "turbo-ext/src/TemplateArrayType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateArrayType",
+        "final": true,
+        "parent": "PHPStan\\Type\\ArrayType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\Generic\\TemplateType",
+            "PHPStan\\Type\\CompoundType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateBenevolentUnionType": {
+        "php": "src/Type/Generic/TemplateBenevolentUnionType.php",
+        "cpp": "turbo-ext/src/TemplateBenevolentUnionType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateBenevolentUnionType",
+        "final": true,
+        "parent": "PHPStan\\Type\\BenevolentUnionType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Generic\\TemplateType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateBooleanType": {
+        "php": "src/Type/Generic/TemplateBooleanType.php",
+        "cpp": "turbo-ext/src/TemplateBooleanType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateBooleanType",
+        "final": true,
+        "parent": "PHPStan\\Type\\BooleanType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\Generic\\TemplateType",
+            "PHPStan\\Type\\CompoundType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateConstantArrayType": {
+        "php": "src/Type/Generic/TemplateConstantArrayType.php",
+        "cpp": "turbo-ext/src/TemplateConstantArrayType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateConstantArrayType",
+        "final": true,
+        "parent": "PHPStan\\Type\\Constant\\ConstantArrayType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\Generic\\TemplateType",
+            "PHPStan\\Type\\CompoundType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateConstantIntegerType": {
+        "php": "src/Type/Generic/TemplateConstantIntegerType.php",
+        "cpp": "turbo-ext/src/TemplateConstantIntegerType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateConstantIntegerType",
+        "final": true,
+        "parent": "PHPStan\\Type\\Constant\\ConstantIntegerType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\ConstantScalarType",
+            "PHPStan\\Type\\Generic\\TemplateType",
+            "PHPStan\\Type\\CompoundType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateConstantStringType": {
+        "php": "src/Type/Generic/TemplateConstantStringType.php",
+        "cpp": "turbo-ext/src/TemplateConstantStringType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateConstantStringType",
+        "final": true,
+        "parent": "PHPStan\\Type\\Constant\\ConstantStringType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\ConstantScalarType",
+            "PHPStan\\Type\\Generic\\TemplateType",
+            "PHPStan\\Type\\CompoundType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateFloatType": {
+        "php": "src/Type/Generic/TemplateFloatType.php",
+        "cpp": "turbo-ext/src/TemplateFloatType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateFloatType",
+        "final": true,
+        "parent": "PHPStan\\Type\\FloatType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\Generic\\TemplateType",
+            "PHPStan\\Type\\CompoundType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateGenericObjectType": {
+        "php": "src/Type/Generic/TemplateGenericObjectType.php",
+        "cpp": "turbo-ext/src/TemplateGenericObjectType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateGenericObjectType",
+        "final": true,
+        "parent": "PHPStan\\Type\\Generic\\GenericObjectType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\SubtractableType",
+            "PHPStan\\Type\\TypeWithClassName",
+            "PHPStan\\Type\\Generic\\TemplateType",
+            "PHPStan\\Type\\CompoundType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateIntegerType": {
+        "php": "src/Type/Generic/TemplateIntegerType.php",
+        "cpp": "turbo-ext/src/TemplateIntegerType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateIntegerType",
+        "final": true,
+        "parent": "PHPStan\\Type\\IntegerType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\Generic\\TemplateType",
+            "PHPStan\\Type\\CompoundType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateIntersectionType": {
+        "php": "src/Type/Generic/TemplateIntersectionType.php",
+        "cpp": "turbo-ext/src/TemplateIntersectionType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateIntersectionType",
+        "final": true,
+        "parent": "PHPStan\\Type\\IntersectionType",
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\Generic\\TemplateType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateIterableType": {
+        "php": "src/Type/Generic/TemplateIterableType.php",
+        "cpp": "turbo-ext/src/TemplateIterableType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateIterableType",
+        "final": true,
+        "parent": "PHPStan\\Type\\IterableType",
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\Generic\\TemplateType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateKeyOfType": {
+        "php": "src/Type/Generic/TemplateKeyOfType.php",
+        "cpp": "turbo-ext/src/TemplateKeyOfType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateKeyOfType",
+        "final": true,
+        "parent": "PHPStan\\Type\\KeyOfType",
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\LateResolvableType",
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\Generic\\TemplateType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateMixedType": {
+        "php": "src/Type/Generic/TemplateMixedType.php",
+        "cpp": "turbo-ext/src/TemplateMixedType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateMixedType",
+        "final": true,
+        "parent": "PHPStan\\Type\\MixedType",
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\SubtractableType",
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\Generic\\TemplateType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateNullType": {
+        "php": "src/Type/Generic/TemplateNullType.php",
+        "cpp": "turbo-ext/src/TemplateNullType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateNullType",
+        "final": true,
+        "parent": "PHPStan\\Type\\NullType",
+        "interfaces": [
+            "PHPStan\\Type\\ConstantScalarType",
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\Generic\\TemplateType",
+            "PHPStan\\Type\\CompoundType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateObjectShapeType": {
+        "php": "src/Type/Generic/TemplateObjectShapeType.php",
+        "cpp": "turbo-ext/src/TemplateObjectShapeType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateObjectShapeType",
+        "final": true,
+        "parent": "PHPStan\\Type\\ObjectShapeType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\Generic\\TemplateType",
+            "PHPStan\\Type\\CompoundType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateObjectType": {
+        "php": "src/Type/Generic/TemplateObjectType.php",
+        "cpp": "turbo-ext/src/TemplateObjectType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateObjectType",
+        "final": true,
+        "parent": "PHPStan\\Type\\ObjectType",
+        "interfaces": [
+            "PHPStan\\Type\\TypeWithClassName",
+            "PHPStan\\Type\\SubtractableType",
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\Generic\\TemplateType",
+            "PHPStan\\Type\\CompoundType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateObjectWithoutClassType": {
+        "php": "src/Type/Generic/TemplateObjectWithoutClassType.php",
+        "cpp": "turbo-ext/src/TemplateObjectWithoutClassType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateObjectWithoutClassType",
+        "final": false,
+        "parent": "PHPStan\\Type\\ObjectWithoutClassType",
+        "interfaces": [
+            "PHPStan\\Type\\SubtractableType",
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\Generic\\TemplateType",
+            "PHPStan\\Type\\CompoundType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateStrictMixedType": {
+        "php": "src/Type/Generic/TemplateStrictMixedType.php",
+        "cpp": "turbo-ext/src/TemplateStrictMixedType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateStrictMixedType",
+        "final": true,
+        "parent": "PHPStan\\Type\\StrictMixedType",
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\Generic\\TemplateType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateStringType": {
+        "php": "src/Type/Generic/TemplateStringType.php",
+        "cpp": "turbo-ext/src/TemplateStringType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateStringType",
+        "final": true,
+        "parent": "PHPStan\\Type\\StringType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\Generic\\TemplateType",
+            "PHPStan\\Type\\CompoundType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateTypeArgumentStrategy": {
+        "php": "src/Type/Generic/TemplateTypeArgumentStrategy.php",
+        "cpp": "turbo-ext/src/TemplateTypeArgumentStrategy.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateTypeArgumentStrategy",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\Generic\\TemplateTypeStrategy"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateTypeFactory": {
+        "php": "src/Type/Generic/TemplateTypeFactory.php",
+        "cpp": "turbo-ext/src/TemplateTypeFactory.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateTypeFactory",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\Generic\\TemplateTypeHelper": {
+        "php": "src/Type/Generic/TemplateTypeHelper.php",
+        "cpp": "turbo-ext/src/TemplateTypeHelper.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateTypeHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\Generic\\TemplateTypeMap": {
+        "php": "src/Type/Generic/TemplateTypeMap.php",
+        "cpp": "turbo-ext/src/TemplateTypeMap.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateTypeMap",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\Generic\\TemplateTypeParameterStrategy": {
+        "php": "src/Type/Generic/TemplateTypeParameterStrategy.php",
+        "cpp": "turbo-ext/src/TemplateTypeParameterStrategy.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateTypeParameterStrategy",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\Generic\\TemplateTypeStrategy"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TemplateTypeReference": {
+        "php": "src/Type/Generic/TemplateTypeReference.php",
+        "cpp": "turbo-ext/src/TemplateTypeReference.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateTypeReference",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\Generic\\TemplateTypeScope": {
+        "php": "src/Type/Generic/TemplateTypeScope.php",
+        "cpp": "turbo-ext/src/TemplateTypeScope.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateTypeScope",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\Generic\\TemplateTypeVariance": {
+        "php": "src/Type/Generic/TemplateTypeVariance.php",
+        "cpp": "turbo-ext/src/TemplateTypeVariance.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateTypeVariance",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\Generic\\TemplateTypeVarianceMap": {
+        "php": "src/Type/Generic/TemplateTypeVarianceMap.php",
+        "cpp": "turbo-ext/src/TemplateTypeVarianceMap.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateTypeVarianceMap",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\Generic\\TemplateUnionType": {
+        "php": "src/Type/Generic/TemplateUnionType.php",
+        "cpp": "turbo-ext/src/TemplateUnionType.cpp",
+        "turboClass": "PHPStanTurbo\\TemplateUnionType",
+        "final": true,
+        "parent": "PHPStan\\Type\\UnionType",
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\Generic\\TemplateType"
+        ]
+    },
+    "PHPStan\\Type\\Generic\\TypeProjectionHelper": {
+        "php": "src/Type/Generic/TypeProjectionHelper.php",
+        "cpp": "turbo-ext/src/TypeProjectionHelper.cpp",
+        "turboClass": "PHPStanTurbo\\TypeProjectionHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\Generic\\UnresolvedTemplateArgumentType": {
+        "php": "src/Type/Generic/UnresolvedTemplateArgumentType.php",
+        "cpp": "turbo-ext/src/UnresolvedTemplateArgumentType.cpp",
+        "turboClass": "PHPStanTurbo\\UnresolvedTemplateArgumentType",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\Helper\\GetTemplateTypeType": {
+        "php": "src/Type/Helper/GetTemplateTypeType.php",
+        "cpp": "turbo-ext/src/GetTemplateTypeType.cpp",
+        "turboClass": "PHPStanTurbo\\GetTemplateTypeType",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\LateResolvableType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\IntegerRangeType": {
+        "php": "src/Type/IntegerRangeType.php",
+        "cpp": "turbo-ext/src/IntegerRangeType.cpp",
+        "turboClass": "PHPStanTurbo\\IntegerRangeType",
+        "final": false,
+        "parent": "PHPStan\\Type\\IntegerType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\CompoundType"
+        ]
+    },
+    "PHPStan\\Type\\IntegerType": {
+        "php": "src/Type/IntegerType.php",
+        "cpp": "turbo-ext/src/IntegerType.cpp",
+        "turboClass": "PHPStanTurbo\\IntegerType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\IntersectionType": {
+        "php": "src/Type/IntersectionType.php",
+        "cpp": "turbo-ext/src/IntersectionType.cpp",
+        "turboClass": "PHPStanTurbo\\IntersectionType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\IsSuperTypeOfResult": {
+        "php": "src/Type/IsSuperTypeOfResult.php",
+        "cpp": "turbo-ext/src/IsSuperTypeOfResult.cpp",
+        "turboClass": "PHPStanTurbo\\IsSuperTypeOfResult",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\IterableType": {
+        "php": "src/Type/IterableType.php",
+        "cpp": "turbo-ext/src/IterableType.cpp",
+        "turboClass": "PHPStanTurbo\\IterableType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\KeyOfType": {
+        "php": "src/Type/KeyOfType.php",
+        "cpp": "turbo-ext/src/KeyOfType.cpp",
+        "turboClass": "PHPStanTurbo\\KeyOfType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\LateResolvableType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\LateResolvableArrayShapeType": {
+        "php": "src/Type/LateResolvableArrayShapeType.php",
+        "cpp": "turbo-ext/src/LateResolvableArrayShapeType.cpp",
+        "turboClass": "PHPStanTurbo\\LateResolvableArrayShapeType",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\LateResolvableType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\MixedType": {
+        "php": "src/Type/MixedType.php",
+        "cpp": "turbo-ext/src/MixedType.cpp",
+        "turboClass": "PHPStanTurbo\\MixedType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\SubtractableType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\NeverType": {
+        "php": "src/Type/NeverType.php",
+        "cpp": "turbo-ext/src/NeverType.cpp",
+        "turboClass": "PHPStanTurbo\\NeverType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\NewObjectType": {
+        "php": "src/Type/NewObjectType.php",
+        "cpp": "turbo-ext/src/NewObjectType.cpp",
+        "turboClass": "PHPStanTurbo\\NewObjectType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\LateResolvableType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\NonAcceptingNeverType": {
+        "php": "src/Type/NonAcceptingNeverType.php",
+        "cpp": "turbo-ext/src/NonAcceptingNeverType.cpp",
+        "turboClass": "PHPStanTurbo\\NonAcceptingNeverType",
+        "final": false,
+        "parent": "PHPStan\\Type\\NeverType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\CompoundType"
+        ]
+    },
+    "PHPStan\\Type\\NonexistentParentClassType": {
+        "php": "src/Type/NonexistentParentClassType.php",
+        "cpp": "turbo-ext/src/NonexistentParentClassType.cpp",
+        "turboClass": "PHPStanTurbo\\NonexistentParentClassType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\NullType": {
+        "php": "src/Type/NullType.php",
+        "cpp": "turbo-ext/src/NullType.cpp",
+        "turboClass": "PHPStanTurbo\\NullType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\ConstantScalarType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\ObjectShapeType": {
+        "php": "src/Type/ObjectShapeType.php",
+        "cpp": "turbo-ext/src/ObjectShapeType.cpp",
+        "turboClass": "PHPStanTurbo\\ObjectShapeType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\ObjectType": {
+        "php": "src/Type/ObjectType.php",
+        "cpp": "turbo-ext/src/ObjectType.cpp",
+        "turboClass": "PHPStanTurbo\\ObjectType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\TypeWithClassName",
+            "PHPStan\\Type\\SubtractableType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\ObjectWithoutClassType": {
+        "php": "src/Type/ObjectWithoutClassType.php",
+        "cpp": "turbo-ext/src/ObjectWithoutClassType.cpp",
+        "turboClass": "PHPStanTurbo\\ObjectWithoutClassType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\SubtractableType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\OffsetAccessType": {
+        "php": "src/Type/OffsetAccessType.php",
+        "cpp": "turbo-ext/src/OffsetAccessType.cpp",
+        "turboClass": "PHPStanTurbo\\OffsetAccessType",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\LateResolvableType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\RecursionGuard": {
+        "php": "src/Type/RecursionGuard.php",
+        "cpp": "turbo-ext/src/RecursionGuard.cpp",
+        "turboClass": "PHPStanTurbo\\RecursionGuard",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\ResourceType": {
+        "php": "src/Type/ResourceType.php",
+        "cpp": "turbo-ext/src/ResourceType.cpp",
+        "turboClass": "PHPStanTurbo\\ResourceType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\StaticType": {
+        "php": "src/Type/StaticType.php",
+        "cpp": "turbo-ext/src/StaticType.cpp",
+        "turboClass": "PHPStanTurbo\\StaticType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\TypeWithClassName",
+            "PHPStan\\Type\\SubtractableType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\StaticTypeFactory": {
+        "php": "src/Type/StaticTypeFactory.php",
+        "cpp": "turbo-ext/src/StaticTypeFactory.cpp",
+        "turboClass": "PHPStanTurbo\\StaticTypeFactory",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\StrictMixedType": {
+        "php": "src/Type/StrictMixedType.php",
+        "cpp": "turbo-ext/src/StrictMixedType.cpp",
+        "turboClass": "PHPStanTurbo\\StrictMixedType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\StringAlwaysAcceptingObjectWithToStringType": {
+        "php": "src/Type/StringAlwaysAcceptingObjectWithToStringType.php",
+        "cpp": "turbo-ext/src/StringAlwaysAcceptingObjectWithToStringType.cpp",
+        "turboClass": "PHPStanTurbo\\StringAlwaysAcceptingObjectWithToStringType",
+        "final": false,
+        "parent": "PHPStan\\Type\\StringType",
+        "interfaces": [
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\StringNeverAcceptingObjectWithToStringType": {
+        "php": "src/Type/StringNeverAcceptingObjectWithToStringType.php",
+        "cpp": "turbo-ext/src/StringNeverAcceptingObjectWithToStringType.cpp",
+        "turboClass": "PHPStanTurbo\\StringNeverAcceptingObjectWithToStringType",
+        "final": false,
+        "parent": "PHPStan\\Type\\StringType",
+        "interfaces": [
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\StringType": {
+        "php": "src/Type/StringType.php",
+        "cpp": "turbo-ext/src/StringType.cpp",
+        "turboClass": "PHPStanTurbo\\StringType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\ThisType": {
+        "php": "src/Type/ThisType.php",
+        "cpp": "turbo-ext/src/ThisType.cpp",
+        "turboClass": "PHPStanTurbo\\ThisType",
+        "final": false,
+        "parent": "PHPStan\\Type\\StaticType",
+        "interfaces": [
+            "PHPStan\\Type\\Type",
+            "PHPStan\\Type\\SubtractableType",
+            "PHPStan\\Type\\TypeWithClassName"
+        ]
+    },
+    "PHPStan\\Type\\TypeCombinator": {
+        "php": "src/Type/TypeCombinator.php",
+        "cpp": "turbo-ext/src/TypeCombinator.cpp",
+        "turboClass": "PHPStanTurbo\\TypeCombinator",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\TypeCombinatorCache": {
+        "php": "src/Type/TypeCombinatorCache.php",
+        "cpp": "turbo-ext/src/TypeCombinatorCache.cpp",
+        "turboClass": "PHPStanTurbo\\TypeCombinatorCache",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\TypeResult": {
+        "php": "src/Type/TypeResult.php",
+        "cpp": "turbo-ext/src/TypeResult.cpp",
+        "turboClass": "PHPStanTurbo\\TypeResult",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\TypeTraverser": {
+        "php": "src/Type/TypeTraverser.php",
+        "cpp": "turbo-ext/src/TypeTraverser.cpp",
+        "turboClass": "PHPStanTurbo\\TypeTraverser",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\TypeUtils": {
+        "php": "src/Type/TypeUtils.php",
+        "cpp": "turbo-ext/src/TypeUtils.cpp",
+        "turboClass": "PHPStanTurbo\\TypeUtils",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\TypehintHelper": {
+        "php": "src/Type/TypehintHelper.php",
+        "cpp": "turbo-ext/src/TypehintHelper.cpp",
+        "turboClass": "PHPStanTurbo\\TypehintHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\UnionType": {
+        "php": "src/Type/UnionType.php",
+        "cpp": "turbo-ext/src/UnionType.cpp",
+        "turboClass": "PHPStanTurbo\\UnionType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\UnionTypeHelper": {
+        "php": "src/Type/UnionTypeHelper.php",
+        "cpp": "turbo-ext/src/UnionTypeHelper.cpp",
+        "turboClass": "PHPStanTurbo\\UnionTypeHelper",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\ValueOfType": {
+        "php": "src/Type/ValueOfType.php",
+        "cpp": "turbo-ext/src/ValueOfType.cpp",
+        "turboClass": "PHPStanTurbo\\ValueOfType",
+        "final": true,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\CompoundType",
+            "PHPStan\\Type\\LateResolvableType",
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PHPStan\\Type\\VerbosityLevel": {
+        "php": "src/Type/VerbosityLevel.php",
+        "cpp": "turbo-ext/src/VerbosityLevel.cpp",
+        "turboClass": "PHPStanTurbo\\VerbosityLevel",
+        "final": true,
+        "parent": null,
+        "interfaces": []
+    },
+    "PHPStan\\Type\\VoidType": {
+        "php": "src/Type/VoidType.php",
+        "cpp": "turbo-ext/src/VoidType.cpp",
+        "turboClass": "PHPStanTurbo\\VoidType",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PHPStan\\Type\\Type"
+        ]
+    },
+    "PhpParser\\NodeTraverser": {
+        "php": "../PhpParser/NodeTraverser.php",
+        "cpp": "turbo-ext/src/NodeTraverser.cpp",
+        "turboClass": "PHPStanTurbo\\NodeTraverser",
+        "final": false,
+        "parent": null,
+        "interfaces": [
+            "PhpParser\\NodeTraverserInterface"
+        ],
+        "vendored": true
+    }
+}

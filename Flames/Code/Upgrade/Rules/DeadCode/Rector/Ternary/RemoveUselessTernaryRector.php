@@ -1,0 +1,77 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\DeadCode\Rector\Ternary;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Array_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BooleanNot;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Ternary;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Scalar\Int_;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\BooleanType;
+use PHPStan\Type\IntegerType;
+use Flames\Code\Upgrade\PhpParser\Node\Value\ValueResolver;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\Rules\DeadCode\Rector\Ternary\RemoveUselessTernaryRectorTest
+ */
+final class RemoveUselessTernaryRector extends AbstractRector
+{
+    public function __construct(private readonly ValueResolver $valueResolver)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Remove useless ternary if fallback is falsey of left code', [new CodeSample(<<<'CODE_SAMPLE'
+function go(bool $value)
+{
+    return $value ?: false;
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+function go(bool $value)
+{
+    return $value;
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [Ternary::class];
+    }
+    /**
+     * @param Ternary $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        // if condition is negated, skip
+        if ($node->cond instanceof BooleanNot) {
+            return null;
+        }
+        $nativeType = $this->nodeTypeResolver->getNativeType($node->cond);
+        if ($nativeType instanceof BooleanType && $node->if instanceof Expr && $this->valueResolver->isTrue($node->if) && $this->valueResolver->isFalse($node->else)) {
+            return $node->cond;
+        }
+        if ($node->if instanceof Expr && !$this->nodeComparator->areNodesEqual($node->if, $node->cond)) {
+            return null;
+        }
+        if ($nativeType instanceof BooleanType && $this->valueResolver->isFalse($node->else)) {
+            return $node->cond;
+        }
+        if ($nativeType instanceof ArrayType && $node->else instanceof Array_ && $node->else->items === []) {
+            return $node->cond;
+        }
+        if ($nativeType instanceof IntegerType && $node->else instanceof Int_ && $node->else->value === 0) {
+            return $node->cond;
+        }
+        return null;
+    }
+}

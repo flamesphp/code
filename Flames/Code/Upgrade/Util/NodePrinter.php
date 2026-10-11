@@ -1,0 +1,41 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Util;
+
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\CustomRules\SimpleNodeDumper;
+use Flames\Code\Upgrade\ThirdParty\Symfony\Component\Console\Style\SymfonyStyle;
+final readonly class NodePrinter
+{
+    /**
+     * @see https://regex101.com/r/Fe8n73/1
+     */
+    private const string CLASS_NAME_REGEX = '#(?<class_name>PhpParser(.*?))\(#ms';
+    /**
+     * @see https://regex101.com/r/uQFuvL/1
+     */
+    private const string PROPERTY_KEY_REGEX = '#(?<key>[\w\d]+)\:#';
+    public function __construct(private SymfonyStyle $symfonyStyle)
+    {
+    }
+    /**
+     * @param Node|Node[] $nodes
+     */
+    public function printNodes($nodes): void
+    {
+        $dumpedNodesContents = SimpleNodeDumper::dump($nodes);
+        // colorize
+        $colorContents = $this->addConsoleColors($dumpedNodesContents);
+        $this->symfonyStyle->writeln($colorContents);
+        $this->symfonyStyle->newLine();
+    }
+    private function addConsoleColors(string $contents): string
+    {
+        // decorate class names
+        $colorContents = Strings::replace($contents, self::CLASS_NAME_REGEX, static fn(array $match): string => '<fg=green>' . $match['class_name'] . '</>(');
+        // decorate keys
+        return Strings::replace($colorContents, self::PROPERTY_KEY_REGEX, static fn(array $match): string => '<fg=yellow>' . $match['key'] . '</>:');
+    }
+}

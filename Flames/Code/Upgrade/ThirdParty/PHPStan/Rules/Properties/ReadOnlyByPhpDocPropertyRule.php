@@ -1,0 +1,33 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Rules\Properties;
+
+use PhpParser\Node;
+use PHPStan\Analyser\Scope;
+use PHPStan\DependencyInjection\RegisteredRule;
+use PHPStan\Node\ClassPropertyNode;
+use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleErrorBuilder;
+/**
+ * @implements Rule<ClassPropertyNode>
+ */
+#[RegisteredRule(0)]
+final class ReadOnlyByPhpDocPropertyRule implements Rule
+{
+    public function getNodeType(): string
+    {
+        return ClassPropertyNode::class;
+    }
+    public function processNode(Node $node, Scope $scope): array
+    {
+        if (!($node->isReadonlyByPhpDoc && !$node->isAllowedPrivateMutation) || ((bool) ($node->flags & \PhpParser\Modifiers::READONLY) || $node->isReadonlyClass)) {
+            return [];
+        }
+        $errors = [];
+        if ($node->default !== null) {
+            $errors[] = RuleErrorBuilder::message('@readonly property cannot have a default value.')->identifier('property.readOnlyByPhpDocDefaultValue')->build();
+        }
+        return $errors;
+    }
+}

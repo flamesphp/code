@@ -1,0 +1,230 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Type;
+
+use PHPStan\Php\PhpVersion;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Reflection\ClassConstantReflection;
+use PHPStan\Reflection\ClassMemberAccessAnswerer;
+use PHPStan\Reflection\ExtendedMethodReflection;
+use PHPStan\Reflection\ExtendedPropertyReflection;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Reflection\Type\UnresolvedMethodPrototypeReflection;
+use PHPStan\Reflection\Type\UnresolvedPropertyPrototypeReflection;
+use PHPStan\ShouldNotHappenException;
+use PHPStan\TrinaryLogic;
+use PHPStan\Turbo\ShadowedByTurboExtension;
+use PHPStan\Type\Accessory\AccessoryLiteralStringType;
+use PHPStan\Type\Enum\EnumCaseObjectType;
+use PHPStan\Type\Traits\NonArrayTypeTrait;
+use PHPStan\Type\Traits\NonCallableTypeTrait;
+use PHPStan\Type\Traits\NonGeneralizableTypeTrait;
+use PHPStan\Type\Traits\NonGenericTypeTrait;
+use PHPStan\Type\Traits\NonIterableTypeTrait;
+use PHPStan\Type\Traits\NonOffsetAccessibleTypeTrait;
+use PHPStan\Type\Traits\NonRemoveableTypeTrait;
+use PHPStan\Type\Traits\TruthyBooleanTypeTrait;
+use PHPStan\Type\Traits\UndecidedComparisonTypeTrait;
+#[ShadowedByTurboExtension(__DIR__ . '/../turbo-ext/src/NonexistentParentClassType.cpp')]
+class NonexistentParentClassType implements \PHPStan\Type\Type
+{
+    use \PHPStan\Type\JustNullableTypeTrait;
+    use NonArrayTypeTrait;
+    use NonCallableTypeTrait;
+    use NonIterableTypeTrait;
+    use NonOffsetAccessibleTypeTrait;
+    use TruthyBooleanTypeTrait;
+    use NonGenericTypeTrait;
+    use UndecidedComparisonTypeTrait;
+    use NonRemoveableTypeTrait;
+    use NonGeneralizableTypeTrait;
+    public function describe(\PHPStan\Type\VerbosityLevel $level): string
+    {
+        return 'parent';
+    }
+    public function getTemplateType(string $ancestorClassName, string $templateTypeName): \PHPStan\Type\Type
+    {
+        return new \PHPStan\Type\ErrorType();
+    }
+    public function isObject(): TrinaryLogic
+    {
+        return TrinaryLogic::createYes();
+    }
+    public function getClassStringType(): \PHPStan\Type\Type
+    {
+        return new \PHPStan\Type\ClassStringType();
+    }
+    public function isEnum(): TrinaryLogic
+    {
+        return TrinaryLogic::createNo();
+    }
+    public function canAccessProperties(): TrinaryLogic
+    {
+        return TrinaryLogic::createNo();
+    }
+    public function hasProperty(string $propertyName): TrinaryLogic
+    {
+        return TrinaryLogic::createNo();
+    }
+    public function getProperty(string $propertyName, ClassMemberAccessAnswerer $scope): ExtendedPropertyReflection
+    {
+        throw new ShouldNotHappenException();
+    }
+    public function getUnresolvedPropertyPrototype(string $propertyName, ClassMemberAccessAnswerer $scope): UnresolvedPropertyPrototypeReflection
+    {
+        throw new ShouldNotHappenException();
+    }
+    public function hasInstanceProperty(string $propertyName): TrinaryLogic
+    {
+        return TrinaryLogic::createNo();
+    }
+    public function getInstanceProperty(string $propertyName, ClassMemberAccessAnswerer $scope): ExtendedPropertyReflection
+    {
+        throw new ShouldNotHappenException();
+    }
+    public function getUnresolvedInstancePropertyPrototype(string $propertyName, ClassMemberAccessAnswerer $scope): UnresolvedPropertyPrototypeReflection
+    {
+        throw new ShouldNotHappenException();
+    }
+    public function hasStaticProperty(string $propertyName): TrinaryLogic
+    {
+        return TrinaryLogic::createNo();
+    }
+    public function getStaticProperty(string $propertyName, ClassMemberAccessAnswerer $scope): ExtendedPropertyReflection
+    {
+        throw new ShouldNotHappenException();
+    }
+    public function getUnresolvedStaticPropertyPrototype(string $propertyName, ClassMemberAccessAnswerer $scope): UnresolvedPropertyPrototypeReflection
+    {
+        throw new ShouldNotHappenException();
+    }
+    public function canCallMethods(): TrinaryLogic
+    {
+        return TrinaryLogic::createNo();
+    }
+    public function hasMethod(string $methodName): TrinaryLogic
+    {
+        return TrinaryLogic::createNo();
+    }
+    public function getMethod(string $methodName, ClassMemberAccessAnswerer $scope): ExtendedMethodReflection
+    {
+        throw new ShouldNotHappenException();
+    }
+    public function getUnresolvedMethodPrototype(string $methodName, ClassMemberAccessAnswerer $scope): UnresolvedMethodPrototypeReflection
+    {
+        throw new ShouldNotHappenException();
+    }
+    public function canAccessConstants(): TrinaryLogic
+    {
+        return TrinaryLogic::createNo();
+    }
+    public function hasConstant(string $constantName): TrinaryLogic
+    {
+        return TrinaryLogic::createNo();
+    }
+    public function getConstant(string $constantName): ClassConstantReflection
+    {
+        throw new ShouldNotHappenException();
+    }
+    public function getConstantStrings(): array
+    {
+        return [];
+    }
+    public function isCloneable(): TrinaryLogic
+    {
+        return TrinaryLogic::createNo();
+    }
+    public function toNumber(): \PHPStan\Type\Type
+    {
+        return new \PHPStan\Type\ErrorType();
+    }
+    public function toBitwiseNotType(): \PHPStan\Type\Type
+    {
+        return new \PHPStan\Type\ErrorType();
+    }
+    public function toGetClassResultType(): \PHPStan\Type\Type
+    {
+        return $this->getClassStringType();
+    }
+    public function toClassConstantType(ReflectionProvider $reflectionProvider): \PHPStan\Type\Type
+    {
+        return new \PHPStan\Type\IntersectionType([$this->getClassStringType(), new AccessoryLiteralStringType()]);
+    }
+    public function toObjectTypeForInstanceofCheck(): \PHPStan\Type\ClassNameToObjectTypeResult
+    {
+        return new \PHPStan\Type\ClassNameToObjectTypeResult($this, \true);
+    }
+    public function toObjectTypeForIsACheck(\PHPStan\Type\Type $objectOrClassType, bool $allowString, bool $allowSameClass): \PHPStan\Type\ClassNameToObjectTypeResult
+    {
+        if ($allowString) {
+            return new \PHPStan\Type\ClassNameToObjectTypeResult(new \PHPStan\Type\UnionType([new \PHPStan\Type\ObjectWithoutClassType(), new \PHPStan\Type\ClassStringType()]), \false);
+        }
+        return new \PHPStan\Type\ClassNameToObjectTypeResult(new \PHPStan\Type\ObjectWithoutClassType(), \false);
+    }
+    public function toAbsoluteNumber(): \PHPStan\Type\Type
+    {
+        return new \PHPStan\Type\ErrorType();
+    }
+    public function toString(): \PHPStan\Type\Type
+    {
+        return new \PHPStan\Type\ErrorType();
+    }
+    public function toInteger(): \PHPStan\Type\Type
+    {
+        return new \PHPStan\Type\ErrorType();
+    }
+    public function toFloat(): \PHPStan\Type\Type
+    {
+        return new \PHPStan\Type\ErrorType();
+    }
+    public function toArray(): \PHPStan\Type\Type
+    {
+        return new \PHPStan\Type\ErrorType();
+    }
+    public function toArrayKey(): \PHPStan\Type\Type
+    {
+        return new \PHPStan\Type\ErrorType();
+    }
+    public function toCoercedArgumentType(bool $strictTypes): \PHPStan\Type\Type
+    {
+        return new \PHPStan\Type\ErrorType();
+    }
+    public function isOffsetAccessLegal(): TrinaryLogic
+    {
+        return TrinaryLogic::createNo();
+    }
+    public function isScalar(): TrinaryLogic
+    {
+        return TrinaryLogic::createNo();
+    }
+    public function looseCompare(\PHPStan\Type\Type $type, PhpVersion $phpVersion): \PHPStan\Type\BooleanType
+    {
+        return new \PHPStan\Type\BooleanType();
+    }
+    public function getEnumCases(): array
+    {
+        return [];
+    }
+    public function getEnumCaseObject(): ?EnumCaseObjectType
+    {
+        return null;
+    }
+    public function exponentiate(\PHPStan\Type\Type $exponent): \PHPStan\Type\Type
+    {
+        return new \PHPStan\Type\ErrorType();
+    }
+    public function getFiniteTypes(): array
+    {
+        return [];
+    }
+    public function toPhpDocNode(): TypeNode
+    {
+        return new IdentifierTypeNode('parent');
+    }
+    public function hasTemplateOrLateResolvableType(): bool
+    {
+        return \false;
+    }
+}

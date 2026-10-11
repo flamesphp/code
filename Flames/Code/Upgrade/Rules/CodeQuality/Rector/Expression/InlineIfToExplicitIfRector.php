@@ -1,0 +1,135 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\CodeQuality\Rector\Expression;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BooleanNot;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Variable;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_;
+use Flames\Code\Upgrade\NodeManipulator\BinaryOpManipulator;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\Rules\CodeQuality\Rector\Expression\InlineIfToExplicitIfRectorTest
+ */
+final class InlineIfToExplicitIfRector extends AbstractRector
+{
+    public function __construct(private readonly BinaryOpManipulator $binaryOpManipulator)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Change inline if to explicit if', [new CodeSample(<<<'CODE_SAMPLE'
+class SomeClass
+{
+    public function run()
+    {
+        $userId = null;
+
+        is_null($userId) && $userId = 5;
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+class SomeClass
+{
+    public function run()
+    {
+        $userId = null;
+
+        if (is_null($userId)) {
+            $userId = 5;
+        }
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [Expression::class];
+    }
+    /**
+     * @param Expression $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if ($node->expr instanceof BooleanAnd) {
+            return $this->processExplicitIf($node);
+        }
+        if ($node->expr instanceof BooleanOr) {
+            return $this->processExplicitIf($node);
+        }
+        return null;
+    }
+    private function processExplicitIf(Expression $expression): ?Node
+    {
+        /** @var BooleanAnd|BooleanOr $booleanExpr */
+        $booleanExpr = $expression->expr;
+        $exprLeft = $booleanExpr->left instanceof BooleanNot ? $booleanExpr->left->expr : $booleanExpr->left;
+        if ($exprLeft instanceof FuncCall && $this->isName($exprLeft, 'defined')) {
+            return null;
+        }
+        if ($this->isSameLocalMethodCallChain($booleanExpr)) {
+            return null;
+        }
+        $leftStaticType = $this->getType($booleanExpr->left);
+        if (!$leftStaticType->isBoolean()->yes()) {
+            return null;
+        }
+        /** @var Expr $expr */
+        $expr = $booleanExpr instanceof BooleanAnd ? $booleanExpr->left : $this->binaryOpManipulator->inverseNode($booleanExpr->left);
+        $if = new If_($expr);
+        $if->stmts[] = new Expression($booleanExpr->right);
+        $this->mirrorComments($if, $expression);
+        return $if;
+    }
+    /**
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\BooleanAnd|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\BooleanOr $booleanExpr
+     */
+    private function isSameLocalMethodCallChain($booleanExpr): bool
+    {
+        $leaves = [];
+        $this->collectOperands($booleanExpr, $leaves);
+        $firstMethodCall = null;
+        foreach ($leaves as $leaf) {
+            if (!$leaf instanceof MethodCall) {
+                return \false;
+            }
+            if (!$leaf->var instanceof Variable || !$this->isName($leaf->var, 'this')) {
+                return \false;
+            }
+            if (!$firstMethodCall instanceof MethodCall) {
+                $firstMethodCall = $leaf;
+                continue;
+            }
+            if (!$this->nodeNameResolver->areNamesEqual($firstMethodCall->name, $leaf->name)) {
+                return \false;
+            }
+        }
+        return $firstMethodCall instanceof MethodCall;
+    }
+    /**
+     * @param Expr[] $leaves
+     */
+    private function collectOperands(Expr $expr, array &$leaves): void
+    {
+        if ($expr instanceof BooleanAnd || $expr instanceof BooleanOr) {
+            $this->collectOperands($expr->left, $leaves);
+            $this->collectOperands($expr->right, $leaves);
+            return;
+        }
+        $leaves[] = $expr;
+    }
+}

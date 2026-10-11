@@ -1,0 +1,58 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Rules\Arrays;
+
+use PhpParser\Node;
+use PHPStan\Analyser\Scope;
+use PHPStan\DependencyInjection\AutowiredParameter;
+use PHPStan\DependencyInjection\RegisteredRule;
+use PHPStan\Php\PhpVersion;
+use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\Rules\RuleLevelHelper;
+use PHPStan\Type\ErrorType;
+use PHPStan\Type\Type;
+use PHPStan\Type\VerbosityLevel;
+use function sprintf;
+/**
+ * @implements Rule<Node\ArrayItem>
+ */
+#[RegisteredRule(3)]
+final class InvalidKeyInArrayItemRule implements Rule
+{
+    private RuleLevelHelper $ruleLevelHelper;
+    private PhpVersion $phpVersion;
+    private bool $reportNonIntStringArrayKey;
+    public function __construct(
+        RuleLevelHelper $ruleLevelHelper,
+        PhpVersion $phpVersion,
+        #[AutowiredParameter]
+        bool $reportNonIntStringArrayKey
+    )
+    {
+        $this->ruleLevelHelper = $ruleLevelHelper;
+        $this->phpVersion = $phpVersion;
+        $this->reportNonIntStringArrayKey = $reportNonIntStringArrayKey;
+    }
+    public function getNodeType(): string
+    {
+        return Node\ArrayItem::class;
+    }
+    public function processNode(Node $node, Scope $scope): array
+    {
+        if ($node->key === null) {
+            return [];
+        }
+        $allowedArrayKeys = \PHPStan\Rules\Arrays\AllowedArrayKeysTypes::getType($this->phpVersion, $this->reportNonIntStringArrayKey);
+        $dimensionType = $this->ruleLevelHelper->findTypeToCheck($scope, $node->key, '', static fn(\PHPStan\Type\Type $dimType): bool => $allowedArrayKeys->isSuperTypeOf($dimType)->yes())->type;
+        if ($dimensionType instanceof ErrorType) {
+            return [];
+        }
+        $isSuperType = $allowedArrayKeys->isSuperTypeOf($dimensionType);
+        if ($isSuperType->yes()) {
+            return [];
+        }
+        return [RuleErrorBuilder::message(sprintf('%s array key type %s.', $isSuperType->no() ? 'Invalid' : 'Possibly invalid', $dimensionType->describe(VerbosityLevel::typeOnly())))->identifier('array.invalidKey')->build()];
+    }
+}

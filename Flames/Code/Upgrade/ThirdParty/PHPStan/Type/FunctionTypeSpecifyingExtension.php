@@ -1,0 +1,39 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Type;
+
+use PhpParser\Node\Expr\FuncCall;
+use PHPStan\Analyser\DependencyTracker;
+use PHPStan\Analyser\Scope;
+use PHPStan\Analyser\SpecifiedTypes;
+use PHPStan\Analyser\TypeSpecifierContext;
+use PHPStan\Analyser\TypeSpecifierFactory;
+use PHPStan\DependencyInjection\ExtensionInterface;
+use PHPStan\Reflection\FunctionReflection;
+/**
+ * This is the interface type-specifying extensions implement for functions.
+ *
+ * To register it in the configuration file use the `phpstan.typeSpecifier.functionTypeSpecifyingExtension` service tag:
+ *
+ * ```
+ * services:
+ * 	-
+ *		class: App\PHPStan\MyExtension
+ *		tags:
+ *			- phpstan.typeSpecifier.functionTypeSpecifyingExtension
+ * ```
+ *
+ * Learn more: https://phpstan.org/developing-extensions/type-specifying-extensions
+ *
+ * @api
+ */
+#[ExtensionInterface(TypeSpecifierFactory::FUNCTION_TYPE_SPECIFYING_EXTENSION_TAG)]
+interface FunctionTypeSpecifyingExtension
+{
+    public function isFunctionSupported(FunctionReflection $functionReflection, FuncCall $node, TypeSpecifierContext $context): bool;
+    /**
+     * @param \PHPStan\Analyser\Scope&\PHPStan\Analyser\DependencyTracker $scope
+     */
+    public function specifyTypes(FunctionReflection $functionReflection, FuncCall $node, \PHPStan\Analyser\Scope $scope, TypeSpecifierContext $context): SpecifiedTypes;
+}

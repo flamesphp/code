@@ -1,0 +1,75 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Rules;
+
+use PHPStan\Analyser\Scope;
+use PHPStan\DependencyInjection\AutowiredExtensions;
+use PHPStan\DependencyInjection\AutowiredService;
+use PHPStan\DependencyInjection\ExtensionsCollection;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Rules\RestrictedUsage\RestrictedClassNameUsageExtension;
+#[AutowiredService]
+final class ClassNameCheck
+{
+    private \PHPStan\Rules\ClassCaseSensitivityCheck $classCaseSensitivityCheck;
+    private \PHPStan\Rules\ClassForbiddenNameCheck $classForbiddenNameCheck;
+    private ReflectionProvider $reflectionProvider;
+    /**
+     * @var ExtensionsCollection<RestrictedClassNameUsageExtension>
+     */
+    private ExtensionsCollection $extensions;
+    /**
+     * @param ExtensionsCollection<RestrictedClassNameUsageExtension> $extensions
+     */
+    public function __construct(
+        \PHPStan\Rules\ClassCaseSensitivityCheck $classCaseSensitivityCheck,
+        \PHPStan\Rules\ClassForbiddenNameCheck $classForbiddenNameCheck,
+        ReflectionProvider $reflectionProvider,
+        #[AutowiredExtensions(RestrictedClassNameUsageExtension::class)]
+        ExtensionsCollection $extensions
+    )
+    {
+        $this->classCaseSensitivityCheck = $classCaseSensitivityCheck;
+        $this->classForbiddenNameCheck = $classForbiddenNameCheck;
+        $this->reflectionProvider = $reflectionProvider;
+        $this->extensions = $extensions;
+    }
+    /**
+     * @param ClassNameNodePair[] $pairs
+     * @return list<IdentifierRuleError>
+     */
+    public function checkClassNames(Scope $scope, array $pairs, ?\PHPStan\Rules\ClassNameUsageLocation $location, bool $checkClassCaseSensitivity = \true): array
+    {
+        $errors = [];
+        if ($checkClassCaseSensitivity) {
+            foreach ($this->classCaseSensitivityCheck->checkClassNames($pairs) as $error) {
+                $errors[] = $error;
+            }
+        }
+        foreach ($this->classForbiddenNameCheck->checkClassNames($pairs) as $error) {
+            $errors[] = $error;
+        }
+        if ($location === null) {
+            return $errors;
+        }
+        $extensions = $this->extensions->getAll();
+        if ($extensions === []) {
+            return $errors;
+        }
+        foreach ($pairs as $pair) {
+            if (!$this->reflectionProvider->hasClass($pair->className)) {
+                continue;
+            }
+            $classReflection = $this->reflectionProvider->getClass($pair->className);
+            foreach ($extensions as $extension) {
+                $restrictedUsage = $extension->isRestrictedClassNameUsage($classReflection, $scope, $location);
+                if ($restrictedUsage === null) {
+                    continue;
+                }
+                $errors[] = \PHPStan\Rules\RuleErrorBuilder::message($restrictedUsage->errorMessage)->identifier($restrictedUsage->identifier)->line($pair->node->getStartLine())->build();
+            }
+        }
+        return $errors;
+    }
+}

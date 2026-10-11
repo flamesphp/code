@@ -1,0 +1,144 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\BetterReflection\Reflection;
+
+use LogicException;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use ReflectionClass as CoreReflectionClass;
+use PHPStan\BetterReflection\Reflector\Reflector;
+use function array_key_exists;
+use function assert;
+use function sprintf;
+use function strtolower;
+/** @psalm-immutable */
+class ReflectionNamedType extends \PHPStan\BetterReflection\Reflection\ReflectionType
+{
+    private Reflector $reflector;
+    /**
+     * @var \PHPStan\BetterReflection\Reflection\ReflectionParameter|\PHPStan\BetterReflection\Reflection\ReflectionMethod|\PHPStan\BetterReflection\Reflection\ReflectionFunction|\PHPStan\BetterReflection\Reflection\ReflectionEnum|\PHPStan\BetterReflection\Reflection\ReflectionProperty|\PHPStan\BetterReflection\Reflection\ReflectionClassConstant
+     */
+    private $owner;
+    /**
+     * @var mixed[]
+     */
+    private const BUILT_IN_TYPES = ['int' => null, 'float' => null, 'string' => null, 'bool' => null, 'callable' => null, 'self' => null, 'parent' => null, 'array' => null, 'iterable' => null, 'object' => null, 'void' => null, 'mixed' => null, 'static' => null, 'null' => null, 'never' => null, 'false' => null, 'true' => null];
+    /** @var non-empty-string */
+    #[\PHPStan\Reflection\Attribute\PrivateProperty]
+    public string $name;
+    #[\PHPStan\Reflection\Attribute\PrivateProperty]
+    public bool $isIdentifier;
+    /** @internal
+     * @param \PHPStan\BetterReflection\Reflection\ReflectionParameter|\PHPStan\BetterReflection\Reflection\ReflectionMethod|\PHPStan\BetterReflection\Reflection\ReflectionFunction|\PHPStan\BetterReflection\Reflection\ReflectionEnum|\PHPStan\BetterReflection\Reflection\ReflectionProperty|\PHPStan\BetterReflection\Reflection\ReflectionClassConstant $owner
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name $type */
+    public function __construct(Reflector $reflector, $owner, $type)
+    {
+        $this->reflector = $reflector;
+        $this->owner = $owner;
+        $this->name = $type->toString();
+        $this->isIdentifier = $type instanceof Identifier;
+    }
+    /**
+     * @return array<string, mixed>
+     */
+    public function exportToCache(): array
+    {
+        return ['name' => $this->name, 'isIdentifier' => $this->isIdentifier];
+    }
+    /**
+     * @param array<string, mixed> $data
+     * @param ReflectionParameter|ReflectionMethod|ReflectionFunction|ReflectionEnum|ReflectionProperty|ReflectionClassConstant $owner
+     */
+    public static function importFromCache(Reflector $reflector, array $data, $owner): self
+    {
+        $reflection = new CoreReflectionClass(self::class);
+        /** @var self $ref */
+        $ref = $reflection->newInstanceWithoutConstructor();
+        $ref->reflector = $reflector;
+        $ref->owner = $owner;
+        $ref->name = $data['name'];
+        $ref->isIdentifier = $data['isIdentifier'];
+        return $ref;
+    }
+    /** @internal
+     * @param \PHPStan\BetterReflection\Reflection\ReflectionParameter|\PHPStan\BetterReflection\Reflection\ReflectionMethod|\PHPStan\BetterReflection\Reflection\ReflectionFunction|\PHPStan\BetterReflection\Reflection\ReflectionEnum|\PHPStan\BetterReflection\Reflection\ReflectionProperty|\PHPStan\BetterReflection\Reflection\ReflectionClassConstant $owner
+     * @return static */
+    public function withOwner($owner)
+    {
+        // The owner is only ever consulted when resolving self/parent/static
+        // to a class - any other name reads the same through any owner, so
+        // re-owning would only duplicate the instance: one fresh 'void' per
+        // inherited-method clone was ~45k duplicate instances in a PHPStan
+        // worker process.
+        switch (strtolower($this->name)) {
+            case 'self':
+            case 'parent':
+            case 'static':
+                $clone = clone $this;
+                $clone->owner = $owner;
+                return $clone;
+        }
+        return $this;
+    }
+    /** @return non-empty-string */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+    /**
+     * Checks if it is a built-in type (i.e., it's not an object...)
+     *
+     * @see https://php.net/manual/en/reflectiontype.isbuiltin.php
+     */
+    public function isBuiltin(): bool
+    {
+        return array_key_exists(strtolower($this->name), self::BUILT_IN_TYPES);
+    }
+    public function getClass(): \PHPStan\BetterReflection\Reflection\ReflectionClass
+    {
+        if (!$this->isBuiltin()) {
+            return $this->reflector->reflectClass($this->name);
+        }
+        if ($this->owner instanceof \PHPStan\BetterReflection\Reflection\ReflectionEnum || $this->owner instanceof \PHPStan\BetterReflection\Reflection\ReflectionFunction || $this->owner instanceof \PHPStan\BetterReflection\Reflection\ReflectionParameter && $this->owner->function instanceof \PHPStan\BetterReflection\Reflection\ReflectionFunction) {
+            throw new LogicException(sprintf('The type %s cannot be resolved to class', $this->name));
+        }
+        $lowercaseName = strtolower($this->name);
+        if ($lowercaseName === 'self') {
+            $class = $this->owner->getImplementingClass();
+            assert($class instanceof \PHPStan\BetterReflection\Reflection\ReflectionClass);
+            return $class;
+        }
+        if ($lowercaseName === 'parent') {
+            $class = $this->owner->getDeclaringClass();
+            assert($class instanceof \PHPStan\BetterReflection\Reflection\ReflectionClass);
+            $parentClass = $class->getParentClass();
+            assert($parentClass instanceof \PHPStan\BetterReflection\Reflection\ReflectionClass);
+            return $parentClass;
+        }
+        if ($this->owner instanceof \PHPStan\BetterReflection\Reflection\ReflectionMethod && $lowercaseName === 'static') {
+            return $this->owner->getCurrentClass();
+        }
+        throw new LogicException(sprintf('The type %s cannot be resolved to class', $this->name));
+    }
+    public function allowsNull(): bool
+    {
+        switch (strtolower($this->name)) {
+            case 'mixed':
+                return \true;
+            case 'null':
+                return \true;
+            default:
+                return \false;
+        }
+    }
+    public function isIdentifier(): bool
+    {
+        return $this->isIdentifier;
+    }
+    /** @return non-empty-string */
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+}

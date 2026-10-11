@@ -1,0 +1,43 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Reflection\PHPStan;
+
+use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Analyser\Scope;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Type\DynamicMethodReturnTypeExtension;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+final class NativeReflectionEnumReturnDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
+{
+    /**
+     * @var class-string
+     */
+    private string $className;
+    private string $methodName;
+    /**
+     * @param class-string $className
+     */
+    public function __construct(string $className, string $methodName)
+    {
+        $this->className = $className;
+        $this->methodName = $methodName;
+    }
+    public function getClass(): string
+    {
+        return $this->className;
+    }
+    public function isMethodSupported(MethodReflection $methodReflection): bool
+    {
+        return $methodReflection->getName() === $this->methodName;
+    }
+    public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): ?Type
+    {
+        if ($scope->getPhpVersion()->hasCorrectReflectionEnumAdapterReturnTypes()->yes()) {
+            return null;
+        }
+        return new ObjectType(ReflectionClass::class);
+    }
+}

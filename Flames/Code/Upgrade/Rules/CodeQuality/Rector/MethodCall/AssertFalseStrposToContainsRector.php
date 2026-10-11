@@ -1,0 +1,81 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\CodeQuality\Rector\MethodCall;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall;
+use Flames\Code\Upgrade\PHPUnit\NodeAnalyzer\IdentifierManipulator;
+use Flames\Code\Upgrade\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\Rules\CodeQuality\Rector\MethodCall\AssertFalseStrposToContainsRectorTest
+ */
+final class AssertFalseStrposToContainsRector extends AbstractRector
+{
+    /**
+     * @var array<string, string>
+     */
+    private const array RENAME_METHODS_MAP = ['assertFalse' => 'assertStringNotContainsString', 'assertNotFalse' => 'assertStringContainsString'];
+    public function __construct(private readonly IdentifierManipulator $identifierManipulator, private readonly TestsNodeAnalyzer $testsNodeAnalyzer)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Turns `strpos`/`stripos` comparisons to their method name alternatives in PHPUnit TestCase', [new CodeSample('$this->assertFalse(strpos($anything, "foo"), "message");', '$this->assertNotContains("foo", $anything, "message");')]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [MethodCall::class, StaticCall::class];
+    }
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        $oldMethodName = array_keys(self::RENAME_METHODS_MAP);
+        if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, $oldMethodName)) {
+            return null;
+        }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
+        $firstArgumentValue = $node->getArgs()[0]->value;
+        if ($firstArgumentValue instanceof StaticCall) {
+            return null;
+        }
+        if ($firstArgumentValue instanceof MethodCall) {
+            return null;
+        }
+        if (!$this->isNames($firstArgumentValue, ['strpos', 'stripos'])) {
+            return null;
+        }
+        $this->identifierManipulator->renameNodeWithMap($node, self::RENAME_METHODS_MAP);
+        return $this->changeArgumentsOrder($node);
+    }
+    /**
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall $node
+     * @return \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\MethodCall|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\StaticCall|null
+     */
+    private function changeArgumentsOrder($node)
+    {
+        $oldArguments = $node->getArgs();
+        $strposFuncCallNode = $oldArguments[0]->value;
+        if (!$strposFuncCallNode instanceof FuncCall) {
+            return null;
+        }
+        $firstArgument = $strposFuncCallNode->getArgs()[1];
+        $secondArgument = $strposFuncCallNode->getArgs()[0];
+        unset($oldArguments[0]);
+        $newArgs = [$firstArgument, $secondArgument];
+        $node->args = array_merge($newArgs, $oldArguments);
+        return $node;
+    }
+}

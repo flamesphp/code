@@ -1,0 +1,106 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\PHPUnit70\Rector\Class_;
+
+use Flames\Code\Upgrade\ThirdParty\Nette\Strings;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Flames\Code\Upgrade\PHPUnit\NodeFinder\DataProviderClassMethodFinder;
+use Flames\Code\Upgrade\PHPUnit\PhpDoc\DataProviderMethodRenamer;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\VersionBonding\Contract\ComposerPackageConstraintInterface;
+use Flames\Code\Upgrade\VersionBonding\ValueObject\ComposerPackageConstraint;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
+/**
+ * @changelog https://stackoverflow.com/a/46693675/1348344
+ *
+ * @see \Flames\Code\Upgrade\PHPUnit70\Rector\Class_\RemoveDataProviderTestPrefixRectorTest
+ */
+final class RemoveDataProviderTestPrefixRector extends AbstractRector implements ComposerPackageConstraintInterface
+{
+    /**
+     * inherited from the PHPUnit 7.0 set
+     */
+    public function provideComposerPackageConstraint(): ComposerPackageConstraint
+    {
+        return new ComposerPackageConstraint('phpunit/phpunit', '>=7.0');
+    }
+    public function __construct(private readonly TestsNodeAnalyzer $testsNodeAnalyzer, private readonly DataProviderClassMethodFinder $dataProviderClassMethodFinder, private readonly DataProviderMethodRenamer $dataProviderMethodRenamer)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Data provider methods cannot start with "test" prefix', [new CodeSample(<<<'CODE_SAMPLE'
+class SomeClass extends PHPUnit\Framework\TestCase
+{
+    /**
+     * @dataProvider testProvideData()
+     */
+    public function test()
+    {
+        $nothing = 5;
+    }
+
+    public function testProvideData()
+    {
+        return ['123'];
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+class SomeClass extends PHPUnit\Framework\TestCase
+{
+    /**
+     * @dataProvider provideData()
+     */
+    public function test()
+    {
+        $nothing = 5;
+    }
+
+    public function provideData()
+    {
+        return ['123'];
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [Class_::class];
+    }
+    /**
+     * @param Class_ $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
+            return null;
+        }
+        $hasChanged = \false;
+        $dataProviderClassMethods = $this->dataProviderClassMethodFinder->find($node);
+        foreach ($dataProviderClassMethods as $dataProviderClassMethod) {
+            $dataProviderClassMethodName = $dataProviderClassMethod->name->toString();
+            if (!str_starts_with($dataProviderClassMethodName, 'test')) {
+                continue;
+            }
+            $shortMethodName = Strings::substring($dataProviderClassMethodName, 4);
+            $shortMethodName = lcfirst($shortMethodName);
+            $dataProviderClassMethod->name = new Identifier($shortMethodName);
+            $hasChanged = \true;
+        }
+        $this->dataProviderMethodRenamer->removeTestPrefix($node);
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
+    }
+}

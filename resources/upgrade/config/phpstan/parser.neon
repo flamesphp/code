@@ -1,0 +1,57 @@
+# see original config.neon in phpstan.neon - https://github.com/phpstan/phpstan-src/blob/386eb913abb6ac05886c5642fd48b5d99db66a20/conf/config.neon#L1582
+# this file overrides definitions from the config above
+services:
+    defaultAnalysisParser:
+        factory: @pathRoutingParser
+        arguments!: []
+
+    cachedRectorParser:
+        class: PHPStan\Parser\CachedParser
+        arguments:
+            originalParser: @rectorParser
+            cachedNodesByStringCountMax: %cache.nodesByStringCountMax%
+        autowired: false
+
+    pathRoutingParser:
+        class: PHPStan\Parser\PathRoutingParser
+        arguments:
+            currentPhpVersionRichParser: @cachedRectorParser
+            currentPhpVersionSimpleParser: @cachedRectorParser
+            php8Parser: @php8Parser
+        autowired: false
+
+    rectorParser:
+        class: PHPStan\Parser\RichParser
+        factory: @rectorRichParserFactory::create()
+        arguments!: []
+        autowired: no
+
+    # RichParser used directly by Rector, see PHPStanServicesFactory::createPHPStanParser()
+    currentPhpVersionRichParser:
+        class: PHPStan\Parser\RichParser
+        factory: @rectorRichParserFactory::create()
+        arguments!: []
+        autowired: no
+
+    rectorPhpParserFactory:
+        class: Flames\Code\Upgrade\ThirdParty\PhpParser\ParserFactory
+        autowired: false
+
+    currentPhpVersionPhpParser:
+        factory: [@rectorPhpParserFactory, createForHostVersion]
+        autowired: false
+
+    rectorPhpParserNameResolver:
+        class: Flames\Code\Upgrade\ThirdParty\PhpParser\NodeVisitor\NameResolver
+        autowired: false
+
+    rectorRichParserFactory:
+        class: Flames\Code\Upgrade\DependencyInjection\PHPStan\RichParserFactory
+        arguments:
+            parser: @currentPhpVersionPhpParser
+            nameResolver: @rectorPhpParserNameResolver
+            ignoreLexer: @PHPStan\Analyser\Ignore\IgnoreLexer
+            nodeVisitors:
+                - @PHPStan\Parser\AnonymousClassVisitor
+                - @PHPStan\Parser\ArrayMapArgVisitor
+        autowired: no

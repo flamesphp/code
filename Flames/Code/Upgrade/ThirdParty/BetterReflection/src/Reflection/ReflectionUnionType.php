@@ -1,0 +1,94 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\BetterReflection\Reflection;
+
+use PhpParser\Node\Identifier;
+use PhpParser\Node\IntersectionType;
+use PhpParser\Node\Name;
+use PhpParser\Node\UnionType;
+use ReflectionClass as CoreReflectionClass;
+use PHPStan\BetterReflection\Reflector\Reflector;
+use function array_map;
+use function assert;
+use function implode;
+use function sprintf;
+/** @psalm-immutable */
+class ReflectionUnionType extends \PHPStan\BetterReflection\Reflection\ReflectionType
+{
+    /** @var non-empty-list<ReflectionNamedType|ReflectionIntersectionType> */
+    #[\PHPStan\Reflection\Attribute\PrivateProperty]
+    public array $types;
+    /** @internal
+     * @param \PHPStan\BetterReflection\Reflection\ReflectionParameter|\PHPStan\BetterReflection\Reflection\ReflectionMethod|\PHPStan\BetterReflection\Reflection\ReflectionFunction|\PHPStan\BetterReflection\Reflection\ReflectionEnum|\PHPStan\BetterReflection\Reflection\ReflectionProperty|\PHPStan\BetterReflection\Reflection\ReflectionClassConstant $owner */
+    public function __construct(Reflector $reflector, $owner, UnionType $type)
+    {
+        /** @var non-empty-list<ReflectionNamedType|ReflectionIntersectionType> $types */
+        $types = array_map(static function ($type) use ($reflector, $owner) {
+            $type = \PHPStan\BetterReflection\Reflection\ReflectionType::createFromNode($reflector, $owner, $type);
+            assert($type instanceof \PHPStan\BetterReflection\Reflection\ReflectionNamedType || $type instanceof \PHPStan\BetterReflection\Reflection\ReflectionIntersectionType);
+            return $type;
+        }, $type->types);
+        $this->types = $types;
+    }
+    /**
+     * @return array<string, mixed>
+     */
+    public function exportToCache(): array
+    {
+        return ['types' => array_map(static fn($type) => ['class' => get_class($type), 'data' => $type->exportToCache()], $this->types)];
+    }
+    /**
+     * @param array<string, mixed> $data
+     * @param ReflectionParameter|ReflectionMethod|ReflectionFunction|ReflectionEnum|ReflectionProperty|ReflectionClassConstant $owner
+     */
+    public static function importFromCache(Reflector $reflector, array $data, $owner): self
+    {
+        $reflection = new CoreReflectionClass(self::class);
+        /** @var self $ref */
+        $ref = $reflection->newInstanceWithoutConstructor();
+        $ref->types = array_map(static function (array $typeData) use ($reflector, $owner) {
+            $typeClass = $typeData['class'];
+            return $typeClass::importFromCache($reflector, $typeData['data'], $owner);
+        }, $data['types']);
+        return $ref;
+    }
+    /** @internal
+     * @param \PHPStan\BetterReflection\Reflection\ReflectionParameter|\PHPStan\BetterReflection\Reflection\ReflectionMethod|\PHPStan\BetterReflection\Reflection\ReflectionFunction|\PHPStan\BetterReflection\Reflection\ReflectionEnum|\PHPStan\BetterReflection\Reflection\ReflectionProperty|\PHPStan\BetterReflection\Reflection\ReflectionClassConstant $owner
+     * @return static */
+    public function withOwner($owner)
+    {
+        $types = array_map(static fn($type) => $type->withOwner($owner), $this->types);
+        if ($types === $this->types) {
+            // no child consults the owner - see ReflectionNamedType::withOwner()
+            return $this;
+        }
+        $clone = clone $this;
+        $clone->types = $types;
+        return $clone;
+    }
+    /** @return non-empty-list<ReflectionNamedType|ReflectionIntersectionType> */
+    public function getTypes(): array
+    {
+        return $this->types;
+    }
+    public function allowsNull(): bool
+    {
+        foreach ($this->types as $type) {
+            if ($type->allowsNull()) {
+                return \true;
+            }
+        }
+        return \false;
+    }
+    /** @return non-empty-string */
+    public function __toString(): string
+    {
+        return implode('|', array_map(static function (\PHPStan\BetterReflection\Reflection\ReflectionType $type): string {
+            if ($type instanceof \PHPStan\BetterReflection\Reflection\ReflectionIntersectionType) {
+                return sprintf('(%s)', $type->__toString());
+            }
+            return $type->getName();
+        }, $this->types));
+    }
+}

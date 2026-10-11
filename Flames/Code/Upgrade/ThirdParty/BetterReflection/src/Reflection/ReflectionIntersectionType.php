@@ -1,0 +1,82 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\BetterReflection\Reflection;
+
+use PhpParser\Node;
+use PhpParser\Node\IntersectionType;
+use ReflectionClass as CoreReflectionClass;
+use PHPStan\BetterReflection\Reflector\Reflector;
+use function array_map;
+use function assert;
+use function implode;
+/** @psalm-immutable */
+class ReflectionIntersectionType extends \PHPStan\BetterReflection\Reflection\ReflectionType
+{
+    /** @var non-empty-list<ReflectionNamedType> */
+    #[\PHPStan\Reflection\Attribute\PrivateProperty]
+    public array $types;
+    /** @internal
+     * @param \PHPStan\BetterReflection\Reflection\ReflectionParameter|\PHPStan\BetterReflection\Reflection\ReflectionMethod|\PHPStan\BetterReflection\Reflection\ReflectionFunction|\PHPStan\BetterReflection\Reflection\ReflectionEnum|\PHPStan\BetterReflection\Reflection\ReflectionProperty|\PHPStan\BetterReflection\Reflection\ReflectionClassConstant $owner */
+    public function __construct(Reflector $reflector, $owner, IntersectionType $type)
+    {
+        /** @var non-empty-list<ReflectionNamedType> $types */
+        $types = array_map(static function ($type) use ($reflector, $owner): \PHPStan\BetterReflection\Reflection\ReflectionNamedType {
+            $type = \PHPStan\BetterReflection\Reflection\ReflectionType::createFromNode($reflector, $owner, $type);
+            assert($type instanceof \PHPStan\BetterReflection\Reflection\ReflectionNamedType);
+            return $type;
+        }, $type->types);
+        $this->types = $types;
+    }
+    /**
+     * @return array<string, mixed>
+     */
+    public function exportToCache(): array
+    {
+        return ['types' => array_map(static fn(\PHPStan\BetterReflection\Reflection\ReflectionNamedType $type) => ['name' => $type->name, 'isIdentifier' => $type->isIdentifier], $this->types)];
+    }
+    /**
+     * @param array<string, mixed> $data
+     * @param ReflectionParameter|ReflectionMethod|ReflectionFunction|ReflectionEnum|ReflectionProperty|ReflectionClassConstant $owner
+     */
+    public static function importFromCache(Reflector $reflector, array $data, $owner): self
+    {
+        $reflection = new CoreReflectionClass(self::class);
+        /** @var self $ref */
+        $ref = $reflection->newInstanceWithoutConstructor();
+        $ref->types = array_map(static fn(array $typeData) => \PHPStan\BetterReflection\Reflection\ReflectionNamedType::importFromCache($reflector, $typeData, $owner), $data['types']);
+        return $ref;
+    }
+    /** @internal
+     * @param \PHPStan\BetterReflection\Reflection\ReflectionParameter|\PHPStan\BetterReflection\Reflection\ReflectionMethod|\PHPStan\BetterReflection\Reflection\ReflectionFunction|\PHPStan\BetterReflection\Reflection\ReflectionEnum|\PHPStan\BetterReflection\Reflection\ReflectionProperty|\PHPStan\BetterReflection\Reflection\ReflectionClassConstant $owner
+     * @return static */
+    public function withOwner($owner)
+    {
+        $types = array_map(static fn(\PHPStan\BetterReflection\Reflection\ReflectionNamedType $type): \PHPStan\BetterReflection\Reflection\ReflectionNamedType => $type->withOwner($owner), $this->types);
+        if ($types === $this->types) {
+            // no child consults the owner - see ReflectionNamedType::withOwner()
+            return $this;
+        }
+        $clone = clone $this;
+        $clone->types = $types;
+        return $clone;
+    }
+    /** @return non-empty-list<ReflectionNamedType> */
+    public function getTypes(): array
+    {
+        return $this->types;
+    }
+    /**
+     * @return false
+     */
+    public function allowsNull(): bool
+    {
+        return \false;
+    }
+    /** @return non-empty-string */
+    public function __toString(): string
+    {
+        // @infection-ignore-all UnwrapArrayMap: It works without array_map() as well but this is less magical
+        return implode('&', array_map(static fn(\PHPStan\BetterReflection\Reflection\ReflectionNamedType $type): string => $type->getName(), $this->types));
+    }
+}

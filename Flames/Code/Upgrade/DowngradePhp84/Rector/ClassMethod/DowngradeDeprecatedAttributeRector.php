@@ -1,0 +1,111 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\DowngradePhp84\Rector\ClassMethod;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Arg;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Attribute;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Identifier;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassConst;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\EnumCase;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Function_;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\GenericTagValueNode;
+use Flames\Code\Upgrade\ThirdParty\PHPStan\Ast\PhpDoc\PhpDocTagNode;
+use Flames\Code\Upgrade\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Flames\Code\Upgrade\Comments\NodeDocBlock\DocBlockUpdater;
+use Flames\Code\Upgrade\PhpParser\Node\Value\ValueResolver;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
+/**
+ * @changelog https://wiki.php.net/rfc/deprecated_attribute
+ *
+ * @see \Flames\Code\Upgrade\DowngradePhp84\Rector\ClassMethod\DowngradeDeprecatedAttributeRectorTest
+ */
+final class DowngradeDeprecatedAttributeRector extends AbstractRector
+{
+    public function __construct(private readonly PhpDocInfoFactory $phpDocInfoFactory, private readonly DocBlockUpdater $docBlockUpdater, private readonly ValueResolver $valueResolver)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Downgrade #[\Deprecated] attribute to @deprecated annotation', [new CodeSample(<<<'CODE_SAMPLE'
+class SomeClass
+{
+    #[\Deprecated(message: 'use SomeOtherMethod() instead', since: '1.5')]
+    public function someMethod(): void
+    {
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+class SomeClass
+{
+    /**
+     * @deprecated 1.5 use SomeOtherMethod() instead
+     */
+    public function someMethod(): void
+    {
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [ClassMethod::class, Function_::class, ClassConst::class, EnumCase::class];
+    }
+    /**
+     * @param ClassMethod|Function_|ClassConst|EnumCase $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if ($node->attrGroups === []) {
+            return null;
+        }
+        $hasChanged = \false;
+        foreach ($node->attrGroups as $attrGroupKey => $attrGroup) {
+            foreach ($attrGroup->attrs as $attrKey => $attribute) {
+                if (!$this->isName($attribute->name, 'Deprecated')) {
+                    continue;
+                }
+                $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+                $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@deprecated', new GenericTagValueNode($this->createTagValue($attribute))));
+                unset($attrGroup->attrs[$attrKey]);
+                $hasChanged = \true;
+            }
+            if ($attrGroup->attrs === []) {
+                unset($node->attrGroups[$attrGroupKey]);
+            }
+        }
+        if (!$hasChanged) {
+            return null;
+        }
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($node);
+        return $node;
+    }
+    private function createTagValue(Attribute $attribute): string
+    {
+        $message = null;
+        $since = null;
+        foreach ($attribute->args as $position => $arg) {
+            $value = $this->valueResolver->getValue($arg->value);
+            if (!is_string($value)) {
+                continue;
+            }
+            $name = $arg instanceof Arg && $arg->name instanceof Identifier ? $arg->name->toString() : ($position === 0 ? 'message' : 'since');
+            if ($name === 'since') {
+                $since = $value;
+            } elseif ($name === 'message') {
+                $message = $value;
+            }
+        }
+        $parts = array_filter([$since, $message], static fn(?string $part): bool => $part !== null && $part !== '');
+        return implode(' ', array_map(static fn(string $part): string => (string) preg_replace('#\s+#', ' ', trim($part)), $parts));
+    }
+}

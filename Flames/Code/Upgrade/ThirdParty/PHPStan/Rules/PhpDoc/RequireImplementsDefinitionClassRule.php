@@ -1,0 +1,35 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Rules\PhpDoc;
+
+use PhpParser\Node;
+use PHPStan\Analyser\Scope;
+use PHPStan\DependencyInjection\RegisteredRule;
+use PHPStan\DependencyInjection\ValidatesStubFiles;
+use PHPStan\Node\InClassNode;
+use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleErrorBuilder;
+use function count;
+use function sprintf;
+/**
+ * @implements Rule<InClassNode>
+ */
+#[RegisteredRule(2)]
+#[ValidatesStubFiles]
+final class RequireImplementsDefinitionClassRule implements Rule
+{
+    public function getNodeType(): string
+    {
+        return InClassNode::class;
+    }
+    public function processNode(Node $node, Scope $scope): array
+    {
+        $classReflection = $node->classReflection;
+        $implementsTags = $classReflection->getRequireImplementsTags();
+        if (count($implementsTags) === 0) {
+            return [];
+        }
+        return [RuleErrorBuilder::message('PHPDoc tag @phpstan-require-implements is only valid on trait.')->identifier(sprintf('requireImplements.on%s', $classReflection->getClassTypeDescription()))->build()];
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "name": "flamesphp/code",
+    "description": "Flames: PHP code upgrade engine",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "flames",
+        "upgrade",
+        "refactoring",
+        "migration"
+    ],
+    "require": {
+        "php": "^8.5",
+        "flamesphp/composer": "^1.0"
+    },
+    "bin": [
+        "resources/upgrade/bin/code-upgrade"
+    ],
+    "autoload": {
+        "files": [
+            "resources/upgrade/bootstrap.php"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

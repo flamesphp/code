@@ -1,0 +1,177 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\DowngradePhp73\Rector\ConstFetch;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Arg;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Assign;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\BitwiseOr;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ConstFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\FuncCall;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\New_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Throw_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Name\FullyQualified as NameFullyQualified;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Expression;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\If_;
+use Flames\Code\Upgrade\DowngradePhp72\NodeManipulator\JsonConstCleaner;
+use Flames\Code\Upgrade\Enum\JsonConstant;
+use Flames\Code\Upgrade\NodeAnalyzer\DefineFuncCallAnalyzer;
+use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
+use Flames\Code\Upgrade\PhpParser\NodeTraverser\SimpleNodeTraverser;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
+/**
+ * @changelog https://www.php.net/manual/en/function.json-encode.php#refsect1-function.json-encode-changelog
+ *
+ * @see \Flames\Code\Upgrade\DowngradePhp73\Rector\ConstFetch\DowngradePhp73JsonConstRectorTest
+ */
+final class DowngradePhp73JsonConstRector extends AbstractRector
+{
+    private const string PHP73_JSON_CONSTANT_IS_KNOWN = 'php73_json_constant_is_known';
+    /**
+     * @var array<string>
+     */
+    private const array JSON_FUNCTIONS = ['json_decode', 'json_encode'];
+    public function __construct(private readonly JsonConstCleaner $jsonConstCleaner, private readonly DefineFuncCallAnalyzer $defineFuncCallAnalyzer)
+    {
+    }
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Remove Json constant that available only in php 7.3', [new CodeSample(<<<'CODE_SAMPLE'
+$json = json_encode($content, JSON_THROW_ON_ERROR);
+
+$content = json_decode($json, null, 512, JSON_THROW_ON_ERROR);
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+$json = json_encode($content);
+if (json_last_error() !== JSON_ERROR_NONE) {
+    throw new \Exception(json_last_error_msg());
+}
+
+$content = json_decode($json, null, 512);
+if (json_last_error() !== JSON_ERROR_NONE) {
+    throw new \Exception(json_last_error_msg());
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [ConstFetch::class, BitwiseOr::class, If_::class, Expression::class];
+    }
+    /**
+     * @param ConstFetch|BitwiseOr|If_|Expression $node
+     * @return null|Expr|array<Expression|If_>
+     */
+    public function refactor(Node $node)
+    {
+        if ($node instanceof If_) {
+            $this->markConstantKnownInInnerStmts($node);
+            return null;
+        }
+        // skip as known
+        if ((bool) $node->getAttribute(self::PHP73_JSON_CONSTANT_IS_KNOWN)) {
+            return null;
+        }
+        if ($node instanceof Expression) {
+            return $this->refactorExpression($node);
+        }
+        return $this->jsonConstCleaner->clean($node, [JsonConstant::THROW_ON_ERROR]);
+    }
+    private function markConstantKnownInInnerStmts(If_ $if): void
+    {
+        if (!$this->defineFuncCallAnalyzer->isDefinedWithConstants($if->cond, [JsonConstant::THROW_ON_ERROR])) {
+            return;
+        }
+        SimpleNodeTraverser::decorateWithAttributeValue($if, self::PHP73_JSON_CONSTANT_IS_KNOWN, \true);
+    }
+    private function resolveFuncCall(Expression $expression): ?FuncCall
+    {
+        $expr = $expression->expr;
+        if ($expr instanceof Assign) {
+            if ($expr->expr instanceof FuncCall) {
+                return $expr->expr;
+            }
+            return null;
+        }
+        if ($expr instanceof FuncCall) {
+            return $expr;
+        }
+        return null;
+    }
+    /**
+     * Add an alternative throwing error behavior after any `json_encode`
+     * or `json_decode` function called with the `JSON_THROW_ON_ERROR` flag set.
+     * This is a partial improvement of removing the `JSON_THROW_ON_ERROR` flag,
+     * only when the flags are directly set in the function call.
+     * If the flags are set from a variable, that would require a much more
+     * complex analysis to be 100% accurate, beyond Upgrade actual capabilities.
+     *
+     * @return null|array<Expression|If_>
+     */
+    private function refactorExpression(Expression $expression): ?array
+    {
+        if ($expression->getAttribute(AttributeKey::IS_IN_TRY_BLOCK) === \true) {
+            return null;
+        }
+        // retrieve a `FuncCall`, if any, from the statement
+        $funcCall = $this->resolveFuncCall($expression);
+        if (!$funcCall instanceof FuncCall) {
+            return null;
+        }
+        // Nothing to do if not a refactored function
+        if (!$this->isNames($funcCall, self::JSON_FUNCTIONS)) {
+            return null;
+        }
+        if ($funcCall->isFirstClassCallable()) {
+            return null;
+        }
+        // Nothing to do if the flag `JSON_THROW_ON_ERROR` is not set in args
+        if (!$this->hasConstFetchInArgs($funcCall->getArgs(), 'JSON_THROW_ON_ERROR')) {
+            return null;
+        }
+        $nodes = [$expression];
+        $nodes[] = new If_(new NotIdentical(new FuncCall(new Name('json_last_error')), new ConstFetch(new Name('JSON_ERROR_NONE'))), ['stmts' => [new Expression(new Throw_(new New_(new NameFullyQualified('Exception'), [new Arg(new FuncCall(new Name('json_last_error_msg')))])))]]);
+        return $nodes;
+    }
+    /**
+     * Search if a given constant is set within a list of `Arg`
+     * @param Arg[] $args
+     */
+    private function hasConstFetchInArgs(array $args, string $constName): bool
+    {
+        foreach ($args as $arg) {
+            $value = $arg->value;
+            if ($value instanceof ConstFetch && $this->isName($value, $constName)) {
+                return \true;
+            }
+            if ($value instanceof BitwiseOr) {
+                return $this->hasConstFetchInBitwiseOr($value, $constName);
+            }
+        }
+        return \false;
+    }
+    /**
+     * Search if a given constant is set within a `BitwiseOr`
+     */
+    private function hasConstFetchInBitwiseOr(BitwiseOr $bitwiseOr, string $constantName): bool
+    {
+        foreach ([$bitwiseOr->left, $bitwiseOr->right] as $subNode) {
+            if ($subNode instanceof BitwiseOr && $this->hasConstFetchInBitwiseOr($subNode, $constantName)) {
+                return \true;
+            }
+            if ($subNode instanceof ConstFetch && $this->isName($subNode, $constantName)) {
+                return \true;
+            }
+        }
+        return \false;
+    }
+}

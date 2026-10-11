@@ -1,0 +1,46 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Type\Php;
+
+use PhpParser\Node\Expr\FuncCall;
+use PHPStan\Analyser\Scope;
+use PHPStan\DependencyInjection\AutowiredService;
+use PHPStan\Reflection\FunctionReflection;
+use PHPStan\TrinaryLogic;
+use PHPStan\Type\BenevolentUnionType;
+use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\Constant\ConstantIntegerType;
+use PHPStan\Type\DynamicFunctionReturnTypeExtension;
+use PHPStan\Type\FloatType;
+use PHPStan\Type\IntegerRangeType;
+use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
+use function count;
+#[AutowiredService]
+final class HrtimeFunctionReturnTypeExtension implements DynamicFunctionReturnTypeExtension
+{
+    public function isFunctionSupported(FunctionReflection $functionReflection): bool
+    {
+        return $functionReflection->getName() === 'hrtime';
+    }
+    public function getTypeFromFunctionCall(FunctionReflection $functionReflection, FuncCall $functionCall, Scope $scope): Type
+    {
+        $arrayType = new ConstantArrayType([new ConstantIntegerType(0), new ConstantIntegerType(1)], [IntegerRangeType::fromInterval(1, null), IntegerRangeType::fromInterval(0, 999999999)], [2], [], TrinaryLogic::createYes());
+        $numberType = new BenevolentUnionType([IntegerRangeType::fromInterval(1, null), new FloatType()]);
+        if (count($functionCall->getArgs()) < 1) {
+            return $arrayType;
+        }
+        $argType = $scope->getType($functionCall->getArgs()[0]->value);
+        $isTrueType = $argType->isTrue();
+        $isFalseType = $argType->isFalse();
+        $compareTypes = $isTrueType->compareTo($isFalseType);
+        if ($compareTypes === $isTrueType) {
+            return $numberType;
+        }
+        if ($compareTypes === $isFalseType) {
+            return $arrayType;
+        }
+        return TypeCombinator::union($arrayType, $numberType);
+    }
+}

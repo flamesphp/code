@@ -1,0 +1,78 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\Rules\CodeQuality\Rector\Ternary;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\ArrayDimFetch;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BinaryOp\Coalesce;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\BooleanNot;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Empty_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Expr\Ternary;
+use Flames\Code\Upgrade\Rector\AbstractRector;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\CodeSample\CodeSample;
+use Flames\Code\Upgrade\ThirdParty\Symplify\ValueObject\RuleDefinition;
+/**
+ * @see \Flames\Code\Upgrade\Rules\CodeQuality\Rector\Ternary\TernaryEmptyArrayArrayDimFetchToCoalesceRectorTest
+ */
+final class TernaryEmptyArrayArrayDimFetchToCoalesceRector extends AbstractRector
+{
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition('Change ternary empty on array property with array dim fetch to coalesce operator', [new CodeSample(<<<'CODE_SAMPLE'
+final class SomeClass
+{
+    private array $items = [];
+
+    public function run()
+    {
+        return ! empty($this->items) ? $this->items[0] : 'default';
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+final class SomeClass
+{
+    private array $items = [];
+
+    public function run()
+    {
+        return $this->items[0] ?? 'default';
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [Ternary::class];
+    }
+    /**
+     * @param Ternary $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if (!$node->cond instanceof BooleanNot) {
+            return null;
+        }
+        $negagedExpr = $node->cond->expr;
+        if (!$negagedExpr instanceof Empty_) {
+            return null;
+        }
+        if (!$node->if instanceof ArrayDimFetch) {
+            return null;
+        }
+        $emptyExprType = $this->getType($negagedExpr->expr);
+        if (!$emptyExprType->isArray()->yes()) {
+            return null;
+        }
+        $dimFetchVar = $node->if->var;
+        if (!$this->nodeComparator->areNodesEqual($negagedExpr->expr, $dimFetchVar)) {
+            return null;
+        }
+        return new Coalesce($node->if, $node->else);
+    }
+}

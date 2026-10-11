@@ -1,0 +1,35 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Type;
+
+use PhpParser\Node\Expr\FuncCall;
+use PHPStan\Analyser\DependencyTracker;
+use PHPStan\Analyser\Scope;
+use PHPStan\DependencyInjection\ExtensionInterface;
+use PHPStan\Reflection\FunctionReflection;
+use PHPStan\Reflection\ParameterReflection;
+/**
+ * This is the interface dynamic parameter out type extensions implement for functions.
+ *
+ * To register it in the configuration file use the `phpstan.functionParameterOutTypeExtension` service tag:
+ *
+ * ```
+ * services:
+ * 	-
+ *		class: App\PHPStan\MyExtension
+ *		tags:
+ *			- phpstan.functionParameterOutTypeExtension
+ * ```
+ *
+ * @api
+ */
+#[ExtensionInterface('phpstan.functionParameterOutTypeExtension')]
+interface FunctionParameterOutTypeExtension
+{
+    public function isFunctionSupported(FunctionReflection $functionReflection, ParameterReflection $parameter): bool;
+    /**
+     * @param \PHPStan\Analyser\Scope&\PHPStan\Analyser\DependencyTracker $scope
+     */
+    public function getParameterOutTypeFromFunctionCall(FunctionReflection $functionReflection, FuncCall $funcCall, ParameterReflection $parameter, \PHPStan\Analyser\Scope $scope): ?\PHPStan\Type\Type;
+}

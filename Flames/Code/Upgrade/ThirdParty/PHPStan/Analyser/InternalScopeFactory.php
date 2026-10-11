@@ -1,0 +1,28 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Analyser;
+
+use PHPStan\Analyser\Generics\TemplateArgumentConstraints;
+use PHPStan\Analyser\Generics\TemplateArgumentFrame;
+use PHPStan\Reflection\FunctionReflection;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParameterReflection;
+use PHPStan\Reflection\Php\PhpFunctionFromParserNodeReflection;
+use PHPStan\Type\ClosureType;
+interface InternalScopeFactory
+{
+    /**
+     * @param array<string, ExpressionTypeHolder> $expressionTypes
+     * @param array<string, ExpressionTypeHolder> $nativeExpressionTypes
+     * @param array<string, ConditionalExpressionHolder[]> $conditionalExpressions
+     * @param list<non-empty-string> $inClosureBindScopeClasses
+     * @param array<string, bool> $currentlyAssignedExpressions
+     * @param array<string, true> $currentlyAllowedUndefinedExpressions
+     * @param list<array{FunctionReflection|MethodReflection|null, ParameterReflection|null}> $inFunctionCallsStack
+     * @param \PHPStan\Reflection\Php\PhpFunctionFromParserNodeReflection|null $function
+     */
+    public function create(\PHPStan\Analyser\ScopeContext $context, bool $declareStrictTypes = \false, $function = null, ?string $namespace = null, array $expressionTypes = [], array $nativeExpressionTypes = [], array $conditionalExpressions = [], array $inClosureBindScopeClasses = [], ?ClosureType $anonymousFunctionReflection = null, bool $inFirstLevelStatement = \true, array $currentlyAssignedExpressions = [], array $currentlyAllowedUndefinedExpressions = [], array $inFunctionCallsStack = [], bool $afterExtractCall = \false, ?\PHPStan\Analyser\MutatingScope $parentScope = null, bool $nativeTypesPromoted = \false, ?TemplateArgumentFrame $templateArgumentFrame = null, ?TemplateArgumentConstraints $templateArgumentConstraints = null): \PHPStan\Analyser\MutatingScope;
+    public function toNodeCallbackScopeFactory(): self;
+    public function toWalkScopeFactory(): self;
+}

@@ -1,0 +1,74 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Type\Php;
+
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name\FullyQualified;
+use PHPStan\Analyser\Scope;
+use PHPStan\Analyser\SpecifiedTypes;
+use PHPStan\Analyser\TypeSpecifier;
+use PHPStan\Analyser\TypeSpecifierAwareExtension;
+use PHPStan\Analyser\TypeSpecifierContext;
+use PHPStan\DependencyInjection\AutowiredService;
+use PHPStan\Reflection\FunctionReflection;
+use PHPStan\Rules\Properties\PropertyReflectionFinder;
+use PHPStan\Type\Accessory\HasPropertyType;
+use PHPStan\Type\Constant\ConstantBooleanType;
+use PHPStan\Type\FunctionTypeSpecifyingExtension;
+use PHPStan\Type\IntersectionType;
+use PHPStan\Type\ObjectWithoutClassType;
+use function count;
+#[AutowiredService]
+final class PropertyExistsTypeSpecifyingExtension implements FunctionTypeSpecifyingExtension, TypeSpecifierAwareExtension
+{
+    private PropertyReflectionFinder $propertyReflectionFinder;
+    private TypeSpecifier $typeSpecifier;
+    public function __construct(PropertyReflectionFinder $propertyReflectionFinder)
+    {
+        $this->propertyReflectionFinder = $propertyReflectionFinder;
+    }
+    public function setTypeSpecifier(TypeSpecifier $typeSpecifier): void
+    {
+        $this->typeSpecifier = $typeSpecifier;
+    }
+    public function isFunctionSupported(FunctionReflection $functionReflection, FuncCall $node, TypeSpecifierContext $context): bool
+    {
+        return $functionReflection->getName() === 'property_exists' && $context->true() && count($node->getArgs()) >= 2;
+    }
+    public function specifyTypes(FunctionReflection $functionReflection, FuncCall $node, Scope $scope, TypeSpecifierContext $context): SpecifiedTypes
+    {
+        $args = $node->getArgs();
+        $propertyNameType = $scope->getType($args[1]->value);
+        $constantStringTypes = $propertyNameType->getConstantStrings();
+        // property_exists() will only assure one of the properties to exist.
+        if (count($constantStringTypes) !== 1) {
+            return $this->typeSpecifier->create(new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name\FullyQualified('property_exists'), $node->getRawArgs()), new \PHPStan\Type\Constant\ConstantBooleanType(\true), $context, $scope);
+        }
+        $propertyNameType = $constantStringTypes[0];
+        if ($propertyNameType->getValue() === '') {
+            return new SpecifiedTypes([], []);
+        }
+        $objectOrStringType = $scope->getType($args[0]->value);
+        if ($objectOrStringType->isString()->yes()) {
+            return $this->typeSpecifier->create(new FuncCall(new FullyQualified('property_exists'), $node->args), new ConstantBooleanType(\true), $context, $scope);
+        }
+        if (!$objectOrStringType->isObject()->yes()) {
+            return new SpecifiedTypes([], []);
+        }
+        $propertyNode = new PropertyFetch($args[0]->value, new Identifier($propertyNameType->getValue()));
+        $propertyReflection = $this->propertyReflectionFinder->findPropertyReflectionFromNode($propertyNode, $scope);
+        if ($propertyReflection !== null) {
+            if (!($propertyReflection->getNativeReflection() !== null)) {
+                return $this->typeSpecifier->create(new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name\FullyQualified('property_exists'), $node->getRawArgs()), new \PHPStan\Type\Constant\ConstantBooleanType(\true), $context, $scope);
+            }
+        }
+        return $this->typeSpecifier->create($args[0]->value, new IntersectionType([new ObjectWithoutClassType(), new HasPropertyType($propertyNameType->getValue())]), $context, $scope);
+    }
+    private function createFuncCallSpec(FuncCall $node, TypeSpecifierContext $context, Scope $scope): SpecifiedTypes
+    {
+        return $this->typeSpecifier->create(new FuncCall(new FullyQualified('property_exists'), $node->args), new ConstantBooleanType(\true), $context, $scope);
+    }
+}

@@ -1,0 +1,93 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\DependencyInjection;
+
+use Flames\Code\Upgrade\ThirdParty\Nette\DI\CompilerExtension;
+use Flames\Code\Upgrade\ThirdParty\Nette\DI\Definitions\FactoryDefinition;
+use Flames\Code\Upgrade\ThirdParty\Nette\DI\Definitions\Reference;
+use Flames\Code\Upgrade\ThirdParty\Nette\DI\Definitions\ServiceDefinition;
+use Flames\Code\Upgrade\ThirdParty\olvlvl\ComposerAttributeCollector\Attributes;
+use Override;
+use PHPStan\ShouldNotHappenException;
+use ReflectionMethod;
+use ReflectionNamedType;
+use function array_key_exists;
+use function is_string;
+use function sprintf;
+use function str_replace;
+use function strcasecmp;
+use function strtolower;
+/**
+ * Registers an ExtensionsCollection service for each interface marked with
+ * #[ExtensionInterface] and wires constructor parameters marked with
+ * #[AutowiredExtensions] to them.
+ *
+ * Container::getExtensionsCollection() looks up the same services by name at runtime.
+ */
+#[\PHPStan\DependencyInjection\ContainerExtension('autowiredExtensions')]
+final class AutowiredExtensionsExtension extends CompilerExtension
+{
+    public const SERVICE_NAME_PREFIX = 'phpstan.extensionsCollection.';
+    public static function getCollectionServiceName(string $extensionInterfaceName): string
+    {
+        return self::SERVICE_NAME_PREFIX . str_replace('\\', '.', $extensionInterfaceName);
+    }
+    #[Override]
+    public function loadConfiguration(): void
+    {
+        $builder = $this->getContainerBuilder();
+        foreach (\PHPStan\DependencyInjection\ValidateServiceTagsExtension::getInterfaceTagMapping() as $interface => $tag) {
+            $builder->addDefinition(self::getCollectionServiceName($interface))->setType(\PHPStan\DependencyInjection\LazyExtensionsCollection::class)->setArgument('tagName', $tag)->setAutowired(\false);
+        }
+    }
+    #[Override]
+    public function beforeCompile(): void
+    {
+        require_once __DIR__ . '/../attributes.php';
+        $builder = $this->getContainerBuilder();
+        $mapping = \PHPStan\DependencyInjection\ValidateServiceTagsExtension::getInterfaceTagMapping();
+        $parametersByClass = [];
+        foreach (Attributes::findTargetMethodParameters(\PHPStan\DependencyInjection\AutowiredExtensions::class) as $parameter) {
+            if (strcasecmp($parameter->method, '__construct') !== 0) {
+                throw new ShouldNotHappenException(sprintf('Attribute #[AutowiredExtensions] is only supported on constructor parameters, found on %s::%s() $%s.', $parameter->class, $parameter->method, $parameter->name));
+            }
+            if (!array_key_exists($parameter->attribute->of, $mapping)) {
+                throw new ShouldNotHappenException(sprintf('Interface %s referenced by #[AutowiredExtensions] on %s::__construct() $%s is not marked with the #[ExtensionInterface] attribute.', $parameter->attribute->of, $parameter->class, $parameter->name));
+            }
+            $nativeType = null;
+            foreach ((new ReflectionMethod($parameter->class, '__construct'))->getParameters() as $constructorParameter) {
+                if ($constructorParameter->getName() !== $parameter->name) {
+                    continue;
+                }
+                $nativeType = $constructorParameter->getType();
+                break;
+            }
+            if (!$nativeType instanceof ReflectionNamedType || $nativeType->getName() !== \PHPStan\DependencyInjection\ExtensionsCollection::class) {
+                throw new ShouldNotHappenException(sprintf('Parameter $%s of %s::__construct() with #[AutowiredExtensions] must have the native type %s.', $parameter->name, $parameter->class, \PHPStan\DependencyInjection\ExtensionsCollection::class));
+            }
+            $parametersByClass[strtolower($parameter->class)][] = $parameter;
+        }
+        foreach ($builder->getDefinitions() as $definition) {
+            if ($definition instanceof FactoryDefinition) {
+                $definition = $definition->getResultDefinition();
+            }
+            if (!$definition instanceof ServiceDefinition) {
+                continue;
+            }
+            $className = $definition->getType();
+            if ($className === null) {
+                continue;
+            }
+            // only wire arguments into definitions that actually invoke the constructor,
+            // not aliases of other services (factory: @otherService) or method factories
+            $creatorEntity = $definition->getCreator()->getEntity();
+            if ($creatorEntity !== null && (!is_string($creatorEntity) || strcasecmp($creatorEntity, $className) !== 0)) {
+                continue;
+            }
+            foreach ($parametersByClass[strtolower($className)] ?? [] as $parameter) {
+                $definition->setArgument($parameter->name, new Reference(self::getCollectionServiceName($parameter->attribute->of)));
+            }
+        }
+    }
+}

@@ -1,0 +1,66 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Node;
+
+use Override;
+use PhpParser\Node\Expr\NullsafeMethodCall;
+use PhpParser\NodeAbstract;
+use PHPStan\Turbo\ReferencedByTurboExtension;
+use PHPStan\Type\Type;
+/**
+ * Emitted by NullsafeMethodCallHandler once the receiver has been processed, so
+ * NullsafeMethodCallRule reads the receiver's (possibly null) type from the carried
+ * type instead of asking the scope for the receiver type before it is processed.
+ *
+ * @internal
+ */
+#[ReferencedByTurboExtension('nullsafeMethodCallExpressionNode')]
+final class NullsafeMethodCallExpressionNode extends NodeAbstract implements \PHPStan\Node\VirtualNode
+{
+    #[\PHPStan\Reflection\Attribute\PrivateProperty]
+    public NullsafeMethodCall $originalNode;
+    #[\PHPStan\Reflection\Attribute\PrivateProperty]
+    public Type $calledOnType;
+    #[\PHPStan\Reflection\Attribute\PrivateProperty]
+    public Type $calledOnNativeType;
+    public function __construct(
+        #[\PHPStan\Reflection\Attribute\PrivateProperty]
+        NullsafeMethodCall $originalNode,
+        #[\PHPStan\Reflection\Attribute\PrivateProperty]
+        Type $calledOnType,
+        #[\PHPStan\Reflection\Attribute\PrivateProperty]
+        Type $calledOnNativeType
+    )
+    {
+        $this->originalNode = $originalNode;
+        $this->calledOnType = $calledOnType;
+        $this->calledOnNativeType = $calledOnNativeType;
+        parent::__construct($originalNode->getAttributes());
+    }
+    public function getOriginalNode(): NullsafeMethodCall
+    {
+        return $this->originalNode;
+    }
+    public function getCalledOnType(): Type
+    {
+        return $this->calledOnType;
+    }
+    public function getCalledOnNativeType(): Type
+    {
+        return $this->calledOnNativeType;
+    }
+    #[Override]
+    public function getType(): string
+    {
+        return 'PHPStan_Node_NullsafeMethodCallExpressionNode';
+    }
+    /**
+     * @return string[]
+     */
+    #[Override]
+    public function getSubNodeNames(): array
+    {
+        return [];
+    }
+}

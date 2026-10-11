@@ -1,0 +1,30 @@
+parameters:
+	inferPrivatePropertyTypeFromConstructor: true
+
+services:
+	-
+		class: PHPStan\Testing\TestCaseSourceLocatorFactory
+		arguments:
+			phpParser: @phpParserDecorator
+			php8Parser: @php8PhpParser
+			fileExtensions: %fileExtensions%
+			excludePaths: %excludePaths%
+
+	currentPhpVersionSimpleParser!:
+		factory: @currentPhpVersionRichParser
+
+	currentPhpVersionLexer:
+		class: PhpParser\Lexer
+		factory: @PHPStan\Parser\LexerFactory::createEmulative()
+
+	betterReflectionSourceLocator:
+		class: PHPStan\BetterReflection\SourceLocator\Type\SourceLocator
+		factory: @PHPStan\Testing\TestCaseSourceLocatorFactory::create()
+		autowired: false
+
+	reflectionProvider:
+		factory: @betterReflectionProvider
+		arguments!: []
+		autowired:
+			- PHPStan\Reflection\ReflectionProvider
+

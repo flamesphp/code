@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @param int|null $error_code
+ * @param-out int|null $error_code
+ * @param string|null $error_message
+ * @param-out string|null $error_message
+ * @param float|null $timeout
+ * @param resource|null $context
+ * @return resource|false
+ */
+function stream_socket_client(
+    string $address,
+    &$error_code = null,
+    &$error_message = null,
+    $timeout = null,
+    int $flags = STREAM_CLIENT_CONNECT,
+    $context = null
+) {
+}

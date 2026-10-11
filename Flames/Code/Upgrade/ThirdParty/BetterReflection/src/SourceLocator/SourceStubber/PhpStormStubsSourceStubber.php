@@ -1,0 +1,895 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\BetterReflection\SourceLocator\SourceStubber;
+
+use CompileError;
+use DatePeriod;
+use Error;
+use Generator;
+use Iterator;
+use IteratorAggregate;
+use Flames\Code\Upgrade\ThirdParty\JetBrains\PHPStormStub\PhpStormStubsMap;
+use JsonSerializable;
+use ParseError;
+use PDOStatement;
+use PhpParser\BuilderFactory;
+use PhpParser\BuilderHelpers;
+use PhpParser\Comment\Doc;
+use PhpParser\Node;
+use PhpParser\Node\ComplexType;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Const_;
+use PhpParser\Node\Stmt\EnumCase;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\NameResolver;
+use PhpParser\Parser;
+use PhpParser\PrettyPrinter\Standard;
+use RecursiveIterator;
+use PHPStan\BetterReflection\Reflection\Annotation\AnnotationHelper;
+use PHPStan\BetterReflection\Reflection\Exception\InvalidConstantNode;
+use PHPStan\BetterReflection\SourceLocator\FileChecker;
+use PHPStan\BetterReflection\SourceLocator\SourceStubber\Exception\CouldNotFindPhpStormStubs;
+use PHPStan\BetterReflection\SourceLocator\SourceStubber\PhpStormStubs\CachingVisitor;
+use PHPStan\BetterReflection\Util\ConstantNodeChecker;
+use SeekableIterator;
+use SimpleXMLElement;
+use SplFixedArray;
+use SplObjectStorage;
+use Traversable;
+use function array_change_key_case;
+use function array_diff_key;
+use function array_key_exists;
+use function array_key_first;
+use function array_map;
+use function assert;
+use function count;
+use function explode;
+use function file_get_contents;
+use function implode;
+use function in_array;
+use function is_dir;
+use function is_string;
+use function ltrim;
+use function preg_match;
+use function preg_replace;
+use function sprintf;
+use function str_contains;
+use function str_replace;
+use function strtolower;
+use function usort;
+use const PHP_VERSION_ID;
+/** @internal */
+final class PhpStormStubsSourceStubber implements \PHPStan\BetterReflection\SourceLocator\SourceStubber\SourceStubber
+{
+    private Parser $phpParser;
+    private int $phpVersion = PHP_VERSION_ID;
+    /**
+     * @var int|null
+     */
+    private $maxCachedNodes = null;
+    private const SEARCH_DIRECTORIES = [__DIR__ . '/../../../../JetBrains/phpstorm-stubs'];
+    private const CORE_EXTENSIONS = ['apache', 'bcmath', 'bz2', 'calendar', 'Core', 'ctype', 'curl', 'date', 'dba', 'dom', 'enchant', 'exif', 'FFI', 'fileinfo', 'filter', 'fpm', 'ftp', 'gd', 'gettext', 'gmp', 'hash', 'iconv', 'imap', 'interbase', 'intl', 'json', 'ldap', 'libxml', 'mbstring', 'mcrypt', 'mssql', 'mysql', 'mysqli', 'oci8', 'odbc', 'openssl', 'pcntl', 'pcre', 'PDO', 'pdo_ibm', 'pdo_mysql', 'pdo_pgsql', 'pdo_sqlite', 'pgsql', 'Phar', 'posix', 'pspell', 'random', 'readline', 'recode', 'Reflection', 'regex', 'session', 'shmop', 'SimpleXML', 'snmp', 'soap', 'sockets', 'sodium', 'SPL', 'sqlite3', 'standard', 'sybase', 'sysvmsg', 'sysvsem', 'sysvshm', 'tidy', 'tokenizer', 'wddx', 'xml', 'xmlreader', 'xmlrpc', 'xmlwriter', 'xsl', 'Zend OPcache', 'zip', 'zlib'];
+    /**
+     * `@throws` tags added in https://github.com/JetBrains/phpstorm-stubs/pull/1926 naming errors
+     * that functions and methods existing in PHP 7 throw only as of PHP 8
+     */
+    private const PHP_8_THROWS = ['array_chunk' => ['ValueError'], 'array_fill' => ['ValueError'], 'array_rand' => ['ValueError'], 'assert_options' => ['ValueError'], 'bcadd' => ['ValueError'], 'bcpow' => ['ValueError', 'DivisionByZeroError'], 'bcpowmod' => ['ValueError', 'DivisionByZeroError'], 'bcscale' => ['ValueError'], 'bcsqrt' => ['ValueError'], 'bind_textdomain_codeset' => ['ValueError'], 'curl_multi_select' => ['ValueError'], 'date_parse_from_format' => ['ValueError'], 'dgettext' => ['ValueError'], 'dngettext' => ['ValueError'], 'easter_date' => ['ValueError'], 'exec' => ['ValueError'], 'fgetcsv' => ['ValueError'], 'file' => ['ValueError'], 'fprintf' => ['ValueError', 'ArgumentCountError'], 'ftp_set_option' => ['ValueError', 'TypeError'], 'get_called_class' => ['Error'], 'get_class' => ['TypeError', 'Error'], 'getimagesize' => ['ValueError'], 'gmp_binomial' => ['ValueError'], 'gmp_random_bits' => ['ValueError'], 'gmp_random_range' => ['ValueError'], 'gmp_random_seed' => ['ValueError'], 'hash' => ['ValueError'], 'hash_hkdf' => ['ValueError'], 'hash_hmac' => ['ValueError'], 'hash_hmac_file' => ['ValueError'], 'hash_init' => ['ValueError'], 'hash_pbkdf2' => ['ValueError'], 'imagefilter' => ['ValueError'], 'imagejpeg' => ['ValueError'], 'imagepng' => ['ValueError'], 'imagescale' => ['ValueError'], 'imagewebp' => ['ValueError'], 'imap_clearflag_full' => ['ValueError'], 'imap_close' => ['ValueError'], 'imap_delete' => ['ValueError'], 'imap_gc' => ['ValueError'], 'imap_setflag_full' => ['ValueError'], 'jdtounix' => ['ValueError'], 'json_decode' => ['ValueError'], 'libxml_set_streams_context' => ['TypeError'], 'max' => ['ValueError'], 'mb_convert_encoding' => ['ValueError'], 'mb_convert_kana' => ['ValueError'], 'mb_decode_numericentity' => ['ValueError'], 'mb_encode_numericentity' => ['ValueError'], 'mb_encoding_aliases' => ['ValueError'], 'mb_http_input' => ['ValueError'], 'mb_http_output' => ['ValueError'], 'mb_internal_encoding' => ['ValueError'], 'mb_stripos' => ['ValueError'], 'mb_strpos' => ['ValueError'], 'mb_strripos' => ['ValueError'], 'mb_strrpos' => ['ValueError'], 'min' => ['ValueError'], 'mt_rand' => ['ValueError'], 'passthru' => ['ValueError'], 'pg_convert' => ['ValueError', 'TypeError'], 'pg_fetch_object' => ['ValueError'], 'pg_insert' => ['ValueError', 'TypeError'], 'printf' => ['ValueError', 'ArgumentCountError'], 'proc_open' => ['ValueError'], 'range' => ['ValueError'], 'round' => ['ValueError'], 'settype' => ['ValueError'], 'shmop_open' => ['ValueError'], 'shmop_read' => ['ValueError'], 'shmop_write' => ['ValueError'], 'simplexml_import_dom' => ['TypeError'], 'sleep' => ['ValueError'], 'sprintf' => ['ValueError', 'ArgumentCountError'], 'str_split' => ['ValueError'], 'stream_set_chunk_size' => ['ValueError'], 'stripos' => ['ValueError'], 'strpos' => ['ValueError'], 'strripos' => ['ValueError'], 'strrpos' => ['ValueError'], 'textdomain' => ['ValueError'], 'trigger_error' => ['ValueError'], 'unserialize' => ['TypeError', 'ValueError'], 'vfprintf' => ['ValueError'], 'vprintf' => ['ValueError'], 'vsprintf' => ['ValueError'], 'wordwrap' => ['ValueError'], 'xml_parser_get_option' => ['ValueError'], 'xml_parser_set_option' => ['ValueError'], 'DOMXPath::query' => ['Error', 'TypeError'], 'DOMXPath::registerPhpFunctions' => ['ValueError', 'TypeError'], 'GlobIterator::__construct' => ['ValueError'], 'IntlCalendar::setMinimalDaysInFirstWeek' => ['ValueError'], 'LimitIterator::__construct' => ['ValueError'], 'ReflectionReference::fromArrayElement' => ['TypeError'], 'SimpleXMLElement::current' => ['Error'], 'SimpleXMLElement::key' => ['Error'], 'SplFixedArray::__construct' => ['ValueError'], 'SplFixedArray::setSize' => ['ValueError'], 'SQLite3Result::finalize' => ['Error'], 'SQLite3Stmt::close' => ['Error'], 'XMLReader::open' => ['ValueError'], 'XMLReader::XML' => ['ValueError'], 'XSLTProcessor::importStylesheet' => ['TypeError'], 'XSLTProcessor::setParameter' => ['ValueError']];
+    private BuilderFactory $builderFactory;
+    private Standard $prettyPrinter;
+    private NodeTraverser $nodeTraverser;
+    /**
+     * @var string|null
+     */
+    private $stubsDirectory = null;
+    private CachingVisitor $cachingVisitor;
+    /**
+     * `null` means "class is not supported in the required PHP version"
+     *
+     * @var array<string, array{0: Node\Stmt\ClassLike, 1: Node\Stmt\Namespace_|null}|null>
+     */
+    private array $classNodes = [];
+    /**
+     * `null` means "function is not supported in the required PHP version"
+     *
+     * @var array<string, array{0: Node\Stmt\Function_, 1: Node\Stmt\Namespace_|null}|null>
+     */
+    private array $functionNodes = [];
+    /**
+     * `null` means "failed lookup" for constant that is not case insensitive or "constant is not supported in the required PHP version"
+     *
+     * @var array<string, array{0: Node\Stmt\Const_|Node\Expr\FuncCall, 1: Node\Stmt\Namespace_|null}|null>
+     */
+    private array $constantNodes = [];
+    private static bool $mapsInitialized = \false;
+    /** @var array<lowercase-string, string> */
+    private static array $classMap;
+    /** @var array<lowercase-string, string> */
+    private static array $functionMap;
+    /** @var array<lowercase-string, string> */
+    private static array $constantMap;
+    /** @var array<lowercase-string, list<string>> */
+    private static array $php8ThrowsMap;
+    /** @var array<lowercase-string, string> */
+    private array $selectedClassMap = [];
+    /** @var array<lowercase-string, string> */
+    private array $selectedFunctionMap = [];
+    /** @var array<lowercase-string, string> */
+    private array $selectedConstantMap = [];
+    /** @var array<lowercase-string, string> */
+    private array $disabledClassMap = [];
+    /** @var array<lowercase-string, string> */
+    private array $disabledFunctionMap = [];
+    /** @var array<lowercase-string, string> */
+    private array $disabledConstantMap = [];
+    /**
+     * @param int|null           $maxCachedNodes    maximum number of entries kept in each node cache, evicted by LRU; null means unlimited
+     * @param array<string, int> $extensionVersions
+     */
+    public function __construct(Parser $phpParser, Standard $prettyPrinter, int $phpVersion = PHP_VERSION_ID, ?int $maxCachedNodes = null, array $extensionVersions = [])
+    {
+        $this->phpParser = $phpParser;
+        $this->phpVersion = $phpVersion;
+        $this->maxCachedNodes = $maxCachedNodes;
+        $this->builderFactory = new BuilderFactory();
+        $this->prettyPrinter = $prettyPrinter;
+        $this->cachingVisitor = new CachingVisitor($this->builderFactory);
+        $this->nodeTraverser = new NodeTraverser(new NameResolver(), $this->cachingVisitor);
+        if (!self::$mapsInitialized) {
+            /** @psalm-suppress PropertyTypeCoercion */
+            self::$classMap = array_change_key_case(PhpStormStubsMap::CLASSES);
+            /** @psalm-suppress PropertyTypeCoercion */
+            self::$functionMap = array_change_key_case(PhpStormStubsMap::FUNCTIONS);
+            /** @psalm-suppress PropertyTypeCoercion */
+            self::$constantMap = array_change_key_case(PhpStormStubsMap::CONSTANTS);
+            /** @psalm-suppress PropertyTypeCoercion */
+            self::$php8ThrowsMap = array_change_key_case(self::PHP_8_THROWS);
+            self::$mapsInitialized = \true;
+        }
+        $this->initializeExtensionVersionMaps($extensionVersions);
+    }
+    public function hasClass(string $className): bool
+    {
+        $lowercaseClassName = strtolower($className);
+        return $this->getClassFilePath($lowercaseClassName) !== null;
+    }
+    public function isPresentClass(string $className): ?bool
+    {
+        $lowercaseClassName = strtolower($className);
+        if (array_key_exists($lowercaseClassName, $this->disabledClassMap)) {
+            return \false;
+        }
+        if ($this->getClassFilePath($lowercaseClassName) === null) {
+            return null;
+        }
+        $classNode = $this->getClassNodeData($lowercaseClassName);
+        return $classNode !== null;
+    }
+    public function isPresentFunction(string $functionName): ?bool
+    {
+        $lowercaseFunctionName = strtolower($functionName);
+        if (array_key_exists($lowercaseFunctionName, $this->disabledFunctionMap)) {
+            return \false;
+        }
+        if ($this->getFunctionFilePath($lowercaseFunctionName) === null) {
+            return null;
+        }
+        $functionNode = $this->getFunctionNodeData($lowercaseFunctionName);
+        return $functionNode !== null;
+    }
+    /** @param class-string|trait-string $className */
+    public function generateClassStub(string $className): ?\PHPStan\BetterReflection\SourceLocator\SourceStubber\StubData
+    {
+        if (strtolower($className) === 'iterable') {
+            return null;
+        }
+        $classNodeData = $this->getClassNodeData($className);
+        if ($classNodeData === null) {
+            return null;
+        }
+        $classNode = $classNodeData[0];
+        if ($classNode instanceof Node\Stmt\Class_) {
+            if ($classNode->extends !== null) {
+                $modifiedExtends = $this->replaceExtendsOrImplementsByPhpVersion($className, [$classNode->extends]);
+                $classNode->extends = $modifiedExtends !== [] ? $modifiedExtends[0] : null;
+            }
+            $classNode->implements = $this->replaceExtendsOrImplementsByPhpVersion($className, $classNode->implements);
+        } elseif ($classNode instanceof Node\Stmt\Interface_) {
+            $classNode->extends = $this->replaceExtendsOrImplementsByPhpVersion($className, $classNode->extends);
+        }
+        $filePath = $this->getClassFilePath(strtolower($className));
+        assert($filePath !== null);
+        $extension = $this->getExtensionFromFilePath($filePath);
+        $stub = $this->createStub($classNode, $classNodeData[1]);
+        if ($className === Traversable::class) {
+            // See https://github.com/JetBrains/phpstorm-stubs/commit/0778a26992c47d7dbee4d0b0bfb7fad4344371b1#diff-575bacb45377d474336c71cbf53c1729
+            $stub = str_replace(' extends \iterable', '', $stub);
+        } elseif ($className === Generator::class) {
+            $stub = str_replace('PS_UNRESERVE_PREFIX_throw', 'throw', $stub);
+        }
+        return new \PHPStan\BetterReflection\SourceLocator\SourceStubber\StubData($stub, $extension, $this->getAbsoluteFilePath($filePath));
+    }
+    /** @return array{0: Node\Stmt\ClassLike, 1: Node\Stmt\Namespace_|null}|null */
+    private function getClassNodeData(string $className): ?array
+    {
+        $lowercaseClassName = strtolower($className);
+        $filePath = $this->getClassFilePath($lowercaseClassName);
+        if ($filePath === null) {
+            return null;
+        }
+        if (!array_key_exists($lowercaseClassName, $this->classNodes)) {
+            $this->parseFile($filePath);
+            /** @psalm-suppress RedundantCondition */
+            if (!array_key_exists($lowercaseClassName, $this->classNodes)) {
+                // Save `null` so we don't parse the file again for the same $lowercaseClassName
+                $this->classNodes[$lowercaseClassName] = null;
+            }
+        } else {
+            $this->markAsRecentlyUsed($this->classNodes, $lowercaseClassName);
+        }
+        return $this->classNodes[$lowercaseClassName];
+    }
+    /**
+     * @return array{0: Node\Stmt\Function_, 1: Node\Stmt\Namespace_|null}|null
+     */
+    private function getFunctionNodeData(string $functionName): ?array
+    {
+        $lowercaseFunctionName = strtolower($functionName);
+        $filePath = $this->getFunctionFilePath($lowercaseFunctionName);
+        if ($filePath === null) {
+            return null;
+        }
+        if (!array_key_exists($lowercaseFunctionName, $this->functionNodes)) {
+            $this->parseFile($filePath);
+            /** @psalm-suppress RedundantCondition */
+            if (!array_key_exists($lowercaseFunctionName, $this->functionNodes)) {
+                // Save `null` so we don't parse the file again for the same $lowercaseFunctionName
+                $this->functionNodes[$lowercaseFunctionName] = null;
+            }
+        } else {
+            $this->markAsRecentlyUsed($this->functionNodes, $lowercaseFunctionName);
+        }
+        return $this->functionNodes[$lowercaseFunctionName];
+    }
+    public function generateFunctionStub(string $functionName): ?\PHPStan\BetterReflection\SourceLocator\SourceStubber\StubData
+    {
+        $functionNodeData = $this->getFunctionNodeData($functionName);
+        if ($functionNodeData === null) {
+            return null;
+        }
+        $filePath = $this->getFunctionFilePath(strtolower($functionName));
+        assert($filePath !== null);
+        $extension = $this->getExtensionFromFilePath($filePath);
+        return new \PHPStan\BetterReflection\SourceLocator\SourceStubber\StubData($this->createStub($functionNodeData[0], $functionNodeData[1]), $extension, $this->getAbsoluteFilePath($filePath));
+    }
+    public function generateConstantStub(string $constantName): ?\PHPStan\BetterReflection\SourceLocator\SourceStubber\StubData
+    {
+        $lowercaseConstantName = strtolower($constantName);
+        $filePath = $this->getConstantFilePath($lowercaseConstantName);
+        if ($filePath === null) {
+            return null;
+        }
+        if (array_key_exists($lowercaseConstantName, $this->constantNodes) && $this->constantNodes[$lowercaseConstantName] === null) {
+            return null;
+        }
+        $constantNodeData = $this->constantNodes[$constantName] ?? $this->constantNodes[$lowercaseConstantName] ?? null;
+        if ($constantNodeData !== null) {
+            $this->markAsRecentlyUsed($this->constantNodes, ($this->constantNodes[$constantName] ?? null) !== null ? $constantName : $lowercaseConstantName);
+        }
+        if ($constantNodeData === null) {
+            $this->parseFile($filePath);
+            $constantNodeData = $this->constantNodes[$constantName] ?? $this->constantNodes[$lowercaseConstantName] ?? null;
+            if ($constantNodeData === null) {
+                // Still `null` - the constant is not case-insensitive. Save `null` so we don't parse the file again for the same $constantName
+                $this->constantNodes[$lowercaseConstantName] = null;
+                return null;
+            }
+        }
+        $extension = $this->getExtensionFromFilePath($filePath);
+        return new \PHPStan\BetterReflection\SourceLocator\SourceStubber\StubData($this->createStub($constantNodeData[0], $constantNodeData[1]), $extension, $this->getAbsoluteFilePath($filePath));
+    }
+    private function parseFile(string $filePath): void
+    {
+        // Evict before inserting the parsed file's nodes, not after, so that entries
+        // just added for the current file cannot be evicted before the caller reads them.
+        // The caches may thus temporarily exceed the limit by one stub file's worth of nodes.
+        $this->evictLeastRecentlyUsed($this->classNodes);
+        $this->evictLeastRecentlyUsed($this->functionNodes);
+        $this->evictLeastRecentlyUsed($this->constantNodes);
+        $absoluteFilePath = $this->getAbsoluteFilePath($filePath);
+        FileChecker::assertReadableFile($absoluteFilePath);
+        $fileContents = file_get_contents($absoluteFilePath);
+        assert($fileContents !== \false);
+        /** @var list<Node\Stmt> $ast */
+        $ast = $this->phpParser->parse($fileContents);
+        // "@since" and "@removed" annotations in some cases do not contain a PHP version, but an extension version - e.g. "@since 1.3.0"
+        // So we check PHP version only for stubs of core extensions
+        $isCoreExtension = $this->isCoreExtension($this->getExtensionFromFilePath($filePath));
+        $this->cachingVisitor->clearNodes();
+        $this->nodeTraverser->traverse($ast);
+        foreach ($this->cachingVisitor->classNodes as $className => $classNodeData) {
+            [$classNode] = $classNodeData;
+            if ($isCoreExtension) {
+                if ($className !== 'Attribute' && $className !== 'ReturnTypeWillChange' && $className !== 'AllowDynamicProperties' && $className !== 'SensitiveParameter' && $className !== 'Override' && $className !== 'Deprecated' && $className !== 'NoDiscard' && $className !== 'DelayedTargetValidation' && !$this->isSupportedInPhpVersion($classNode)) {
+                    continue;
+                }
+                $classNode->stmts = $this->modifyStmtsByPhpVersion($classNode->stmts, $className);
+            }
+            $this->classNodes[strtolower($className)] = $classNodeData;
+        }
+        foreach ($this->cachingVisitor->functionNodes as $functionName => $functionNodesData) {
+            foreach ($functionNodesData as $functionNodeData) {
+                [$functionNode] = $functionNodeData;
+                if ($isCoreExtension) {
+                    if (!$this->isSupportedInPhpVersion($functionNode)) {
+                        continue;
+                    }
+                    $this->modifyFunctionReturnTypeByPhpVersion($functionNode);
+                    $this->modifyFunctionParametersByPhpVersion($functionNode);
+                    if ($this->phpVersion < 80000) {
+                        $this->removePhp8ThrowsFromDocComment($functionNode, $functionName);
+                    }
+                }
+                $lowercaseFunctionName = strtolower($functionName);
+                if (array_key_exists($lowercaseFunctionName, $this->functionNodes)) {
+                    continue;
+                }
+                $this->functionNodes[$lowercaseFunctionName] = $functionNodeData;
+            }
+        }
+        foreach ($this->cachingVisitor->constantNodes as $constantName => $constantNodeData) {
+            [$constantNode] = $constantNodeData;
+            if ($isCoreExtension && !$this->isSupportedInPhpVersion($constantNode)) {
+                continue;
+            }
+            $this->constantNodes[$constantName] = $constantNodeData;
+        }
+    }
+    /**
+     * LRU bookkeeping: re-insert the entry at the end so genuinely cold nodes
+     * are evicted first, not the ones cached earliest.
+     *
+     * @param array<string, T> $cache
+     *
+     * @template T
+     */
+    private function markAsRecentlyUsed(array &$cache, string $key): void
+    {
+        if ($this->maxCachedNodes === null) {
+            return;
+        }
+        $value = $cache[$key];
+        unset($cache[$key]);
+        $cache[$key] = $value;
+    }
+    /** @param array<string, mixed> $cache */
+    private function evictLeastRecentlyUsed(array &$cache): void
+    {
+        if ($this->maxCachedNodes === null) {
+            return;
+        }
+        while (count($cache) > $this->maxCachedNodes) {
+            $oldestKey = array_key_first($cache);
+            if ($oldestKey === null) {
+                break;
+            }
+            unset($cache[$oldestKey]);
+        }
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Const_|\PhpParser\Node\Expr\FuncCall $node
+     */
+    private function createStub($node, ?\PhpParser\Node\Stmt\Namespace_ $namespaceNode): string
+    {
+        if ($node instanceof Node\Expr\FuncCall) {
+            try {
+                ConstantNodeChecker::assertValidDefineFunctionCall($node);
+                $this->addDeprecatedDocComment($node);
+            } catch (InvalidConstantNode $exception) {
+                // just keep going
+            }
+        }
+        if (!$node instanceof Node\Expr\FuncCall) {
+            $this->addDeprecatedDocComment($node);
+            $nodeWithNamespaceName = $node instanceof Node\Stmt\Const_ ? $node->consts[0] : $node;
+            $namespacedName = $nodeWithNamespaceName->namespacedName;
+            assert($namespacedName instanceof Node\Name);
+            $namespaceBuilder = new \PhpParser\Builder\Namespace_($namespacedName->slice(0, -1));
+            if ($namespaceNode !== null) {
+                foreach ($namespaceNode->stmts as $stmt) {
+                    if (!$stmt instanceof Node\Stmt\Use_ && !$stmt instanceof Node\Stmt\GroupUse) {
+                        continue;
+                    }
+                    $namespaceBuilder->addStmt($stmt);
+                }
+            }
+            $namespaceBuilder->addStmt($node);
+            $node = $namespaceBuilder->getNode();
+        }
+        return sprintf("<?php\n\n%s%s\n", $this->prettyPrinter->prettyPrint([$node]), $node instanceof Node\Expr\FuncCall ? ';' : '');
+    }
+    /** @param array<string, int> $extensionVersions */
+    private function initializeExtensionVersionMaps(array $extensionVersions): void
+    {
+        foreach ($extensionVersions as $extensionName => $version) {
+            $extensionName = strtolower($extensionName);
+            if (!array_key_exists($extensionName, PhpStormStubsMap::EXTENSION_VERSIONS)) {
+                continue;
+            }
+            $versionMaps = PhpStormStubsMap::EXTENSION_VERSIONS[$extensionName];
+            if (array_key_exists($version, $versionMaps)) {
+                $selectedMap = $versionMaps[$version];
+                $this->selectedClassMap += array_change_key_case($selectedMap['classes']);
+                $this->selectedFunctionMap += array_change_key_case($selectedMap['functions']);
+                $this->selectedConstantMap += array_change_key_case($selectedMap['constants']);
+            } else {
+                // a version without a map of its own uses the default stubs
+                $selectedMap = $versionMaps['default'];
+            }
+            // symbols that other versions of the extension define and the selected one does not
+            $selectedClasses = array_change_key_case($selectedMap['classes']);
+            $selectedFunctions = array_change_key_case($selectedMap['functions']);
+            $selectedConstants = array_change_key_case($selectedMap['constants']);
+            foreach ($versionMaps as $versionMap) {
+                $this->disabledClassMap += array_diff_key(array_change_key_case($versionMap['classes']), $selectedClasses);
+                $this->disabledFunctionMap += array_diff_key(array_change_key_case($versionMap['functions']), $selectedFunctions);
+                $this->disabledConstantMap += array_diff_key(array_change_key_case($versionMap['constants']), $selectedConstants);
+            }
+        }
+    }
+    private function getClassFilePath(string $lowercaseClassName): ?string
+    {
+        if (array_key_exists($lowercaseClassName, $this->selectedClassMap)) {
+            return $this->selectedClassMap[$lowercaseClassName];
+        }
+        if (array_key_exists($lowercaseClassName, $this->disabledClassMap)) {
+            return null;
+        }
+        return self::$classMap[$lowercaseClassName] ?? null;
+    }
+    private function getFunctionFilePath(string $lowercaseFunctionName): ?string
+    {
+        if (array_key_exists($lowercaseFunctionName, $this->selectedFunctionMap)) {
+            return $this->selectedFunctionMap[$lowercaseFunctionName];
+        }
+        if (array_key_exists($lowercaseFunctionName, $this->disabledFunctionMap)) {
+            return null;
+        }
+        return self::$functionMap[$lowercaseFunctionName] ?? null;
+    }
+    private function getConstantFilePath(string $lowercaseConstantName): ?string
+    {
+        if (array_key_exists($lowercaseConstantName, $this->selectedConstantMap)) {
+            return $this->selectedConstantMap[$lowercaseConstantName];
+        }
+        if (array_key_exists($lowercaseConstantName, $this->disabledConstantMap)) {
+            return null;
+        }
+        return self::$constantMap[$lowercaseConstantName] ?? null;
+    }
+    /** @return non-empty-string */
+    private function getExtensionFromFilePath(string $filePath): string
+    {
+        $extensionName = explode('/', $filePath)[0];
+        assert($extensionName !== '');
+        if (preg_match('~^(.+)_v\d+$~', $extensionName, $matches) === 1) {
+            return $matches[1];
+        }
+        return $extensionName;
+    }
+    /** @return non-empty-string */
+    private function getAbsoluteFilePath(string $filePath): string
+    {
+        return sprintf('%s/%s', $this->getStubsDirectory(), $filePath);
+    }
+    /**
+     * Some stubs extend/implement classes from newer PHP versions. We need to filter those names in regard to set PHP version so that those stubs remain valid.
+     *
+     * @param array<Node\Name> $nameNodes
+     *
+     * @return list<Node\Name>
+     */
+    private function replaceExtendsOrImplementsByPhpVersion(string $className, array $nameNodes): array
+    {
+        $modifiedNames = [];
+        foreach ($nameNodes as $nameNode) {
+            $name = $nameNode->name;
+            if ($className === ParseError::class) {
+                if ($name === CompileError::class && $this->phpVersion < 70300) {
+                    $modifiedNames[] = new Node\Name\FullyQualified(Error::class);
+                    continue;
+                }
+            } elseif ($className === SplFixedArray::class) {
+                if ($name === JsonSerializable::class && $this->phpVersion < 80100) {
+                    continue;
+                }
+                if ($name === IteratorAggregate::class && $this->phpVersion < 80000) {
+                    continue;
+                }
+                if ($name === Iterator::class && $this->phpVersion >= 80000) {
+                    continue;
+                }
+            } elseif ($className === SimpleXMLElement::class) {
+                if ($name === RecursiveIterator::class && $this->phpVersion < 80000) {
+                    continue;
+                }
+            } elseif ($className === DatePeriod::class || $className === PDOStatement::class) {
+                if ($name === IteratorAggregate::class && $this->phpVersion < 80000) {
+                    $modifiedNames[] = new Node\Name\FullyQualified(Traversable::class);
+                    continue;
+                }
+            } elseif ($className === SplObjectStorage::class) {
+                if ($name === SeekableIterator::class && $this->phpVersion < 80400) {
+                    $modifiedNames[] = new Node\Name\FullyQualified(Iterator::class);
+                    continue;
+                }
+            }
+            if ($this->getClassNodeData($name) === null) {
+                continue;
+            }
+            $modifiedNames[] = $nameNode;
+        }
+        return $modifiedNames;
+    }
+    /**
+     * @param array<Node\Stmt> $stmts
+     *
+     * @return list<Node\Stmt>
+     */
+    private function modifyStmtsByPhpVersion(array $stmts, string $className): array
+    {
+        $newStmts = [];
+        foreach ($stmts as $stmt) {
+            assert($stmt instanceof Node\Stmt\ClassConst || $stmt instanceof Node\Stmt\Property || $stmt instanceof Node\Stmt\ClassMethod || $stmt instanceof Node\Stmt\EnumCase);
+            if (!$this->isSupportedInPhpVersion($stmt)) {
+                continue;
+            }
+            if ($stmt instanceof Node\Stmt\Property) {
+                $this->modifyStmtTypeByPhpVersion($stmt);
+            }
+            if ($stmt instanceof Node\Stmt\ClassMethod) {
+                $this->modifyFunctionReturnTypeByPhpVersion($stmt);
+                $this->modifyFunctionParametersByPhpVersion($stmt);
+                if ($this->phpVersion < 80000) {
+                    $this->removePhp8ThrowsFromDocComment($stmt, sprintf('%s::%s', $className, $stmt->name->name));
+                }
+            }
+            $this->addDeprecatedDocComment($stmt);
+            $newStmts[] = $stmt;
+        }
+        return $newStmts;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $stmt
+     */
+    private function modifyStmtTypeByPhpVersion($stmt): void
+    {
+        $type = $this->getStmtType($stmt);
+        if ($type === null) {
+            return;
+        }
+        $stmt->type = $type;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $function
+     */
+    private function modifyFunctionReturnTypeByPhpVersion($function): void
+    {
+        $isTentativeReturnType = $this->getNodeAttribute($function, 'JetBrains\PhpStorm\Internal\TentativeType') !== null;
+        if ($isTentativeReturnType) {
+            // Tentative types are the most correct in stubs
+            // If the type is tentative in stubs, we should remove the type for PHP < 8.1
+            if ($this->phpVersion >= 80100) {
+                $this->addAnnotationToDocComment($function, AnnotationHelper::TENTATIVE_RETURN_TYPE_ANNOTATION);
+            } else {
+                $function->returnType = null;
+            }
+            return;
+        }
+        $rawType = $this->getRawStmtType($function);
+        if ($rawType !== null && self::isResourcePseudoType($rawType)) {
+            $this->addTagToDocComment($function, sprintf('return %s', $rawType));
+            $function->returnType = null;
+            return;
+        }
+        $type = $this->getStmtType($function);
+        if ($type === null) {
+            return;
+        }
+        $function->returnType = $type;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $function
+     */
+    private function modifyFunctionParametersByPhpVersion($function): void
+    {
+        $parameters = [];
+        foreach ($function->getParams() as $parameterNode) {
+            if (!$this->isSupportedInPhpVersion($parameterNode)) {
+                continue;
+            }
+            $this->modifyStmtTypeByPhpVersion($parameterNode);
+            $rawType = $this->getRawStmtType($parameterNode);
+            if ($rawType !== null && self::isResourcePseudoType($rawType)) {
+                assert($parameterNode->var instanceof Node\Expr\Variable);
+                assert(is_string($parameterNode->var->name));
+                $this->addTagToDocComment($function, sprintf('param %s $%s', $rawType, $parameterNode->var->name));
+                $parameterNode->type = null;
+            }
+            $parameters[] = $parameterNode;
+        }
+        $function->params = $parameters;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
+     * @return \PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\ComplexType|null
+     */
+    private function getStmtType($node)
+    {
+        $type = $this->getRawStmtType($node);
+        if ($type === null) {
+            return null;
+        }
+        return $this->normalizeType($type);
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
+     */
+    private function getRawStmtType($node): ?string
+    {
+        $languageLevelTypeAwareAttribute = $this->getNodeAttribute($node, 'JetBrains\PhpStorm\Internal\LanguageLevelTypeAware');
+        if ($languageLevelTypeAwareAttribute === null) {
+            return null;
+        }
+        assert($languageLevelTypeAwareAttribute->args[0]->value instanceof Node\Expr\Array_);
+        /** @var list<Node\ArrayItem> $types */
+        $types = $languageLevelTypeAwareAttribute->args[0]->value->items;
+        usort($types, static fn(Node\ArrayItem $a, Node\ArrayItem $b): int => $b->key <=> $a->key);
+        foreach ($types as $type) {
+            assert($type->key instanceof Node\Scalar\String_);
+            assert($type->value instanceof Node\Scalar\String_);
+            if ($this->parsePhpVersion($type->key->value) > $this->phpVersion) {
+                continue;
+            }
+            return $type->value->value;
+        }
+        assert($languageLevelTypeAwareAttribute->args[1]->value instanceof Node\Scalar\String_);
+        return $languageLevelTypeAwareAttribute->args[1]->value->value !== '' ? $languageLevelTypeAwareAttribute->args[1]->value->value : null;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Stmt\Const_|\PhpParser\Node\Stmt\EnumCase $node
+     */
+    private function addDeprecatedDocComment($node): void
+    {
+        if ($node instanceof Node\Expr\FuncCall) {
+            if (!$this->isDeprecatedByPhpDocInPhpVersion($node)) {
+                $this->removeAnnotationFromDocComment($node, 'deprecated');
+            }
+            return;
+        }
+        if ($node instanceof Node\Stmt\Const_) {
+            return;
+        }
+        if (!$this->isDeprecatedInPhpVersion($node)) {
+            $this->removeAnnotationFromDocComment($node, 'deprecated');
+            return;
+        }
+        $this->addAnnotationToDocComment($node, 'deprecated');
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Const_|\PhpParser\Node\Stmt\EnumCase $node
+     */
+    private function addAnnotationToDocComment($node, string $annotationName): void
+    {
+        $docComment = $node->getDocComment();
+        if ($docComment === null) {
+            $docCommentText = sprintf('/** @%s */', $annotationName);
+        } else {
+            $docCommentText = preg_replace('~(\r?\n\s*)\*/~', sprintf('\1* @%s\1*/', $annotationName), $docComment->getText());
+            assert($docCommentText !== null);
+        }
+        $node->setDocComment(new Doc($docCommentText));
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Stmt\Const_|\PhpParser\Node\Stmt\EnumCase $node
+     */
+    private function removeAnnotationFromDocComment($node, string $annotationName): void
+    {
+        $docComment = $node->getDocComment();
+        if ($docComment === null) {
+            return;
+        }
+        $docCommentText = preg_replace('~@' . $annotationName . '.*$~m', '', $docComment->getText());
+        assert($docCommentText !== null);
+        $node->setDocComment(new Doc($docCommentText));
+    }
+    private function isCoreExtension(string $extension): bool
+    {
+        return in_array($extension, self::CORE_EXTENSIONS, \true);
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassMethod $node
+     */
+    private function removePhp8ThrowsFromDocComment($node, string $name): void
+    {
+        $throws = self::$php8ThrowsMap[strtolower($name)] ?? null;
+        if ($throws === null) {
+            return;
+        }
+        $docComment = $node->getDocComment();
+        if ($docComment === null) {
+            return;
+        }
+        // the tag together with the following lines of its description
+        $docCommentText = preg_replace(sprintf('~^[ \t]*\*[ \t]*@throws[ \t]+\\\\?(?:%s)\b[^\n]*\n(?:[ \t]*\*(?![ \t]*@|/)[^\n]*\n)*~m', implode('|', $throws)), '', $docComment->getText());
+        assert($docCommentText !== null);
+        $node->setDocComment(new Doc($docCommentText));
+    }
+    private function isDeprecatedByPhpDocInPhpVersion(Node\Expr\FuncCall $node): bool
+    {
+        $docComment = $node->getDocComment();
+        if ($docComment === null) {
+            return \false;
+        }
+        if (preg_match('#@deprecated\s+(\d+)\.(\d+)(?:\.(\d+))?$#m', $docComment->getText(), $matches) === 1) {
+            $major = $matches[1];
+            $minor = $matches[2];
+            $patch = $matches[3] ?? 0;
+            $versionId = sprintf('%d%02d%02d', $major, $minor, $patch);
+            return $this->phpVersion >= $versionId;
+        }
+        return \true;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\EnumCase $node
+     */
+    private function isDeprecatedInPhpVersion($node): bool
+    {
+        $deprecatedAttribute = $this->getNodeAttribute($node, 'JetBrains\PhpStorm\Deprecated');
+        if ($deprecatedAttribute === null) {
+            return \false;
+        }
+        foreach ($deprecatedAttribute->args as $attributeArg) {
+            if ($attributeArg->name !== null && $attributeArg->name->name === 'since') {
+                assert($attributeArg->value instanceof Node\Scalar\String_);
+                return $this->parsePhpVersion($attributeArg->value->value) <= $this->phpVersion;
+            }
+        }
+        return \true;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Const_|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param|\PhpParser\Node\Stmt\EnumCase $node
+     */
+    private function isSupportedInPhpVersion($node): bool
+    {
+        [$fromVersion, $toVersion] = $this->getSupportedPhpVersions($node);
+        if ($fromVersion !== null && $fromVersion > $this->phpVersion) {
+            return \false;
+        }
+        return $toVersion === null || $toVersion >= $this->phpVersion;
+    }
+    /** @return array{0: int|null, 1: int|null}
+     * @param \PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Const_|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param|\PhpParser\Node\Stmt\EnumCase $node */
+    private function getSupportedPhpVersions($node): array
+    {
+        $fromVersion = null;
+        $toVersion = null;
+        $docComment = $node->getDocComment();
+        if ($docComment !== null) {
+            if (preg_match('~@since\s+(?P<version>\d+\.\d+(?:\.\d+)?)\s+~', $docComment->getText(), $sinceMatches) === 1) {
+                $fromVersion = $this->parsePhpVersion($sinceMatches['version']);
+            }
+            if (preg_match('~@removed\s+(?P<version>\d+\.\d+(?:\.\d+)?)\s+~', $docComment->getText(), $removedMatches) === 1) {
+                $toVersion = $this->parsePhpVersion($removedMatches['version']) - 1;
+            }
+        }
+        $elementsAvailable = $this->getNodeAttribute($node, 'JetBrains\PhpStorm\Internal\PhpStormStubsElementAvailable');
+        if ($elementsAvailable !== null) {
+            foreach ($elementsAvailable->args as $i => $attributeArg) {
+                $isFrom = \false;
+                if ($attributeArg->name !== null && $attributeArg->name->name === 'from') {
+                    $isFrom = \true;
+                }
+                if ($attributeArg->name === null && $i === 0) {
+                    $isFrom = \true;
+                }
+                if ($isFrom) {
+                    assert($attributeArg->value instanceof Node\Scalar\String_);
+                    $fromVersion = $this->parsePhpVersion($attributeArg->value->value);
+                }
+                $isTo = \false;
+                if ($attributeArg->name !== null && $attributeArg->name->name === 'to') {
+                    $isTo = \true;
+                }
+                if ($attributeArg->name === null && $i === 1) {
+                    $isTo = \true;
+                }
+                if (!$isTo) {
+                    continue;
+                }
+                assert($attributeArg->value instanceof Node\Scalar\String_);
+                $toVersion = $this->parsePhpVersion($attributeArg->value->value, 99);
+            }
+        }
+        return [$fromVersion, $toVersion];
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Const_|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param|\PhpParser\Node\Stmt\EnumCase $node
+     */
+    private function getNodeAttribute($node, string $attributeName): ?\PhpParser\Node\Attribute
+    {
+        if ($node instanceof Node\Expr\FuncCall || $node instanceof Node\Stmt\Const_) {
+            return null;
+        }
+        foreach ($node->attrGroups as $attributesGroupNode) {
+            foreach ($attributesGroupNode->attrs as $attributeNode) {
+                if ($attributeNode->name->name === $attributeName) {
+                    return $attributeNode;
+                }
+            }
+        }
+        return null;
+    }
+    private function parsePhpVersion(string $version, int $defaultPatch = 0): int
+    {
+        $parts = array_map('intval', explode('.', $version));
+        return $parts[0] * 10000 + $parts[1] * 100 + ($parts[2] ?? $defaultPatch);
+    }
+    /**
+     * @return \PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\ComplexType|null
+     */
+    private function normalizeType(string $type)
+    {
+        // There are some invalid types in stubs, eg. `string[]|string|null`
+        if (strpos($type, '[') !== \false) {
+            return null;
+        }
+        if (self::isResourcePseudoType($type)) {
+            return null;
+        }
+        /** @psalm-suppress InternalClass, InternalMethod */
+        return BuilderHelpers::normalizeType($type);
+    }
+    /**
+     * `resource` is a pseudo-type: PHP has no such native type, and a `resource`
+     * typehint in source code is read back as a class name. The stubs use it in
+     * `#[LanguageLevelTypeAware]` to describe pre-PHP 8 signatures, so it must never
+     * become a native type - it is moved into the PHPDoc instead, where `resource`
+     * is a well-known type.
+     */
+    private static function isResourcePseudoType(string $type): bool
+    {
+        return in_array('resource', explode('|', ltrim($type, '?')), \true);
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Const_|\PhpParser\Node\Stmt\EnumCase $node
+     */
+    private function addTagToDocComment($node, string $tag): void
+    {
+        $this->removeAnnotationFromDocComment($node, $tag);
+        $this->addAnnotationToDocComment($node, $tag);
+    }
+    private function getStubsDirectory(): string
+    {
+        if ($this->stubsDirectory !== null) {
+            return $this->stubsDirectory;
+        }
+        foreach (self::SEARCH_DIRECTORIES as $directory) {
+            if (is_dir($directory)) {
+                return $this->stubsDirectory = $directory;
+            }
+        }
+        // @codeCoverageIgnoreStart
+        // @infection-ignore-all
+        // Untestable code
+        throw CouldNotFindPhpStormStubs::create();
+        // @codeCoverageIgnoreEnd
+    }
+}

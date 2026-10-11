@@ -1,0 +1,34 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\Analyser\StmtHandler;
+
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Goto_;
+use PHPStan\Analyser\ExpressionResultStorage;
+use PHPStan\Analyser\InternalStatementExitPoint;
+use PHPStan\Analyser\InternalStatementResult;
+use PHPStan\Analyser\MutatingScope;
+use PHPStan\Analyser\NodeScopeResolver;
+use PHPStan\Analyser\StatementContext;
+use PHPStan\Analyser\StmtHandler;
+use PHPStan\Analyser\VariableFlow;
+use PHPStan\DependencyInjection\AutowiredService;
+use PHPStan\Turbo\ShadowedByTurboExtension;
+/**
+ * @implements StmtHandler<Goto_>
+ */
+#[AutowiredService]
+#[ShadowedByTurboExtension(__DIR__ . '/../../turbo-ext/src/GotoHandler.cpp')]
+final class GotoHandler implements StmtHandler
+{
+    public function supports(Stmt $stmt): bool
+    {
+        return $stmt instanceof Goto_;
+    }
+    public function processStmt(NodeScopeResolver $nodeScopeResolver, Stmt $stmt, MutatingScope $scope, ExpressionResultStorage $storage, callable $nodeCallback, StatementContext $context): InternalStatementResult
+    {
+        // a jump defeats reaching-write tracking for the whole body
+        return new InternalStatementResult($scope, \false, \true, [new InternalStatementExitPoint($stmt, $scope)], [], [], [], VariableFlow::all(VariableFlow::OPAQUE));
+    }
+}

@@ -1,0 +1,74 @@
+<?php
+
+declare (strict_types=1);
+namespace Flames\Code\Upgrade\NodeManipulator;
+
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Class_;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassConst;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod;
+use Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property;
+use PHPStan\Type\Type;
+use Flames\Code\Upgrade\NodeTypeResolver\Node\AttributeKey;
+use Flames\Code\Upgrade\PhpParser\Node\NodeFactory;
+final readonly class ClassInsertManipulator
+{
+    public function __construct(private NodeFactory $nodeFactory)
+    {
+    }
+    /**
+     * @api
+     * @param \Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\Property|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassConst|\Flames\Code\Upgrade\ThirdParty\PhpParser\Node\Stmt\ClassMethod $addedStmt
+     */
+    public function addAsFirstMethod(Class_ $class, $addedStmt): void
+    {
+        $scope = $class->getAttribute(AttributeKey::SCOPE);
+        $addedStmt->setAttribute(AttributeKey::SCOPE, $scope);
+        // no stmts? add this one
+        if ($class->stmts === []) {
+            $class->stmts[] = $addedStmt;
+            return;
+        }
+        $newClassStmts = [];
+        $isAdded = \false;
+        foreach ($class->stmts as $key => $classStmt) {
+            $nextStmt = $class->stmts[$key + 1] ?? null;
+            if ($isAdded === \false) {
+                // first class method
+                if ($classStmt instanceof ClassMethod) {
+                    $newClassStmts[] = $addedStmt;
+                    $newClassStmts[] = $classStmt;
+                    $isAdded = \true;
+                    continue;
+                }
+                // after last property
+                if ($classStmt instanceof Property && !$nextStmt instanceof Property) {
+                    $newClassStmts[] = $classStmt;
+                    $newClassStmts[] = $addedStmt;
+                    $isAdded = \true;
+                    continue;
+                }
+            }
+            $newClassStmts[] = $classStmt;
+        }
+        // still not added? try after last trait
+        // @todo
+        if ($isAdded) {
+            $class->stmts = $newClassStmts;
+            return;
+        }
+        // keep added at least as first stmt
+        $class->stmts = array_merge([$addedStmt], $class->stmts);
+    }
+    /**
+     * @internal Use PropertyAdder service instead
+     */
+    public function addPropertyToClass(Class_ $class, string $name, ?Type $type): void
+    {
+        $existingProperty = $class->getProperty($name);
+        if ($existingProperty instanceof Property) {
+            return;
+        }
+        $property = $this->nodeFactory->createPrivatePropertyFromNameAndType($name, $type);
+        $this->addAsFirstMethod($class, $property);
+    }
+}

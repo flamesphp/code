@@ -1,0 +1,61 @@
+<?php
+
+declare (strict_types=1);
+namespace PHPStan\BetterReflection\SourceLocator\Located;
+
+use PHPStan\BetterReflection\SourceLocator\FileChecker;
+/**
+ * @internal
+ *
+ * @psalm-immutable
+ */
+class InternalLocatedSource extends \PHPStan\BetterReflection\SourceLocator\Located\LocatedSource
+{
+    /**
+     * @var non-empty-string
+     */
+    private string $extensionName;
+    private ?string $aliasName = null;
+    /** @param non-empty-string $extensionName */
+    public function __construct(?string $source, string $name, string $extensionName, ?string $fileName = null, ?string $aliasName = null)
+    {
+        $this->extensionName = $extensionName;
+        $this->aliasName = $aliasName;
+        parent::__construct($source, $name, $fileName);
+    }
+    public function isInternal(): bool
+    {
+        return \true;
+    }
+    /** @return non-empty-string|null */
+    public function getExtensionName(): ?string
+    {
+        return $this->extensionName;
+    }
+    public function getAliasName(): ?string
+    {
+        return $this->aliasName;
+    }
+    /**
+     * @return array<string, mixed>
+     */
+    public function exportToCache(): array
+    {
+        $data = parent::exportToCache();
+        $data['data']['extensionName'] = $this->extensionName;
+        $data['data']['aliasName'] = $this->aliasName;
+        return $data;
+    }
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function importFromCache(array $data): self
+    {
+        FileChecker::assertReadableFile($data['data']['filename']);
+        // Read the source lazily in getSource(), like the parent import does. The
+        // eager read here duplicated the whole stub file into every hydrated
+        // reflection - stub files hold many classes each, so a process ended up
+        // with dozens of copies of the same multi-hundred-KB source.
+        return new self(null, $data['data']['name'], $data['data']['extensionName'], $data['data']['filename'], $data['data']['aliasName']);
+    }
+}
